@@ -30,10 +30,10 @@ $this->params['breadcrumbs'][] = $this->title;
 function pro(item){
     var index  = item.attr("id").replace(/[^0-9.]/g, ""); 
     var product_id = $('#invoiceproduct-' + index + '-product_id').val();
-    var inventory_id = "<?= $inventory->id; ?>";
+
     product_id = product_id == "" ? 0 : Number(product_id.split(",").join(""));
     $.ajax({
-         url: 'details?product_id=' + product_id + '&inventory_id=' + inventory_id,
+         url: 'details?id=' + product_id,
          dataType: 'json',
          method: 'GET',
          data: product_id,
@@ -131,43 +131,20 @@ function calculateAmountDue(){
 }
 
 </script>
-
+<div>
+</div>
 <div class="invoices-form" style="margin-top: 30px;">
-<div class="row">
-<div class="col-sm-12">
-<div class="box">
-    <?php $form = ActiveForm::begin([ 
-            'id'=>"dynamic-form",
-            'options'=>['method' => 'post'],
-            'action' => Url::to(['invoices/create', 'id' => $inventory->id])
-            ]);  
-    ?>
-    <div class="col-sm-8" style="min-height: 400px; border-right: 2px solid #ecf0f5;">
-        <h1 style="text-align: center;  font-size: 40px; font-family: e; font-weight: bold;">
-             Invoice
-        </h1>
-        <span class="text-bold"> #</span>
-        <span class="pull-right text-bold"> </span>
-        <hr style="margin-top: 0px; margin-bottom: 0px; border-top: 2px solid #3434" >
-        
+    <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
+    <div class="row">
+        <div class="col-sm-4">
+            <?= $model->client->client_name ?>
+            <?= $form->field($model, 'client_id')->hiddenInput(['value'=>$model->client_id])->label(false); ?>  
+            
+        </div>
+        <div class="col-sm-6">
+            
+        </div>
     </div>
-    <div class="col-sm-4" style="min-height: 400px; padding-left: 0; padding-right: 0;">
-        <div class="col-sm-12" style="min-height: 180px;">
-            <?= $inventory->name;?>
-            <?= $inventory->address;?>
-
-        </div>
-        <div class="col-sm-12" style="min-height: 180px; border-top:2px solid #ecf0f5">
-            <?= $form->field($model, 'client_id')
-                ->dropDownList(ArrayHelper::map(Client::find()->all(), 'id', 'client_name'),
-                [
-                    'prompt'=>'Client Name',
-                    // 'onchange'=> 'pro($(this))'
-
-                ])->label(false);  
-            ?>
-        </div>
-    </div>    
 
     <?php DynamicFormWidget::begin([
         'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
@@ -184,15 +161,14 @@ function calculateAmountDue(){
             'quantity',
         ],
     ]); ?>
-
-    <table class="table table-borderd table-responsive container-items">
-        <tr class="bg-maroon">
+    <table class="table table-border table-responsive container-items">
+        <tr>
+            <th class="text-center"></th>
             <th class="text-center">Item</th>
             <th class="text-center">Quantity</th>
             <th class="text-center">Price</th>
             <th class="text-center">LineTotal</th>
             <th class="text-center">
-                <button type="button" class="add-item btn  btn-xs"><i class="glyphicon glyphicon-plus"></i></button>
             </th>
         </tr>
         <?php foreach ($modelsItem as $i => $modelItem): ?>
@@ -204,17 +180,10 @@ function calculateAmountDue(){
                 }
             ?>
             <td class="text-center">
-                <?= $form->field($modelItem, "[{$i}]product_id")->dropDownList(
-                        ArrayHelper::map(Stock::find()
-                                ->where(['inventory_id' => $inventory->id])
-                                ->andWhere('quantity > 0')
-                                ->all(), 'product_id', 'product_name'),
-                        [
-                            'prompt'=>'Select A Product ',
-                            'onchange'=> 'pro($(this))'
-
-                        ])->label(false); 
-                ?>
+                <?= $i+1 ?>
+            </td>
+            <td class="text-center">
+                <?php echo $modelItem->product->product_name;?>
             </td>
             <td class="text-center">
                 <?= $form->field($modelItem, "[{$i}]quantity")
@@ -229,87 +198,28 @@ function calculateAmountDue(){
             </td>
             <td class="text-center">
                 <?= $form->field($modelItem, "[{$i}]selling_rate")
-                    ->textInput(
-                        [
-                            'type' => 'number',
-                            'placeholder'=>'Price',
-                            'disabled' => true,
-                            // 'onchange' => 'check($(this))',
-                        ])
-                    ->label(false) 
+                    ->textInput(['disabled' => true])->label(false) 
                 ?>
             </td>
             <td class="text-center">
-                <?= $form->field($modelItem, "[{$i}]buying_rate")
-                    ->textInput(
-                        [   
-                            'class' => 'form-control totalLinePrice',
-                            'type' => 'number', 
-                            'disabled' => True,
-                            'onchange' => 'calculateTotal()', 
-                            'placeholder'=>'LineTotal'
-                        ])
-                    ->label(false)
-                ?>
+                Total
             </td>
             <td class="text-center">
                 <button type="button" class="remove-item btn btn-danger btn-xs"><i class="glyphicon glyphicon-minus"></i></button>
             </td>
+
+        </tr>
         <?php endforeach; ?>
     </table>
-    <hr style=" border-bottom: 1px solid #000;">
-
     <?php DynamicFormWidget::end(); ?>
-        <div class="col-sm-offset-8">
-            <table class="table table-responsive">
-                <tr>
-                    <td> Total</td>
-                    <td> 
-                        <?= $form->field($model, 'amount')
-                            ->textInput(
-                                [
-                                    'placeholder'=>'Total', 
-                                    'onchange'=> 'calculateAmountDue()',
-                                    'readonly' => true,
-                                ])->label(false) 
-                        ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td> Pay</td>
-                    <td> 
-                        <?= $form->field($model, 'pay')
-                            ->textInput(
-                            [
-                                'placeholder'=>'Pay',
-                                'type' => 'number',
-                                'onchange'=> 'calculateAmountDue()',
-                            ])->label(false) 
-                        ?> 
-                    </td>
-                </tr>
-
-            </table>
-        </div>
-        <hr style=" border-bottom: 4px solid #000;">
-        <div class="col-sm-offset-8">
-            <div id="info hide">
-                AMOUNT DUE: <span class="showAmount"> </span>
-            </div>
-            <hr style=" border-bottom: 4px solid #3455;">
-        </div>
-        
     
     <div class="form-group">
-        <?= Html::submitButton($modelItem->isNewRecord ? 'Create' : 'Update', ['class' => 'btn bg-maroon btn-block']) ?>
+        <?= Html::submitButton($modelItem->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary btn-block']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
-</div>
-</div>
-</div>
-</div>
 
+</div>
 
 <?php 
 $script = <<< JS

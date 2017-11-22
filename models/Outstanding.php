@@ -41,7 +41,6 @@ class Outstanding extends \yii\db\ActiveRecord
             [['cheque_no', 'cheque_date', 'amount', 'bank', 'due_date'], 'required'],
             [['cheque_no'], 'integer'],
             [['amount'], 'number'],
-            [['mode'], 'string'],
             [['cheque_date', 'due_date'], 'safe'],
             [['bank'], 'string', 'max' => 45],
 

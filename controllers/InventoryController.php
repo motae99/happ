@@ -4,21 +4,16 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Inventory;
-use app\models\InventoryAccount;
 use app\models\SystemAccount;
 use app\models\InventorySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
-/**
- * InventoryController implements the CRUD actions for Inventory model.
- */
+
 class InventoryController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
+    
     public function behaviors()
     {
         return [
@@ -31,34 +26,31 @@ class InventoryController extends Controller
         ];
     }
 
-    /**
-     * Lists all Inventory models.
-     * @return mixed
-     */
+    
     public function actionIndex()
     {
         $searchModel = new InventorySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
-        $inventories = Inventory::find()->all();
-        foreach ($inventories as $inventory) {
-            $inventory_account = $inventory->account;
-            $inventory_account->balance = 0;
-            $stocks = $inventory->stocks;
+        // $inventories = Inventory::find()->all();
+        // // foreach ($inventories as $inventory) {
+        // //     $inventory_account = $inventory->account;
+        // //     $inventory_account->balance = 0;
+        // //     $stocks = $inventory->stocks;
 
-            $stock_value = 0;
-            foreach ($stocks as $stock) {
-                $product = $stock->product;
-                $stock_value += $stock->quantity * $product->buying_price;
-            }
-                $inventory_account->balance += $stock_value;
-                $inventory_account->save();
+        // //     $stock_value = 0;
+        // //     foreach ($stocks as $stock) {
+        // //         $product = $stock->product;
+        // //         $stock_value += $stock->quantity * $product->buying_price;
+        // //     }
+        // //         $inventory_account->balance += $stock_value;
+        // //         $inventory_account->save();
 
-        }
-        $balance = InventoryAccount::find()->sum('balance');
-        $sys = SystemAccount::find()->where(['group' => 'inventory'])->one();
-        $sys->balance = $balance;
-        $sys->save();
+        // // }
+        // $balance = InventoryAccount::find()->sum('balance');
+        // $sys = SystemAccount::find()->where(['group' => 'inventory'])->one();
+        // $sys->balance = $balance;
+        // $sys->save();
 
 
         return $this->render('index', [
@@ -67,11 +59,7 @@ class InventoryController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Inventory model.
-     * @param integer $id
-     * @return mixed
-     */
+    
     public function actionView($id)
     {
         return $this->render('view', [
@@ -79,75 +67,128 @@ class InventoryController extends Controller
         ]);
     }
 
-    /**
-     * Creates a new Inventory model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
+    
     public function actionCreate()
     {
         $model = new Inventory();
 
         if ($model->load(Yii::$app->request->post())) {
+            $model->created_at = new \yii\db\Expression('NOW()');
+            $model->created_by = 1;
+            // $transaction = \Yii::$app->db->beginTransaction();
+            //  try {
+            //         $flag = $model->save(false)
+            //         if (! ($flag = $modelItem->save(false))) {
+            //             $transaction->rollBack();
+            //             //set flash success
+            //             break;
+            //         }
+            //         if ($flag) {
+            //             $transaction->commit();
+            //         }
+            //     }
+            //     catch (Exception $e) {
+            //         $transaction->rollBack();
+            //     }
+            // // $transaction ////
+
             if($model->save()){
-                $account = new InventoryAccount();
-                $account->inventory_id = $model->id;
-                // need more work//
-                $SystemAccount = SystemAccount::find()->where(['group'=> $model->account_group])->one();
-                $account->system_account_id = $SystemAccount->id ;
-                // $account->obening_balance = 0;
-                // $account->balance = 0;
-                $account->save();
-                //Set flash Success//
-                // need more work//
+                
+                //// CREATING ASSET ACCOUNT ////
+                    $asset = new SystemAccount();
+                    $max = SystemAccount::find()->where(['group'=> 'inventory'])->max('account_no');
+                    if($max){
+                        $asset->account_no = $max+1;
+                    }else{
+                        $asset->account_no = 1140;
+                    }
+                    $asset->system_account_name = $model->alias.' Value';
+                    $asset->account_type_id = 1;
+                    $asset->description = $model->name;
+                    $asset->opening_balance = 0;
+                    $asset->balance = 0;
+                    $asset->group = 'inventory';
+                    $asset->to_increase = 'debit';
+                    $asset->color_class = $model->color_class;
+                    $asset->created_at = new \yii\db\Expression('NOW()');
+                    $asset->created_by = 1;
+                    $asset->save(false);
+                //// CREATING ASSET ACCOUNT ////
+                
+                //// CREATING EXPENSE ACCOUNT ////
+                    $expense = new SystemAccount();
+                    $max = SystemAccount::find()->where(['group'=> 'inventory expense'])->max('account_no');
+                    if($max){
+                        $expense->account_no = $max+1;
+                    }else{
+                        $expense->account_no = 5140;
+                    }
+                    $expense->system_account_name = $model->alias.' Cost';
+                    $expense->account_type_id = 5;
+                    $expense->description = $model->name.' Cost Of Goods Sold';
+                    $expense->opening_balance = 0;
+                    $expense->balance = 0;
+                    $expense->group = 'inventory expense';
+                    $expense->to_increase = 'debit';
+                    $expense->color_class = $model->color_class;
+                    $expense->created_at = new \yii\db\Expression('NOW()');
+                    $expense->created_by = 1;
+                    $expense->save(false);
+                //// CREATING EXPENSE ACCOUNT ////
+
+                //// Saving Values to Inventory////
+                    $model->asset_account_id = $asset->id;
+                    $model->expense_account_id = $expense->id;
+                    $model->save(false);
+                //// Saving Values to Inventory////
+
+
+                //// Set flash Properties//
+                    Yii::$app->getSession()->setFlash('success', ['type' => 'success']);
+                //// Set flash Properties//
+
+            }else{
+                //// Set flash Properties//
+                    Yii::$app->getSession()->setFlash('error', ['type' => 'error']);
+                //// Set flash Properties//
             }
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         }
 
-        return $this->render('create', [
+        return $this->renderAjax('create', [
             'model' => $model,
         ]);
     }
 
-    /**
-     * Updates an existing Inventory model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
+    
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            
+            //// Set flash Properties//
+                Yii::$app->getSession()->setFlash('success', ['type' => 'success']);
+            //// Set flash Properties//
+
+            return $this->redirect(['index']);
         }
 
-        return $this->render('update', [
+        return $this->renderAjax('update', [
             'model' => $model,
         ]);
     }
 
-    /**
-     * Deletes an existing Inventory model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
+    
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        
 
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the Inventory model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Inventory the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+    
     protected function findModel($id)
     {
         if (($model = Inventory::findOne($id)) !== null) {

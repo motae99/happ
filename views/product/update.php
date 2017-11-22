@@ -1,23 +1,42 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Product */
-
-$this->title = Yii::t('app', 'Update Product: {nameAttribute}', [
-    'nameAttribute' => $model->id,
-]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Products'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+/* @var $form yii\widgets\ActiveForm */
 ?>
-<div class="product-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="product-form">
 
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
+    <?php $form = ActiveForm::begin([   
+            'id' => 'product-update-form',
+            'options'=>['method' => 'post'],
+            'action' => Url::to(['product/update', 'id'=>$model->id]),
+            
+        ]); 
+    ?>
+
+    <?= $form->field($model, 'category_id')->textInput() ?>
+
+    <?= $form->field($model, 'no')->textInput(['placeholder'=>'Product No', 'maxlength' => true])->label(false) ?>
+
+    <?= $form->field($model, 'product_name')->textInput(['placeholder'=>'Product Name', 'maxlength' => true])->label(false) ?>
+
+    <?= $form->field($model, 'description')->textInput(['placeholder'=>'Product Description', 'maxlength' => true])->label(false) ?>
+
+    <?= $form->field($model, 'buying_price')->textInput(['placeholder'=>'buying_price', 'maxlength' => true])->label(false) ?>
+    
+    <?= $form->field($model, 'selling_price')->textInput(['placeholder'=>'selling_price', 'maxlength' => true])->label(false) ?>
+    
+    <?= $form->field($model, 'minimum')->textInput(['placeholder'=>'minimum', 'maxlength' => true])->label(false) ?>
+
+    <div class="form-group">
+        <?= Html::submitButton(Yii::t('app', 'Update'), ['class' => 'btn btn-block btn-flat btn-warning']) ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
 
 </div>

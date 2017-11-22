@@ -4,6 +4,8 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Invoices;
+use yii\helpers\ArrayHelper;
+
 
 use app\models\InvoiceProduct;
 use app\models\Product;
@@ -26,9 +28,7 @@ use yii\filters\VerbFilter;
  */
 class InvoicesController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
+    
     public function behaviors()
     {
         return [
@@ -41,10 +41,126 @@ class InvoicesController extends Controller
         ];
     }
 
-    public function actionDetails($id)
+    public function actionReconcileDelete($id)
     {
-        $stock = Stock::findOne($id);
-        $product = Product::find()->where(['id' => $stock->product_id])->one();
+        $outstanding = Outstanding::findOne($id);
+        $model = $this->findModel($outstanding->invoice_id);
+        $outstanding->delete();
+        return $this->redirect(['view', 'id' => $model->id]);
+
+    }
+    
+    public function actionReconcile($account_id, $invoice_id, $outstanding_id)
+    {
+        $model = Invoices::findOne($invoice_id);
+        $cashAccount = SystemAccount::find()->where(['id' => $account_id])->one();
+        $client = Client::findOne($model->client_id);
+        $clientAccount = SystemAccount::find()->where(['id' => $client->account_id])->one();
+        
+        $payment = new Payments();
+
+        $outstanding = Outstanding::findOne($outstanding_id);
+
+        if($outstanding->type == 'cheque'){
+            $payment->mode = "cheque";
+            $payment->bank_name = $outstanding->bank;
+            $payment->cheque_no = $outstanding->cheque_no;
+            $payment->cheque_date = $outstanding->cheque_date;
+        }else{
+            $payment->mode = "cash";
+        }
+
+
+        // Saving the payment //
+            $payment->amount = $outstanding->amount;
+            $payment->invoice_id = $model->id;
+            $payment->system_account_id = $cashAccount->id ;
+            $payment->save(false);
+        // Saving the payment //
+
+        // Fixing outstanding Status//
+            $outstanding->payment_id = $payment->id;
+            $outstanding->status = 'clear';
+            $outstanding->save(false);
+        // Fixing outstanding Status//
+
+        // Fixing Invoice Status //
+            $total_cash = $model->payments;
+            $total_paid = 0;
+            if($total_cash){
+                foreach ($total_cash as $p) {
+                    $total_paid += $p->amount ;
+                }
+            }
+            $remaining = $model->amount - $total_paid ;
+
+            if($remaining > 0){
+                $model->status = "partially";
+                $model->save(false);
+
+            }else{
+                $model->status = "paid";
+                $model->save(false);
+            }
+        // Fixing Invoice Status //
+
+        // Keeping journal entry by registering the cash in //
+            $start = new Transaction();
+            $start->description = "Reconciling payment for invoice ".$model->id;
+            $start->reference = $model->id;
+            $start->reference_type = "Invoices";
+            if($start->save(false)){
+            
+            // Depiting Cash//
+                $cash = new Entry();
+                $account = $cashAccount;
+                $cash->transaction_id = $start->id; 
+                $cash->account_id = $account->id; 
+                $cash->is_depit = 'yes'; 
+                $cash->amount = $payment->amount; 
+                $cash->description = "Cash Increased because of selling products in this invoice"; 
+                $cash->date = date('Y-m-d'); 
+                $cash->balance = $account->balance + $payment->amount; 
+                if($cash->save(false)){
+                    $account->balance += $payment->amount;
+                    $account->save(false); 
+                }
+            // Depiting Cash//
+
+            // Crediting Client Account//
+                $recievable = new Entry();
+                $account = $clientAccount;
+                $recievable->transaction_id = $start->id; 
+                $recievable->account_id = $account->id; 
+                $recievable->is_depit = 'no'; 
+                $recievable->amount = $payment->amount; 
+                $recievable->description = "recievable Amount decreased for paying this invoice"; 
+                $recievable->date = date('Y-m-d'); 
+                $recievable->balance = $account->balance - $payment->amount; 
+                if($recievable->save(false)){
+                    $account->balance -= $payment->amount;
+                    $account->save(false); 
+                }
+            // Crediting Client Account//
+
+            // Linking Payment with this transaction //
+                $payment->transaction_id = $start->id;
+                $payment->save(false);
+            // Linking Payment with this transaction //
+            }
+        // Keeping journal entry by registering the cash in //
+
+
+        return $this->redirect(['view', 'id' => $model->id]);
+
+    }
+
+    public function actionDetails($product_id, $inventory_id)
+    {
+        $product = Product::find()->where(['id' => $product_id])->one();
+        $stock = Stock::find()
+                    ->where(['product_id' => $product->id])
+                    ->andWhere(['inventory_id' => $inventory_id])->one();
         // if($product){
             return \yii\helpers\Json::encode([
                 'selling_price'=>$product->selling_price,
@@ -57,8 +173,8 @@ class InvoicesController extends Controller
     public function actionCash($id)
     {   
         $model = $this->findModel($id);
-        
         $payment = new Payments();
+
         if($payment->load(Yii::$app->request->post())){
             
             $cashAccount = SystemAccount::find()->where(['system_account_name' => 'cash'])->one();
@@ -68,7 +184,7 @@ class InvoicesController extends Controller
             $payment->invoice_id = $model->id;
             $payment->system_account_id = $cashAccount->id ;
             $payment->mode = "cash";
-            $payment->save();
+            $payment->save(false);
         // Saveing the payment //
 
         // Fixing Invoice Status //
@@ -83,11 +199,11 @@ class InvoicesController extends Controller
 
             if($remaining > 0){
                 $model->status = "partially";
-                $model->save();
+                $model->save(false);
 
             }else{
                 $model->status = "paid";
-                $model->save();
+                $model->save(false);
             }
         // Fixing Invoice Status //
 
@@ -96,7 +212,7 @@ class InvoicesController extends Controller
             $start->description = "Paying for invoice ".$model->id;
             $start->reference = $model->id;
             $start->reference_type = "Invoices";
-            if($start->save()){
+            if($start->save(false)){
             
             // Depiting Cash//
                 $cash = new Entry();
@@ -105,12 +221,12 @@ class InvoicesController extends Controller
                 $cash->account_id = $account->id; 
                 $cash->is_depit = 'yes'; 
                 $cash->amount = $payment->amount; 
-                $cash->description = "Cash Increased because of selling products in this invoice"; 
+                $cash->description = "Cash Increased because of paying for this invoice"; 
                 $cash->date = date('Y-m-d'); 
                 $cash->balance = $account->balance + $payment->amount; 
-                if($cash->save()){
+                if($cash->save(false)){
                     $account->balance += $payment->amount;
-                    $account->save(); 
+                    $account->save(false); 
                 }
             // Depiting Cash//
 
@@ -121,21 +237,24 @@ class InvoicesController extends Controller
                 $recievable->account_id = $account->id; 
                 $recievable->is_depit = 'no'; 
                 $recievable->amount = $payment->amount; 
-                $recievable->description = "recievable Cash Increased because of selling products in this invoice"; 
+                $recievable->description = "recievable amount decreased because of paying this invoice"; 
                 $recievable->date = date('Y-m-d'); 
-                $recievable->balance = $account->balance + $payment->amount; 
-                if($recievable->save()){
+                $recievable->balance = $account->balance - $payment->amount; 
+                if($recievable->save(false)){
                     $account->balance -= $payment->amount;
-                    $account->save(); 
+                    $account->save(false); 
                 }
             // Crediting Client Account//
+
+            // Linking Payment with this transaction //
+                $payment->transaction_id = $start->id;
+                $payment->save(false);
+            // Linking Payment with this transaction //
             }
         // Keeping journal entry by registering the cash in //
 
 
-            return $this->render('view', [
-                'model' => $model,
-            ]);
+            return $this->redirect(['view', 'id' => $model->id]);
 
         }
         return $this->renderAjax('cash', [
@@ -159,9 +278,7 @@ class InvoicesController extends Controller
             $outstanding->save(false);
             //set flash success
 
-            return $this->render('view', [
-            'model' => $model,
-        ]);
+            return $this->redirect(['view', 'id' => $model->id]);
 
         }
         return $this->renderAjax('cheque', [
@@ -185,9 +302,7 @@ class InvoicesController extends Controller
             $outstanding->save(false);
             //set flash success
 
-            return $this->render('view', [
-            'model' => $model,
-        ]);
+            return $this->redirect(['view', 'id' => $model->id]);
 
         }
 
@@ -198,10 +313,6 @@ class InvoicesController extends Controller
 
     }
 
-    /**
-     * Lists all Invoices models.
-     * @return mixed
-     */
     public function actionIndex()
     {
         $searchModel = new InvoicesSearch();
@@ -213,11 +324,6 @@ class InvoicesController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Invoices model.
-     * @param integer $id
-     * @return mixed
-     */
     public function actionView($id)
     {   
         $model = $this->findModel($id);
@@ -227,21 +333,19 @@ class InvoicesController extends Controller
         ]);
     }
 
-    /**
-     * Creates a new Invoices model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
+    
+    public function actionCreate($id)
     {
         $model = new Invoices();
         $modelsItem = [new InvoiceProduct];
+        $inventory = Inventory::findOne($id);
 
         if($model->load(Yii::$app->request->post()) ){
 
             $modelsItem = Model::createMultiple(InvoiceProduct::classname());
             Model::loadMultiple($modelsItem, Yii::$app->request->post());
 
+            
             $client_id = $_POST['Invoices']['client_id'];
             $client = Client::findOne($client_id);
             $clientAccount = SystemAccount::find()->where(['id' => $client->account_id])->one();
@@ -253,9 +357,11 @@ class InvoicesController extends Controller
                 // set flash error with massage 
                 return $this->render('_form', [
                     'model' => $model,
-                    'modelsItem' => (empty($modelsItem)) ? [new InvoiceProduct] : $modelsItem
+                    'modelsItem' => (empty($modelsItem)) ? [new InvoiceProduct] : $modelsItem,
+                    'inventory' => $inventory
                 ]);    
             }
+            
             if($model->amount == $model->pay){
                 //invoice method cash, status paid
                 $invoiceMethod = "cash";
@@ -325,9 +431,10 @@ class InvoicesController extends Controller
             $model->status = $invoiceStatus;
             $model->cost = 0;
         
-             // validate all models
-           $valid = $model->validate();
-           //$valid = Model::validateMultiple($modelsItem) && $valid;
+            // validate all models
+            $valid = $model->validate();
+            //$valid = Model::validateMultiple($modelsItem) && $valid;
+
 
            if ($valid) {
                 $transaction = \Yii::$app->db->beginTransaction();
@@ -342,12 +449,13 @@ class InvoicesController extends Controller
                             $payment->save(false);
                         }
                        
-
                         foreach ($modelsItem as $modelItem){       
                             $modelItem->invoice_id = $model->id;
 
                             /// see the stock ///
-                            $stock = Stock::find()->where(['id' => $modelItem->product_id])->one();
+                            $stock = Stock::find()
+                                    ->where(['product_id' => $modelItem->product_id])
+                                    ->andWhere(['inventory_id' => $inventory->id])->one();
 
                             if($modelItem->quantity <= $stock->quantity && $modelItem->quantity > 0){
                                 $product = Product::findOne($stock->product_id);
@@ -361,7 +469,7 @@ class InvoicesController extends Controller
                                 $expense += ($product->buying_price * $modelItem->quantity); 
 
                                 $stock->quantity -= $modelItem->quantity;
-                                $stock->save();
+                                $stock->save(false);
                                 //set flash success
                                 if (! ($flag = $modelItem->save(false))) {
                                     $transaction->rollBack();
@@ -384,7 +492,7 @@ class InvoicesController extends Controller
                 $start->description = "Selling Products";
                 $start->reference = $model->id;
                 $start->reference_type = "Invoices";
-                if($start->save()){
+                if($start->save(false)){
                     if($fullPaymentCash){
                         //// Depit Cash account + balance////
                             $cash = new Entry();
@@ -396,9 +504,9 @@ class InvoicesController extends Controller
                             $cash->description = "Cash Increased because of selling products in this invoice"; 
                             $cash->date = date('Y-m-d'); 
                             $cash->balance = $account->balance + $cashPaid; 
-                            if($cash->save()){
+                            if($cash->save(false)){
                                 $account->balance += $cashPaid;
-                                $account->save(); 
+                                $account->save(false); 
                             }
                         //// Depit Cash account + balance////
 
@@ -412,9 +520,9 @@ class InvoicesController extends Controller
                             $sales->description = "Revenue is been counted for this sale"; 
                             $sales->date = date('Y-m-d'); 
                             $sales->balance = $account->balance + $salesAmount; 
-                            if($sales->save()){
+                            if($sales->save(false)){
                                 $account->balance += $salesAmount;
-                                $account->save(); 
+                                $account->save(false); 
                             }
                         //// Credit Sales account + balance ////
 
@@ -428,9 +536,9 @@ class InvoicesController extends Controller
                             $sales_expenses->description = "Cost is been counted for this sale"; 
                             $sales_expenses->date = date('Y-m-d'); 
                             $sales_expenses->balance = $account->balance + $expense; 
-                            if($sales_expenses->save()){
+                            if($sales_expenses->save(false)){
                                 $account->balance += $expense;
-                                $account->save(); 
+                                $account->save(false); 
                             }
                         //// Depit Sale_expenses account + balance////
 
@@ -444,11 +552,16 @@ class InvoicesController extends Controller
                             $inventory_expenses->description = "Cost of products for this sale"; 
                             $inventory_expenses->date = date('Y-m-d'); 
                             $inventory_expenses->balance = $account->balance - $expense; 
-                            if($inventory_expenses->save()){
+                            if($inventory_expenses->save(false)){
                                 $account->balance -= $expense;
-                                $account->save(); 
+                                $account->save(false); 
                             }
                         //// Credit inventory account - balance////
+
+                        // Linking Payment with this transaction //
+                            $payment->transaction_id = $start->id;
+                            $payment->save(false);
+                        // Linking Payment with this transaction //
 
                     }elseif($partialPaymentCash){
                         //// Depit Cash account + balance////
@@ -461,9 +574,9 @@ class InvoicesController extends Controller
                             $cash->description = "Cash Increased because of selling products in this invoice"; 
                             $cash->date = date('Y-m-d'); 
                             $cash->balance = $account->balance + $cashPaid; 
-                            if($cash->save()){
+                            if($cash->save(false)){
                                 $account->balance += $cashPaid;
-                                $account->save(); 
+                                $account->save(false); 
                             }
                         //// Depit Cash account + balance////
 
@@ -477,9 +590,9 @@ class InvoicesController extends Controller
                             $recievable->description = "recievable Cash Increased because of selling products in this invoice"; 
                             $recievable->date = date('Y-m-d'); 
                             $recievable->balance = $account->balance + $recievableAmount; 
-                            if($recievable->save()){
+                            if($recievable->save(false)){
                                 $account->balance += $recievableAmount;
-                                $account->save(); 
+                                $account->save(false); 
                             }
                         //// Depit ClientRecievable account + balance////
 
@@ -493,9 +606,9 @@ class InvoicesController extends Controller
                             $sales->description = "Revenue is been counted for this sale"; 
                             $sales->date = date('Y-m-d'); 
                             $sales->balance = $account->balance + $salesAmount; 
-                            if($sales->save()){
+                            if($sales->save(false)){
                                 $account->balance += $salesAmount;
-                                $account->save(); 
+                                $account->save(false); 
                             }
                         //// Credit Sales account + balance ////
 
@@ -509,9 +622,9 @@ class InvoicesController extends Controller
                             $sales_expenses->description = "Cost is been counted for this sale"; 
                             $sales_expenses->date = date('Y-m-d'); 
                             $sales_expenses->balance = $account->balance + $expense; 
-                            if($sales_expenses->save()){
+                            if($sales_expenses->save(false)){
                                 $account->balance += $expense;
-                                $account->save(); 
+                                $account->save(false); 
                             }
                         //// Depit Sale_expenses account + balance////
 
@@ -525,11 +638,16 @@ class InvoicesController extends Controller
                             $inventory_expenses->description = "Cost of products for this sale"; 
                             $inventory_expenses->date = date('Y-m-d'); 
                             $inventory_expenses->balance = $account->balance - $expense; 
-                            if($inventory_expenses->save()){
+                            if($inventory_expenses->save(false)){
                                 $account->balance -= $expense;
-                                $account->save(); 
+                                $account->save(false); 
                             }
-                        //// Credit inventory account - balance////                        
+                        //// Credit inventory account - balance////  
+
+                        // Linking Payment with this transaction //
+                            $payment->transaction_id = $start->id;
+                            $payment->save(false);
+                        // Linking Payment with this transaction //                      
 
                     }elseif($noCash){
                         //// Depit ClientRecievable account + balance////
@@ -597,40 +715,87 @@ class InvoicesController extends Controller
                         //// Credit inventory account - balance////
                     }
                 
-            } ///end of transaction saved
+                    $model->transaction_id = $start->id;
+                    $model->save(false);
+                    } ///end of transaction saved
 
 
-                        return $this->redirect(['index']);
+
                     }
                 } //end of try
                  catch (Exception $e) {
                     $transaction->rollBack();
                 } //end of catch
+
+                return $this->redirect(['view', 'id' => $model->id]);
             } //end of if(valid)
+
+            return $this->redirect(['index']);
 
         }// end of (model->load()) 
             return $this->render('_form', [
                 'model' => $model,
+                'inventory' => $inventory,
                 'modelsItem' => (empty($modelsItem)) ? [new InvoiceProduct] : $modelsItem
             ]);                      
     }
 
-    /**
-     * Updates an existing Invoices model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
+    
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $modelsItem = $model->invoiceProducts;
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+            
+
+            $oldIDs = ArrayHelper::map($modelsItem, 'id', 'id');
+            $modelsItem = Model::createMultiple(InvoiceProduct::classname(), $modelsItem);
+            Model::loadMultiple($modelsItem, Yii::$app->request->post());
+            $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($modelsItem, 'id', 'id')));
+
+            // ajax validation
+            if (Yii::$app->request->isAjax) {
+                Yii::$app->response->format = Response::FORMAT_JSON;
+                return ArrayHelper::merge(
+                    ActiveForm::validateMultiple($modelsItem),
+                    ActiveForm::validate($model)
+                );
+            }
+
+            // validate all models
+            $valid = $model->validate();
+            
+            // $valid = Model::validateMultiple($modelsItem) && $valid;
+
+            if ($valid) {
+                $transaction = \Yii::$app->db->beginTransaction();
+                try {
+                    if ($flag = $model->save(false)) {
+                        if (! empty($deletedIDs)) {
+                            InvoiceProduct::deleteAll(['id' => $deletedIDs]);
+                        }
+                        foreach ($modelsItem as $modelItem) {
+                            $modelItem->invoice_id = $model->id;
+                            if (! ($flag = $modelItem->save(false))) {
+                                $transaction->rollBack();
+                                break;
+                            }
+                        }
+                    }
+                    if ($flag) {
+                        $transaction->commit();
+                        return $this->redirect(['view', 'id' => $model->id]);
+                    }
+                } catch (Exception $e) {
+                    $transaction->rollBack();
+                }
+            }
         }
 
-        return $this->render('update', [
+        return $this->render('_try', [
             'model' => $model,
+            'modelsItem' => (empty($modelsItem)) ? [new InvoiceProduct] : $modelsItem
         ]);
     }
 

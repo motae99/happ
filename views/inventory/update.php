@@ -1,23 +1,37 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
+use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Inventory */
-
-$this->title = Yii::t('app', 'Update Inventory: {nameAttribute}', [
-    'nameAttribute' => $model->name,
-]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Inventories'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+/* @var $form yii\widgets\ActiveForm */
 ?>
-<div class="inventory-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="inventory-form">
 
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
+    <?php $form = ActiveForm::begin(
+        [   
+            'id' => 'inventory-update-form',
+            'options'=>['method' => 'post'],
+            'action' => Url::to(['inventory/update', 'id' =>$model->id ]),
+            
+        ]); 
+    ?>
+
+    <?= $form->field($model, 'name')->textInput(['placeholder'=>'Inventory Name', 'maxlength' => true])->label(false) ?>
+    
+    <?= $form->field($model, 'address')->textarea(['placeholder'=>'Address', 'rows' => 6])->label(false) ?>
+
+    <?= $form->field($model, 'phone_no')->textInput(['placeholder'=>'Phone No', 'maxlength' => true])->label(false) ?>
+
+    <?= $form->field($model, 'color_class')->textInput(['placeholder'=>'Select Color', 'maxlength' => true])->label(false) ?>
+
+    <div class="form-group">
+        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-flat btn-block btn-warning']) ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
 
 </div>

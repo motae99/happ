@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 /* @var $this yii\web\View */
@@ -13,12 +14,13 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="inventory-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php Pjax::begin(); ?>
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create Inventory'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::button('<i class="fa fa-plus">Add New</i>', ['value' => Url::to(['inventory/create']), 'title' => 'Add', 'class' => 'btn btn-flat bg-blue showModalButton']); ?>
     </p>
+
+    <?php// Pjax::begin(); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -29,10 +31,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'name',
             'address:ntext',
-            'account_group',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
-    <?php Pjax::end(); ?>
+    <?php //Pjax::end(); ?>
 </div>

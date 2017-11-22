@@ -19,7 +19,7 @@ class InventorySearch extends Inventory
     {
         return [
             [['id'], 'integer'],
-            [['name', 'address', 'account_group'], 'safe'],
+            [['name', 'address'], 'safe'],
         ];
     }
 
@@ -63,8 +63,7 @@ class InventorySearch extends Inventory
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'address', $this->address])
-            ->andFilterWhere(['like', 'account_group', $this->account_group]);
+            ->andFilterWhere(['like', 'address', $this->address]);
 
         return $dataProvider;
     }

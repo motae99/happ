@@ -15,8 +15,7 @@ use Yii;
  * @property string $bank_name
  * @property int $cheque_no
  * @property string $cheque_date
- * @property string $due_date
- * @property string $created_at
+ * @property string  * @property string $created_at
  *
  * @property Invoices $invoice
  * @property SystemAccount $systemAccount
@@ -41,7 +40,7 @@ class Payments extends \yii\db\ActiveRecord
             [['invoice_id', 'system_account_id', 'cheque_no'], 'integer'],
             [['amount'], 'number'],
             [['mode'], 'string'],
-            [['cheque_date', 'due_date', 'created_at'], 'safe'],
+            [['cheque_date', 'created_at'], 'safe'],
             [['bank_name'], 'string', 'max' => 45],
             [['invoice_id'], 'exist', 'skipOnError' => true, 'targetClass' => Invoices::className(), 'targetAttribute' => ['invoice_id' => 'id']],
             [['system_account_id'], 'exist', 'skipOnError' => true, 'targetClass' => SystemAccount::className(), 'targetAttribute' => ['system_account_id' => 'id']],
@@ -62,7 +61,7 @@ class Payments extends \yii\db\ActiveRecord
             'bank_name' => Yii::t('app', 'Bank Name'),
             'cheque_no' => Yii::t('app', 'Cheque No'),
             'cheque_date' => Yii::t('app', 'Cheque Date'),
-            'due_date' => Yii::t('app', 'Due Date'),
+            'transaction_id' => Yii::t('app', 'Transaction ID'),
             'created_at' => Yii::t('app', 'Created At'),
         ];
     }
@@ -81,6 +80,11 @@ class Payments extends \yii\db\ActiveRecord
     public function getSystemAccount()
     {
         return $this->hasOne(SystemAccount::className(), ['id' => 'system_account_id']);
+    }
+
+    public function getTransaction()
+    {
+        return $this->hasOne(Transaction::className(), ['id' => 'transaction_id']);
     }
 
     /**

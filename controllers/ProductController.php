@@ -12,14 +12,10 @@ use yii\filters\VerbFilter;
 use yii\db\Query;
 
 
-/**
- * ProductController implements the CRUD actions for Product model.
- */
+
 class ProductController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
+    
     public function behaviors()
     {
         return [
@@ -32,10 +28,7 @@ class ProductController extends Controller
         ];
     }
 
-    /**
-     * Lists all Product models.
-     * @return mixed
-     */
+    
     public function actionFetch($q = null, $id = null)
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
@@ -88,11 +81,7 @@ class ProductController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Product model.
-     * @param integer $id
-     * @return mixed
-     */
+    
     public function actionView($id)
     {
         return $this->render('view', [
@@ -100,17 +89,17 @@ class ProductController extends Controller
         ]);
     }
 
-    /**
-     * Creates a new Product model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
+    
     public function actionCreate()
     {
         $model = new Product();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            //// Set flash Properties//
+                Yii::$app->getSession()->setFlash('success', ['type' => 'success']);
+            //// Set flash Properties//
+
+            return $this->redirect(['index']);
         }
 
         return $this->render('create', [
@@ -118,31 +107,27 @@ class ProductController extends Controller
         ]);
     }
 
-    /**
-     * Updates an existing Product model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
+
+    
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            //// Set flash Properties//
+                Yii::$app->getSession()->setFlash('success', ['type' => 'success']);
+            //// Set flash Properties//
+
+            return $this->redirect(['index']);
         }
 
-        return $this->render('update', [
+        return $this->renderAjax('update', [
             'model' => $model,
         ]);
     }
 
-    /**
-     * Deletes an existing Product model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
+
+    
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
@@ -150,13 +135,7 @@ class ProductController extends Controller
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the Product model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Product the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
+    
     protected function findModel($id)
     {
         if (($model = Product::findOne($id)) !== null) {

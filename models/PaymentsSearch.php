@@ -20,7 +20,7 @@ class PaymentsSearch extends Payments
         return [
             [['id', 'invoice_id', 'system_account_id', 'cheque_no'], 'integer'],
             [['amount'], 'number'],
-            [['mode', 'bank_name', 'cheque_date', 'due_date', 'created_at'], 'safe'],
+            [['mode', 'bank_name', 'cheque_date', 'created_at'], 'safe'],
         ];
     }
 
@@ -66,7 +66,6 @@ class PaymentsSearch extends Payments
             'amount' => $this->amount,
             'cheque_no' => $this->cheque_no,
             'cheque_date' => $this->cheque_date,
-            'due_date' => $this->due_date,
             'created_at' => $this->created_at,
         ]);
 

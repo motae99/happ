@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
@@ -30,7 +31,14 @@ use yii\widgets\ActiveForm;
 ?>
 <div class="payments-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(
+        [   
+            'id' => 'cash-form',
+            'options'=>['method' => 'post'],
+            'action' => Url::to(['invoices/cash', 'id' => $model->id]),
+            
+        ]); 
+    ?>
 
     <?= $form->field($payment, 'amount')
         ->textInput(
@@ -50,4 +58,4 @@ use yii\widgets\ActiveForm;
 
     <?php ActiveForm::end(); ?>
 
-</div>
+</div> 

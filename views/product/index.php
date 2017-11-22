@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\widgets\Pjax;
 /* @var $this yii\web\View */
@@ -17,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Create Product'), ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::button('<i class="fa fa-add"> Add New Product</i>', ['value' => Url::to(['product/create']), 'title' => 'Add', 'class' => 'btn btn-flat bg-green showModalButton']); ?>
     </p>
 
     <?= GridView::widget([

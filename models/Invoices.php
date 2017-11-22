@@ -53,6 +53,7 @@ class Invoices extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'client_id' => Yii::t('app', 'Client ID'),
+            'transaction_id' => Yii::t('app', 'Transaction ID'),
             'amount' => Yii::t('app', 'Amount'),
             'method' => Yii::t('app', 'Method'),
             'date' => Yii::t('app', 'Date'),
@@ -88,7 +89,7 @@ class Invoices extends \yii\db\ActiveRecord
 
     public function getOutstanding()
     {
-        return $this->hasMany(Outstanding::className(), ['invoice_id' => 'id']);
+        return $this->hasMany(Outstanding::className(), ['invoice_id' => 'id'])->onCondition(['status' => 'outstanding']);
     }
 
     /**

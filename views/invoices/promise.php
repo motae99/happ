@@ -44,7 +44,8 @@ use kartik\date\DatePicker;
                         'format' => 'yyyy-mm-dd',
                         'todayHighlight' => true
                 	]    
-                ]);
+                ])
+            ->label(false);
         ?>
     	<?= $form->field($outstanding, 'amount')
 	        ->textInput(

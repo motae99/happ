@@ -66,10 +66,15 @@ class CategoryController extends Controller
         $model = new Category();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+
+            //// Set flash Properties//
+                Yii::$app->getSession()->setFlash('success', ['type' => 'success']);
+            //// Set flash Properties//
+
+            return $this->redirect(['index']);
         }
 
-        return $this->render('create', [
+        return $this->renderAjax('create', [
             'model' => $model,
         ]);
     }
@@ -85,13 +90,18 @@ class CategoryController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            //// Set flash Properties//
+                Yii::$app->getSession()->setFlash('success', ['type' => 'success']);
+            //// Set flash Properties//
+
+            return $this->redirect(['index']);
         }
 
-        return $this->render('update', [
+        return $this->renderAjax('update', [
             'model' => $model,
         ]);
     }
+
 
     /**
      * Deletes an existing Category model.

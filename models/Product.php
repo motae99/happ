@@ -22,17 +22,13 @@ use Yii;
  */
 class Product extends \yii\db\ActiveRecord
 {
-    /**
-     * @inheritdoc
-     */
+    
     public static function tableName()
     {
         return '{{%product}}';
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function rules()
     {
         return [
@@ -43,9 +39,7 @@ class Product extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
+    
     public function attributeLabels()
     {
         return [
@@ -60,42 +54,31 @@ class Product extends \yii\db\ActiveRecord
         ];
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
+    
     public function getInvoiceProducts()
     {
         return $this->hasMany(InvoiceProduct::className(), ['product_id' => 'id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
+    
     public function getCategory()
     {
         return $this->hasOne(Category::className(), ['id' => 'category_id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
+    
     public function getStocks()
     {
         return $this->hasMany(Stock::className(), ['product_id' => 'id']);
     }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
+    
     public function getStockings()
     {
         return $this->hasMany(Stocking::className(), ['product_id' => 'id']);
     }
 
-    /**
-     * @inheritdoc
-     * @return ProductQuery the active query used by this AR class.
-     */
+    
     public static function find()
     {
         return new ProductQuery(get_called_class());
