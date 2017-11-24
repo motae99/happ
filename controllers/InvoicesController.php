@@ -10,6 +10,7 @@ use yii\helpers\ArrayHelper;
 use app\models\InvoiceProduct;
 use app\models\Product;
 use app\models\Stock;
+use app\models\Stocking;
 use app\models\Model;
 use app\models\Payments;
 use app\models\Client;
@@ -161,9 +162,16 @@ class InvoicesController extends Controller
         $stock = Stock::find()
                     ->where(['product_id' => $product->id])
                     ->andWhere(['inventory_id' => $inventory_id])->one();
+        $current_rate = Yii::$app->mycomponent->rate();
+        $highest_rate = $stock->highest_rate;
+        if ($current_rate > $highest_rate) {
+           $price = $product->selling_price*$current_rate; 
+        }else{
+          $price = $product->selling_price*$highest_rate; 
+        }
         // if($product){
             return \yii\helpers\Json::encode([
-                'selling_price'=>$product->selling_price,
+                'selling_price'=>$price,
                 'quantity'=>$stock->quantity,
             ]);   
         // }
@@ -462,14 +470,66 @@ class InvoicesController extends Controller
                                 $modelItem->product_id = $product->id;
                                 $modelItem->buying_rate = $product->buying_price;
 
-                                // So far we do not allow seller to sell for more or less
-                                $modelItem->selling_rate = $product->selling_price;
                                 
+
+                                // So far we do not allow seller to sell for more or less
+                                $current_rate = Yii::$app->mycomponent->rate();
+                                $highest_rate = $stock->highest_rate;
+                                if($modelItem->selling_rate == $product->selling_price*$current_rate){
+                                    $modelItem->d_rate = $current_rate;
+                                }else{
+                                    $modelItem->d_rate = $highest_rate;
+                                }                                
+                                $modelItem->selling_rate = $product->selling_price;
                                 //calculate total cost of item sold using buying_price
-                                $expense += ($product->buying_price * $modelItem->quantity); 
+                                $stockings = Stocking::find()
+                                    ->where(['product_id' => $modelItem->product_id])
+                                    ->andWhere(['inventory_id' => $inventory->id])
+                                    ->andWhere(['transaction' => 'in'])
+                                    ->orderBy(['rate' => SORT_DESC])
+                                    ->all();
+                                $q = $modelItem->quantity;
+                                
+                                foreach ($stockings as $s) {
+                                    if ($s->quantity > $q) {
+                                        $s->quantity -= $q;
+                                        $s->save(false);
+                                        break;
+                                    }
+                                    elseif ($s->quantity <= $q) {
+                                        $q -= $s->quantity;
+                                        $s->delete(false);
+                                    }
+                                }
+                                    
+                                
+
+                                $stocking_out = new Stocking();
+                                $stocking_out->inventory_id = $stock->inventory_id;
+                                $stocking_out->product_id = $stock->product_id;
+                                $stocking_out->buying_price = $stock->avg_cost;
+                                $stocking_out->selling_price = $modelItem->selling_rate;
+                                $stocking_out->quantity = $modelItem->quantity;
+                                $stocking_out->rate = $modelItem->d_rate;
+                                $stocking_out->transaction = "out";
+                                $stocking_out->save(false);
+
+
 
                                 $stock->quantity -= $modelItem->quantity;
                                 $stock->save(false);
+
+                                //// save minimum/////
+                                if ($stock->quantity < $product->minimum) {
+                                    $minimum = new minimal();
+                                    $minimum->stock_id = $stock->id;
+                                    $minimum->quantity = $remaining;
+                                    $minimum->save(false);
+                                }
+                                //// save minimum/////
+                                
+
+                                $expense += ($stock->avg_cost*$modelItem->quantity); 
                                 //set flash success
                                 if (! ($flag = $modelItem->save(false))) {
                                     $transaction->rollBack();
@@ -481,7 +541,8 @@ class InvoicesController extends Controller
 
                         /// temperory until we fix invoices to specific inventory
                             $inventory = Inventory::find()->where(['id' => $stock->inventory_id])->one();
-                            $inventoryAccount = SystemAccount::find()->where(['id' => $inventory->system_account_id])->one();
+                            $inventoryAccount = SystemAccount::find()->where(['id' => $inventory->asset_account_id])->one();
+                            $inventoryExpenseAccount = SystemAccount::find()->where(['id' => $inventory->expense_account_id])->one();
                         /// temperory until we fix invoices to specific inventory
                     }
                     if ($flag) {
@@ -528,7 +589,7 @@ class InvoicesController extends Controller
 
                         //// Depit Sale_expenses account + balance////
                             $sales_expenses = new Entry();
-                            $account = SystemAccount::find()->where(['system_account_name' => 'sales expenses'])->one();
+                            $account = $inventoryExpenseAccount;
                             $sales_expenses->transaction_id = $start->id; 
                             $sales_expenses->account_id = $account->id; 
                             $sales_expenses->is_depit = 'yes'; 
@@ -614,7 +675,7 @@ class InvoicesController extends Controller
 
                         //// Depit Sale_expenses account + balance////
                             $sales_expenses = new Entry();
-                            $account = SystemAccount::find()->where(['system_account_name' => 'sales expenses'])->one();
+                            $account = $inventoryExpenseAccount;
                             $sales_expenses->transaction_id = $start->id; 
                             $sales_expenses->account_id = $account->id; 
                             $sales_expenses->is_depit = 'yes'; 
@@ -684,7 +745,7 @@ class InvoicesController extends Controller
 
                         //// Depit Sale_expenses account + balance////
                             $sales_expenses = new Entry();
-                            $account = SystemAccount::find()->where(['system_account_name' => 'sales expenses'])->one();
+                            $account = $inventoryExpenseAccount;
                             $sales_expenses->transaction_id = $start->id; 
                             $sales_expenses->account_id = $account->id; 
                             $sales_expenses->is_depit = 'yes'; 

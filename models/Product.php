@@ -29,12 +29,17 @@ class Product extends \yii\db\ActiveRecord
     }
 
     
+
+    
     public function rules()
     {
         return [
-            [['category_id', 'no', 'product_name', 'description', 'buying_price', 'selling_price', 'minimum'], 'required'],
+            [['category_id', 'no', 'product_name', 'description', 'buying_price', 'selling_price', 'minimum', 'percentage', 'active'], 'required'],
             [['category_id', 'no', 'minimum'], 'integer'],
-            [['product_name', 'description', 'buying_price', 'selling_price'], 'string', 'max' => 45],
+            [['created_at', 'updated_at'], 'safe'],
+            [['buying_price', 'selling_price', 'percentage'], 'number', 'min' => 0],
+            [['description'], 'string', 'max' => 255],
+            [['product_name'], 'string', 'max' => 45],
             [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
         ];
     }
@@ -50,21 +55,27 @@ class Product extends \yii\db\ActiveRecord
             'description' => Yii::t('app', 'Description'),
             'buying_price' => Yii::t('app', 'Buying Price'),
             'selling_price' => Yii::t('app', 'Selling Price'),
+            'percentage' => Yii::t('app', 'percentage'),
             'minimum' => Yii::t('app', 'Minimum'),
+            'active' => Yii::t('app', 'active'),
+            'created_at' => Yii::t('app', 'created_at'),
+            'updated_at' => Yii::t('app', 'updated_at'),
+            'created_by' => Yii::t('app', 'created_by'),
+            'updated_by' => Yii::t('app', 'updated_by'),
         ];
     }
 
     
-    public function getInvoiceProducts()
-    {
-        return $this->hasMany(InvoiceProduct::className(), ['product_id' => 'id']);
-    }
+    // public function getInvoiceProducts()
+    // {
+    //     return $this->hasMany(InvoiceProduct::className(), ['product_id' => 'id']);
+    // }
 
     
-    public function getCategory()
-    {
-        return $this->hasOne(Category::className(), ['id' => 'category_id']);
-    }
+    // public function getCategory()
+    // {
+    //     return $this->hasOne(Category::className(), ['id' => 'category_id']);
+    // }
 
     
     public function getStocks()

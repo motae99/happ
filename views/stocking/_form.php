@@ -1,8 +1,11 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
+
+use app\models\Inventory;
 
 use kartik\select2\Select2;
 
@@ -19,6 +22,10 @@ use kartik\select2\Select2;
 <div class="stocking-form">
 
     <?php $form = ActiveForm::begin(); ?>
+    <?= $form->field($model, 'inventory_id')->dropDownList(
+                                ArrayHelper::map(Inventory::find()->all(), 'id', 'name'),
+                                ['prompt'=>'Select An Inventory '])->label(false); 
+    ?>
 
     <?php echo $form->field($model, 'product_id')->widget(Select2::classname(), [
                       'options' => ['placeholder' => 'Type Product name ...'],
@@ -35,21 +42,22 @@ use kartik\select2\Select2;
                           'templateSelection' => new JsExpression('function (name) { return name.text; }'),
                       ],
       
-                  ]);
+                  ])->label(false);
       
         ?>
 
-    <?= $form->field($model, 'inventory_id')->textInput() ?>
 
-    <?= $form->field($model, 'buying_price')->textInput() ?>
+    <?= $form->field($model, 'buying_price')->textInput(['placeholder'=>'buying_price', 'maxlength' => true])->label(false) ?>
+    
+    <?= $form->field($model, 'percentage')->textInput(['placeholder'=>'percentage', 'maxlength' => true])->label(false) ?>
 
-    <?= $form->field($model, 'selling_price')->textInput() ?>
+    <?= $form->field($model, 'selling_price')->textInput(['placeholder'=>'selling_price', 'maxlength' => true])->label(false) ?>
 
-    <?= $form->field($model, 'quantity')->textInput() ?>
+    <?= $form->field($model, 'quantity')->textInput(['placeholder'=>'quantity', 'maxlength' => true])->label(false) ?>
 
 
     <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success btn-flat btn-block']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
@@ -70,6 +78,16 @@ $('#stocking-product_id').change(function(){
      success: function (data, textStatus, jqXHR) {
        $('#stocking-selling_price').val(data.selling_price);
        $('#stocking-buying_price').val(data.buying_price);
+       $('#stocking-active').val(data.active);
+       $('#stocking-percentage').val(data.percentage);
+       if(data.active == "percentage"){
+        $('#stocking-selling_price').prop("readonly", true);
+        // $('div .field-stocking-selling_price').hide();
+       }else{
+        $('#stocking-percentage').prop("readonly", true);
+        // $('div .field-stocking-percentage').hide();
+
+       }
       },
           error: function (jqXHR, textStatus, errorThrown) {
               //console.log('An error occured!');
@@ -77,6 +95,26 @@ $('#stocking-product_id').change(function(){
           }
     });
   });
+
+  $("#stocking-buying_price, #stocking-selling_price").change(function() {
+      var priceOne = parseFloat($("#stocking-buying_price").val());
+      var priceTwo = parseFloat($("#stocking-selling_price").val());
+      if ($("#stocking-buying_price").val() && $("#stocking-selling_price").val()){     
+        $("#stocking-percentage").val("");
+        $('#stocking-percentage').val(((priceTwo - priceOne) / priceOne * 100));
+      }
+
+  });
+
+    $("#stocking-percentage").change(function() {
+        var priceOne = parseFloat($("#stocking-buying_price").val());
+        var rate = parseFloat($("#stocking-percentage").val());
+
+        if ($("#stocking-percentage").val() && $("#stocking-buying_price").val()){
+          $('#stocking-selling_price').val("");
+          $('#stocking-selling_price').val(((priceOne * rate)/ 100 + priceOne));
+        }
+    });
 });
 JS;
 $this->registerJs($script);

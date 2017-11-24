@@ -161,7 +161,7 @@ function calculateAmountDue(){
             <?= $form->field($model, 'client_id')
                 ->dropDownList(ArrayHelper::map(Client::find()->all(), 'id', 'client_name'),
                 [
-                    'prompt'=>'Client Name',
+                    'prompt'=>'Client Name', 
                     // 'onchange'=> 'pro($(this))'
 
                 ])->label(false);  

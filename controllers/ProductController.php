@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Product;
 use app\models\ProductSearch;
+// use app\components\MyComponent;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -58,8 +59,10 @@ class ProductController extends Controller
             return \yii\helpers\Json::encode([
                 'id'=>$model->id,
                 'product_name'=>$model->product_name,
-                'buying_price'=>$model->buying_price,
-                'selling_price'=>$model->selling_price,
+                'active'=>$model->active,
+                'percentage'=>$model->percentage,
+                'buying_price'=>Yii::$app->mycomponent->rateUsd($model->buying_price),
+                'selling_price'=>Yii::$app->mycomponent->rateUsd($model->selling_price),
 
             ]);
 
@@ -94,7 +97,10 @@ class ProductController extends Controller
     {
         $model = new Product();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $model->buying_price = Yii::$app->mycomponent->rateSdp($_POST['Product']['buying_price']);
+            $model->selling_price = Yii::$app->mycomponent->rateSdp($_POST['Product']['buying_price']);
+            $model->save();
             //// Set flash Properties//
                 Yii::$app->getSession()->setFlash('success', ['type' => 'success']);
             //// Set flash Properties//
@@ -102,7 +108,7 @@ class ProductController extends Controller
             return $this->redirect(['index']);
         }
 
-        return $this->render('create', [
+        return $this->renderAjax('create', [
             'model' => $model,
         ]);
     }

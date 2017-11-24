@@ -18,14 +18,11 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= Html::button('<i class="fa fa-edit"> Update This</i>', ['value' => Url::to(['inventory/update', 'id' => $model->id]), 'title' => 'update', 'class' => 'btn btn-flat bg-yellow showModalButton']); ?>
         
-        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
-                'method' => 'post',
-            ],
-        ]) ?>
+        <?= Html::a(Yii::t('app', 'Invoice'), ['invoices/create', 'id' => $model->id], [
+            'class' => 'btn btn-danger',]) 
+        ?>
     </p>
+
 
     <?= DetailView::widget([
         'model' => $model,

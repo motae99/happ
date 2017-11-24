@@ -23,6 +23,9 @@ class Stocking extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    public $active;
+    public $percentage;
+
     public static function tableName()
     {
         return '{{%stocking}}';
@@ -34,8 +37,9 @@ class Stocking extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['inventory_id', 'product_id', 'buying_price', 'selling_price', 'quantity'], 'required'],
-            [['inventory_id', 'product_id', 'buying_price', 'selling_price', 'quantity'], 'integer'],
+            [['inventory_id', 'product_id', 'buying_price', 'selling_price', 'quantity', 'percentage'], 'required'],
+            [['inventory_id', 'product_id', 'quantity'], 'integer'],
+            // [['buying_price', 'selling_price'], 'decimal'],
             [['created_at'], 'safe'],
             [['inventory_id'], 'exist', 'skipOnError' => true, 'targetClass' => Inventory::className(), 'targetAttribute' => ['inventory_id' => 'id']],
             [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['product_id' => 'id']],

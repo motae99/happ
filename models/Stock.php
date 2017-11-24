@@ -50,6 +50,8 @@ class Stock extends \yii\db\ActiveRecord
             'inventory_id' => Yii::t('app', 'Inventory ID'),
             'product_id' => Yii::t('app', 'Product ID'),
             'quantity' => Yii::t('app', 'Quantity'),
+            'avg_cost' => Yii::t('app', 'average cost'),
+            'highest_rate' => Yii::t('app', 'highest_rate'),
             'created_at' => Yii::t('app', 'Created At'),
         ];
     }

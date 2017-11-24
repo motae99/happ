@@ -30,7 +30,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'inventory_id',
             'product_name',
             'quantity',
-            'created_at',
+            'avg_cost',
+            'highest_rate',
+            // 'created_at',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
