@@ -26,14 +26,14 @@ $this->params['breadcrumbs'][] = $this->title;
 <script>
 
 
-
+<?php $details = Url::to(['invoices/details']);?>
 function pro(item){
     var index  = item.attr("id").replace(/[^0-9.]/g, ""); 
     var product_id = $('#invoiceproduct-' + index + '-product_id').val();
     var inventory_id = "<?= $inventory->id; ?>";
     product_id = product_id == "" ? 0 : Number(product_id.split(",").join(""));
     $.ajax({
-         url: 'details?product_id=' + product_id + '&inventory_id=' + inventory_id,
+         url: "<?=$details?>?product_id=" + product_id + '&inventory_id=' + inventory_id,
          dataType: 'json',
          method: 'GET',
          data: product_id,
@@ -41,7 +41,7 @@ function pro(item){
             $('#invoiceproduct-' + index + '-selling_rate').val(data.selling_price) ;
             $('#invoiceproduct-' + index + '-quantity').prop('min', 1);
             $('#invoiceproduct-' + index + '-quantity').prop('max', data.quantity);
-            $('#invoiceproduct-' + index + '-buying_rate').val('your quantity');
+            $('#invoiceproduct-' + index + '-quantity').prop('readonly', false);
          },
          //  beforeSend: function (xhr) {
          //      alert('loading!');
@@ -50,6 +50,8 @@ function pro(item){
             $('#invoiceproduct-' + index + '-selling_rate').val('') ;
             $('#invoiceproduct-' + index + '-quantity').val('') ;
             $('#invoiceproduct-' + index + '-buying_rate').val('') ;
+            $('#invoiceproduct-' + index + '-quantity').prop('readonly', true);
+            calculateTotal();
               
           }
     });
@@ -73,7 +75,7 @@ function check(item) {
         // $('input #invoiceproduct-' + index + '-quantity').attr('aria-invalid', 'true');
         $('#invoiceproduct-' + index + '-quantity').val(max);
         // $('#invoiceproduct-' + index + '-buying_rate').val('Stock is less');
-        alert('you dont have this much avaiablabe is:' + max);  
+        alert('you dont have this much! avaiablabe is:' + max);  
     }else{
         $('#invoiceproduct-' + index + '-buying_rate').val(selling_rate * quantity);  
 
@@ -112,30 +114,23 @@ function calculateTotal(){
 
 //due amount calculation
 function calculateAmountDue(){
-    // amountPaid = $('#invoices-pay').val();
-    // total = $('#invoices-amount').val();
-    // if(amountPaid <= total ){
-    //     amountDue = parseFloat(total) - parseFloat( amountPaid );
-    //     // alert("amount due is :" + amountDue);
-    //     // $('.amountDue').val( amountDue.toFixed(2) );
-    //     $('#info').show();
-    //     $('.showAmount').text(data.amountDue);
+    amountPaid = $('#invoices-pay').val();
+    total = $('#invoices-amount').val();
+    if(amountPaid < total ){
+        amountDue = parseFloat(total) - parseFloat( amountPaid );
+        $('#info').show();
+        $('#invoices-amountDue').val(amountDue);
 
-    // }else{
-    //     total = parseFloat(total).toFixed(2);
-    //     // $('.amountDue').val( total);
-    //     $('#invoices-pay').val('0');
-    //     $('#info').show();
-    //     $('.showAmount').text(data.amountDue);
-    // }
+    }
+    else{
+         $('#info').hide();
+    }
 }
 
 </script>
 
 <div class="invoices-form" style="margin-top: 30px;">
-<div class="row">
-<div class="col-sm-12">
-<div class="box">
+
     <?php $form = ActiveForm::begin([ 
             'id'=>"dynamic-form",
             'options'=>['method' => 'post'],
@@ -221,7 +216,8 @@ function calculateAmountDue(){
                     ->textInput(
                         [
                             'type' => 'number', 
-                            'onchange' => 'check($(this))', 
+                            'onchange' => 'check($(this))',
+                            'readonly' => true, 
                             'placeholder'=>'Quantity'
                         ])
                     ->label(false) 
@@ -289,14 +285,23 @@ function calculateAmountDue(){
                     </td>
                 </tr>
 
+                <!-- <tr>
+                    <td id="info">
+                        AMOUNT DUE:
+                    </td>
+                    <td>
+                        
+                    </td>
+                </tr> -->
+                <hr style=" border-bottom: 4px solid #000;">
             </table>
         </div>
-        <hr style=" border-bottom: 4px solid #000;">
         <div class="col-sm-offset-8">
-            <div id="info hide">
-                AMOUNT DUE: <span class="showAmount"> </span>
+            <div id="info" >
+                 AMOUNT DUE:  <?= $form->field($model, 'amountDue')
+                            ->textInput()->label(false);  ?>
+                <hr style=" border-bottom: 4px solid #3455;">
             </div>
-            <hr style=" border-bottom: 4px solid #3455;">
         </div>
         
     
@@ -306,13 +311,14 @@ function calculateAmountDue(){
 
     <?php ActiveForm::end(); ?>
 </div>
-</div>
-</div>
-</div>
 
 
 <?php 
 $script = <<< JS
+$(document).ready(function () {
+    $("#info").hide();
+});
+
 $(".dynamicform_wrapper").on("afterDelete", function(e) {
     calculateTotal();
 });

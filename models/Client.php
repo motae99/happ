@@ -34,7 +34,7 @@ class Client extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['client_name', 'phone'], 'required'],
+            [['client_name', 'phone', 'color_class'], 'required'],
             [['phone', 'account_id', 'balance'], 'integer'],
             [['address'], 'string'],
             [['client_name'], 'string', 'max' => 45],
@@ -53,6 +53,8 @@ class Client extends \yii\db\ActiveRecord
             'address' => Yii::t('app', 'Address'),
             'account_id' => Yii::t('app', 'Account'),
             'balance' => Yii::t('app', 'Existing Balance'),
+            'color_class' => Yii::t('app', 'Color'),
+            'balance' => Yii::t('app', 'balance'),
         ];
     }
 

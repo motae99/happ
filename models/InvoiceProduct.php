@@ -52,6 +52,9 @@ class InvoiceProduct extends \yii\db\ActiveRecord
             'quantity' => Yii::t('app', 'Quantity'),
             'buying_rate' => Yii::t('app', 'Buying Rate'),
             'selling_rate' => Yii::t('app', 'Selling Rate'),
+            'd_rate' => Yii::t('app', 'Dollar Rate'),
+            'stocking_id' => Yii::t('app', 'Stock out'),
+            'created_at' => Yii::t('app', 'created at'),
         ];
     }
 

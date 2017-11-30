@@ -46,8 +46,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 	<div class="row">
-		<div class="col-sm-2"></div>
-		<div class="col-sm-8">
+		<div class="col-sm-1"></div>
+		<div class="col-sm-10">
 			<div class="box box-info box-solid">
 				<div class="box-header">
 						<?php 
@@ -57,7 +57,9 @@ $this->params['breadcrumbs'][] = $this->title;
 						        echo Html::button('<i class="fa fa-bank"></i>', ['value' => Url::to(['cheque', 'id' => $model->id]), 'title' => 'Cheque', 'class' => 'btn btn-sm bg-blue showModalButton']); 
 							}
 						?>
-						<?=  Html::button('<i class="fa fa-print"></i>', ['value' => Url::to(['cheque', 'id' => $model->id]), 'title' => 'export', 'class' => 'btn btn-sm bg-navy']);?>
+        				<?= Html::button('<i class="fa fa-edit">Edit</i>', ['value' => Url::to(['invoices/update', 'id' => $model->id]), 'title' => 'update', 'class' => 'btn btn-flat bg-blue showModalButton']); ?>
+						
+						<?=  Html::button('<i class="fa fa-print"></i>', ['value' => Url::to(['print', 'id' => $model->id]), 'title' => 'export', 'class' => 'btn btn-sm bg-navy']);?>
 				</div>
 				<div class="box-body" style="min-height: 908px; max-height: auto;  box-shadow: 0 0 30px black; padding: 0 15px 0 15px;">
 					<div class="col-sm-8" style="min-height: 400px; border-right: 2px solid #ecf0f5;">
@@ -121,11 +123,11 @@ $this->params['breadcrumbs'][] = $this->title;
 					</div>
 					<div class="col-sm-4" style="min-height: 400px; padding-left: 0; padding-right: 0;">
 						<div class="col-sm-12" style="min-height: 180px;">
-							Inventory Details
+							<?= $model->inventory->name;?>
 
 						</div>
 						<div class="col-sm-12" style="min-height: 180px; border-top:2px solid #ecf0f5">
-							Client's Details
+							<?= $model->client->client_name;?>
 						</div>
 					</div>
 
@@ -213,24 +215,18 @@ $this->params['breadcrumbs'][] = $this->title;
 
 					<table class="table table-responsive">
 								<tr>
-									<th class="text-center" style=" background-color: #07562d; width: 2%; color: white;"></th>
-									<th class="text-left" style=" background-color: #07562d; width: 40%; color: white;">Item</th>
-									<th class="text-center" style=" background-color: #07562d; width: 10%; color: white;">Quantity</th>
-									<th class="text-center" style=" background-color: #07562d; width: 10%; color: white;">Price</th>
-									<th class="text-center" style=" background-color: #07562d; width: 10%; color: white;">Tax</th>
-									<th class="text-right" style=" background-color: #07562d; width: 20%; color: white;">LineTotal</th>
+									<th class="text-center" style=" background-color: #00ef; color: white;">Amount</th>
+									<th class="text-center" style=" background-color: #00ef; color: white;">Mode</th>
+									<th class="text-center" style=" background-color: #00ef; color: white;">Paid At</th>
 								</tr>
 								<?php 
-									$products = $model->invoiceProducts;
-									foreach ($products as $product => $p) { 
+									$payments = $model->payments;
+									foreach ($payments as $payment ) { 
 								?>
 								<tr>
-									<td class="text-center" style="width: 2%"><?= $product+1 ?></td>
-									<td class="text-left" style="width: 40%"><?=$p->product->product_name?></td>
-									<td class="text-center" style="width: 10%"><?=$p->quantity?></td>
-									<td class="text-center" style="width: 10%"><?=$p->selling_rate?>.00</td>
-									<td class="text-center" style="width: 10%">0%</td>
-									<td class="text-right" style="width: 20%"><?= $p->quantity * $p->selling_rate?>.00</td>
+									<td class="text-center" ><?=$payment->amount?></td>
+									<td class="text-center" ><?=$payment->mode?></td>
+									<td class="text-center" ><?=$payment->created_at?></td>
 									
 								</tr>
 								<?php } 

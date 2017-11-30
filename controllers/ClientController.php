@@ -70,17 +70,28 @@ class ClientController extends Controller
 
             if($model->save()){
                 $account = new SystemAccount();
-                $account->account_no = "111".$model->phone;
+                $max = SystemAccount::find()->where(['group'=> 'client'])->max('account_no');
+                if($max){
+                    $account->account_no = $max+1;
+                }else{
+                    $account->account_no = 1200;
+                }
                 $account->system_account_name = $model->client_name;
                 $account->account_type_id = 1;
                 $account->description = "Client ".$model->client_name." Recievable account";
-                $account->opening_balance = $model->account_id;
-                $account->balance = $model->account_id;
+                if ($model->balance != "") {
+                    $account->opening_balance = $model->balance;
+                    $account->balance = $model->balance;
+                }else{
+                    $account->opening_balance = 0;
+                    $account->balance = 0;
+                }
+
                 $account->group = "client";
                 $account->to_increase = 'depit';
-                if($account->save()){
+                if($account->save(false)){
                     $model->account_id = $account->id;
-                    $model->save();
+                    $model->save(false);
                 }
 
             }

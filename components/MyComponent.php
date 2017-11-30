@@ -18,7 +18,7 @@ class MyComponent extends Component
 	}
 
 	public function Rate(){
-		return 20;
+		return 22;
 	}
   
   // public function MyFunction($param1,$param2){

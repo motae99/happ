@@ -28,7 +28,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
             'id',
             'transaction_id',
-            'account_id',
+            [
+                'attribute' => 'client_id',
+                'value' => function ($model) {
+                    return $model->systemAccount->system_account_name;
+                },
+            ],
             'is_depit',
             'amount',
             'description',

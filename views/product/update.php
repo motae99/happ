@@ -35,7 +35,7 @@ function shift(){
     <?php $form = ActiveForm::begin([   
             'id' => 'product-create-form',
             'options'=>['method' => 'post'],
-            'action' => Url::to(['product/create']),
+            'action' => Url::to(['product/update', 'id' => $model->id]),
             
         ]); 
     ?>

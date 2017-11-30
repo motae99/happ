@@ -13,6 +13,7 @@ use app\models\Stock;
 use app\models\Stocking;
 use app\models\Model;
 use app\models\Payments;
+use app\models\Minimal;
 use app\models\Client;
 use app\models\Outstanding;
 use app\models\SystemAccount;
@@ -162,6 +163,7 @@ class InvoicesController extends Controller
         $stock = Stock::find()
                     ->where(['product_id' => $product->id])
                     ->andWhere(['inventory_id' => $inventory_id])->one();
+
         $current_rate = Yii::$app->mycomponent->rate();
         $highest_rate = $stock->highest_rate;
         if ($current_rate > $highest_rate) {
@@ -349,139 +351,59 @@ class InvoicesController extends Controller
         $inventory = Inventory::findOne($id);
 
         if($model->load(Yii::$app->request->post()) ){
-
-            $modelsItem = Model::createMultiple(InvoiceProduct::classname());
-            Model::loadMultiple($modelsItem, Yii::$app->request->post());
-
-            
+            $inventoryAccount = SystemAccount::find()->where(['id' => $inventory->asset_account_id])->one();
+            $inventoryExpenseAccount = SystemAccount::find()->where(['id' => $inventory->expense_account_id])->one();
             $client_id = $_POST['Invoices']['client_id'];
             $client = Client::findOne($client_id);
             $clientAccount = SystemAccount::find()->where(['id' => $client->account_id])->one();
-            $cashAccount = SystemAccount::find()->where(['system_account_name' => 'cash'])->one();
-            $expense = 0;
-
-            if(!($clientAccount)){
-                // we have a problem
-                // set flash error with massage 
-                return $this->render('_form', [
-                    'model' => $model,
-                    'modelsItem' => (empty($modelsItem)) ? [new InvoiceProduct] : $modelsItem,
-                    'inventory' => $inventory
-                ]);    
-            }
+            $cashAccount = SystemAccount::find()->where(['account_no' => 1100])->one();
+            $paidNow = $model->pay;
             
-            if($model->amount == $model->pay){
-                //invoice method cash, status paid
-                $invoiceMethod = "cash";
-                $invoiceDate = date('Y-m-d');
-                $invoiceStatus = "paid";
+            $expense = 0;
+             
 
-                // new payment data 
-                $paymentAvailable = True;
-                $paymentSystemAccountId = $cashAccount->id;
-                $paymentAmount = $model->amount;
-                $paymentMode = "cash";
-
-                // use Cash account on transaction 
-                $fullPaymentCash = True;
-                $partialPaymentCash = False;
-                $noCash = False;
-
-
-                $cashPaid = $model->amount;
-
-                // use sales account with Total 
-                $salesAmount = $model->amount;
-
-            }elseif(($model->pay > 0) && ($model->pay < $model->amount)){
-                //invoice method credit, status partiallyPaid
-                $invoiceMethod = "credit";
-                $invoiceDate = date('Y-m-d');
-                $invoiceStatus = "partially";
-
-                // new payment with amount of model->pay 
-                $paymentAvailable = True;
-                $paymentSystemAccountId = $cashAccount->id;
-                $paymentAmount = $model->pay;
-                $paymentMode = "cash";
-
-                // use Cash account with model->pay amount 
-                $fullPaymentCash = False;
-                $partialPaymentCash = True;
-                $noCash = False;
-                $cashPaid = $model->pay;
-                // use client account with ($model->amount - $model->pay) 
-                $recievableAmount = $model->amount - $model->pay;
-
-                // use sales account with Total 
-                $salesAmount = $model->amount;
-
-            }else{
-                //invoice method credit, status unPaid
-                $invoiceMethod = "credit";
-                $invoiceDate = date('Y-m-d');
-                $invoiceStatus = "unpaid";
-
-                //We have no payment
-                $paymentAvailable = false;
-
-                // use client account with model->amount 
-                $fullPaymentCash = False;
-                $partialPaymentCash = False;
-                $noCash = True;
-                $recievableAmount = $model->amount;
-
-                // use sales account with Total 
-                $salesAmount = $model->amount;
-            }
-            $model->method = $invoiceMethod;
-            $model->date = $invoiceDate;
-            $model->status = $invoiceStatus;
+            $modelsItem = Model::createMultiple(InvoiceProduct::classname());
+            Model::loadMultiple($modelsItem, Yii::$app->request->post());
+                       
+            $model->method = 'undefined';
+            $model->date = date('Y-m-d');
+            $model->status = 'unpaid';
+            $model->inventory_id = $inventory->id;
             $model->cost = 0;
         
-            // validate all models
             $valid = $model->validate();
             //$valid = Model::validateMultiple($modelsItem) && $valid;
 
-
-           if ($valid) {
+            $tAmount = 0;
+            $tCost = 0;
+            if ($valid) {
                 $transaction = \Yii::$app->db->beginTransaction();
                 try {
-                    if($flag = $model->save(false)) {
-                        if($paymentAvailable){
-                            $payment = new Payments();
-                            $payment->invoice_id = $model->id;
-                            $payment->system_account_id = $paymentSystemAccountId;
-                            $payment->amount = $paymentAmount ;
-                            $payment->mode = $paymentMode ;
-                            $payment->save(false);
-                        }
+                    if($flag = $model->save(false)) {                       
                        
                         foreach ($modelsItem as $modelItem){       
-                            $modelItem->invoice_id = $model->id;
 
-                            /// see the stock ///
                             $stock = Stock::find()
                                     ->where(['product_id' => $modelItem->product_id])
                                     ->andWhere(['inventory_id' => $inventory->id])->one();
 
                             if($modelItem->quantity <= $stock->quantity && $modelItem->quantity > 0){
                                 $product = Product::findOne($stock->product_id);
-                                $modelItem->product_id = $product->id;
-                                $modelItem->buying_rate = $product->buying_price;
-
-                                
-
-                                // So far we do not allow seller to sell for more or less
                                 $current_rate = Yii::$app->mycomponent->rate();
                                 $highest_rate = $stock->highest_rate;
-                                if($modelItem->selling_rate == $product->selling_price*$current_rate){
+                                
+                                $modelItem->invoice_id = $model->id;
+                                $modelItem->product_id = $product->id;                                
+                                if ($current_rate > $highest_rate) {
+                                    $modelItem->selling_rate = $product->selling_price*$current_rate;
+                                    $modelItem->buying_rate = $product->buying_price*$current_rate;
                                     $modelItem->d_rate = $current_rate;
                                 }else{
-                                    $modelItem->d_rate = $highest_rate;
-                                }                                
-                                $modelItem->selling_rate = $product->selling_price;
-                                //calculate total cost of item sold using buying_price
+                                    $modelItem->selling_rate = $product->selling_price*$highest_rate;
+                                    $modelItem->buying_rate = $product->buying_price*$highest_rate;
+                                    $modelItem->d_rate = $highest_rate; 
+                                }
+
                                 $stockings = Stocking::find()
                                     ->where(['product_id' => $modelItem->product_id])
                                     ->andWhere(['inventory_id' => $inventory->id])
@@ -502,34 +424,51 @@ class InvoicesController extends Controller
                                     }
                                 }
                                     
-                                
-
                                 $stocking_out = new Stocking();
                                 $stocking_out->inventory_id = $stock->inventory_id;
                                 $stocking_out->product_id = $stock->product_id;
                                 $stocking_out->buying_price = $stock->avg_cost;
-                                $stocking_out->selling_price = $modelItem->selling_rate;
+                                $stocking_out->selling_price = $product->selling_price;
                                 $stocking_out->quantity = $modelItem->quantity;
                                 $stocking_out->rate = $modelItem->d_rate;
                                 $stocking_out->transaction = "out";
                                 $stocking_out->save(false);
 
+                                $checkRate = Stocking::find()
+                                    ->where(['product_id' => $product->id])
+                                    ->andWhere(['inventory_id' => $inventory->id])
+                                    ->andWhere(['transaction' => 'in'])
+                                    ->max('rate');
 
-
-                                $stock->quantity -= $modelItem->quantity;
+                                if ($checkRate != $stock->highest_rate) {
+                                    $stock->highest_rate = $checkRate;
+                                }
+                                $stock->quantity -= $stocking_out->quantity;
                                 $stock->save(false);
+
 
                                 //// save minimum/////
                                 if ($stock->quantity < $product->minimum) {
-                                    $minimum = new minimal();
-                                    $minimum->stock_id = $stock->id;
-                                    $minimum->quantity = $remaining;
-                                    $minimum->save(false);
+                                    $remainingQuantity = $product->minimum - $stock->quantity;
+                                    $min = Minimal::find()->where(['stock_id' => $stock->id])->one();
+                                    if ($min) {
+                                        $min->quantity = $remainingQuantity;
+                                        $min->save(false);
+                                    }else{
+                                        $minimum = new Minimal();
+                                        $minimum->stock_id = $stock->id;
+                                        $minimum->quantity = $remainingQuantity;
+                                        $minimum->save(false);
+                                    }
                                 }
                                 //// save minimum/////
-                                
 
-                                $expense += ($stock->avg_cost*$modelItem->quantity); 
+                                $modelItem->stocking_id = $stocking_out->id;
+
+                                $expense += ($stock->avg_cost*$modelItem->quantity);
+                                $tAmount += $modelItem->selling_rate*$modelItem->quantity;
+                                $tCost += $modelItem->buying_rate*$modelItem->quantity;
+
                                 //set flash success
                                 if (! ($flag = $modelItem->save(false))) {
                                     $transaction->rollBack();
@@ -537,18 +476,86 @@ class InvoicesController extends Controller
                                     break;
                                 }
                             }
-                        }
 
-                        /// temperory until we fix invoices to specific inventory
-                            $inventory = Inventory::find()->where(['id' => $stock->inventory_id])->one();
-                            $inventoryAccount = SystemAccount::find()->where(['id' => $inventory->asset_account_id])->one();
-                            $inventoryExpenseAccount = SystemAccount::find()->where(['id' => $inventory->expense_account_id])->one();
-                        /// temperory until we fix invoices to specific inventory
+                            Yii::$app->getSession()->setFlash('warning', ['type' => 'warning']);
+                            $model->amount = $tAmount;
+                            $model->cost = $tCost;
+                            $model->save(false);
+                        }
                     }
                     if ($flag) {
                         $transaction->commit();
+                    }
+                } //end of try
+                 catch (Exception $e) {
+                    $transaction->rollBack();
+                } //end of catch
 
-                        // Record Entry if payment is cash ////
+                if($model->amount == $paidNow){
+                    //invoice method cash, status paid
+                    $invoiceMethod = "cash";
+                    $invoiceDate = date('Y-m-d');
+                    $invoiceStatus = "paid";
+
+                    // new payment data 
+                    $paymentAvailable = True;
+                    $paymentSystemAccountId = $cashAccount->id;
+                    $paymentAmount = $model->amount;
+                    $paymentMode = "cash";
+
+                    // use Cash account on transaction 
+                    $fullPaymentCash = True;
+                    $partialPaymentCash = False;
+                    $noCash = False;
+
+
+                    $cashPaid = $model->amount;
+
+                    // use sales account with Total 
+                    $salesAmount = $model->amount;
+
+                }elseif(($paidNow > 0) && ($paidNow < $model->amount)){
+                    //invoice method credit, status partiallyPaid
+                    $invoiceMethod = "credit";
+                    $invoiceDate = date('Y-m-d');
+                    $invoiceStatus = "partially";
+
+                    // new payment with amount of paidNow 
+                    $paymentAvailable = True;
+                    $paymentSystemAccountId = $cashAccount->id;
+                    $paymentAmount = $paidNow;
+                    $paymentMode = "cash";
+
+                    // use Cash account with model->pay amount 
+                    $fullPaymentCash = False;
+                    $partialPaymentCash = True;
+                    $noCash = False;
+                    $cashPaid = $paidNow;
+                    // use client account with ($model->amount - $paidNow) 
+                    $recievableAmount = $model->amount - $paidNow;
+
+                    // use sales account with Total 
+                    $salesAmount = $model->amount;
+
+                }else{
+                    //invoice method credit, status unPaid
+                    $invoiceMethod = "credit";
+                    $invoiceDate = date('Y-m-d');
+                    $invoiceStatus = "unpaid";
+
+                    //We have no payment
+                    $paymentAvailable = false;
+
+                    // use client account with model->amount 
+                    $fullPaymentCash = False;
+                    $partialPaymentCash = False;
+                    $noCash = True;
+                    $recievableAmount = $model->amount;
+
+                    // use sales account with Total 
+                    $salesAmount = $model->amount;
+                }
+
                 $start = new Transaction();
                 $start->description = "Selling Products";
                 $start->reference = $model->id;
@@ -618,12 +625,6 @@ class InvoicesController extends Controller
                                 $account->save(false); 
                             }
                         //// Credit inventory account - balance////
-
-                        // Linking Payment with this transaction //
-                            $payment->transaction_id = $start->id;
-                            $payment->save(false);
-                        // Linking Payment with this transaction //
-
                     }elseif($partialPaymentCash){
                         //// Depit Cash account + balance////
                             $cash = new Entry();
@@ -704,12 +705,6 @@ class InvoicesController extends Controller
                                 $account->save(false); 
                             }
                         //// Credit inventory account - balance////  
-
-                        // Linking Payment with this transaction //
-                            $payment->transaction_id = $start->id;
-                            $payment->save(false);
-                        // Linking Payment with this transaction //                      
-
                     }elseif($noCash){
                         //// Depit ClientRecievable account + balance////
                             $recievable = new Entry();
@@ -775,26 +770,34 @@ class InvoicesController extends Controller
                             }
                         //// Credit inventory account - balance////
                     }
-                
+                    $model->method = $invoiceMethod;
+                    $model->date = $invoiceDate;
+                    $model->status = $invoiceStatus;
                     $model->transaction_id = $start->id;
                     $model->save(false);
-                    } ///end of transaction saved
 
-
-
+                    if($paymentAvailable){
+                        $payment = new Payments();
+                        $payment->invoice_id = $model->id;
+                        $payment->system_account_id = $paymentSystemAccountId;
+                        $payment->transaction_id = $start->id;
+                        $payment->amount = $paymentAmount ;
+                        $payment->mode = $paymentMode ;
+                        $payment->save(false);
                     }
-                } //end of try
-                 catch (Exception $e) {
-                    $transaction->rollBack();
-                } //end of catch
 
+                } ///end of start saved
+
+                Yii::$app->getSession()->setFlash('success', ['type' => 'success']);
                 return $this->redirect(['view', 'id' => $model->id]);
             } //end of if(valid)
 
+            Yii::$app->getSession()->setFlash('error', ['type' => 'error']);
             return $this->redirect(['index']);
 
+
         }// end of (model->load()) 
-            return $this->render('_form', [
+            return $this->renderAjax('_form', [
                 'model' => $model,
                 'inventory' => $inventory,
                 'modelsItem' => (empty($modelsItem)) ? [new InvoiceProduct] : $modelsItem
@@ -807,14 +810,17 @@ class InvoicesController extends Controller
         $model = $this->findModel($id);
         $modelsItem = $model->invoiceProducts;
 
-        if ($model->load(Yii::$app->request->post())) {
-            
+        $paid = False;
+        $original_amount = $model->amount;
+        $payment_transaction = $model->transaction_id;
+        $inventory = Inventory::find()->where(['id' => $model->inventory_id])->one();
+        
+        if($model->load(Yii::$app->request->post())) {
 
             $oldIDs = ArrayHelper::map($modelsItem, 'id', 'id');
             $modelsItem = Model::createMultiple(InvoiceProduct::classname(), $modelsItem);
             Model::loadMultiple($modelsItem, Yii::$app->request->post());
             $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($modelsItem, 'id', 'id')));
-
             // ajax validation
             if (Yii::$app->request->isAjax) {
                 Yii::$app->response->format = Response::FORMAT_JSON;
@@ -823,39 +829,377 @@ class InvoicesController extends Controller
                     ActiveForm::validate($model)
                 );
             }
-
             // validate all models
             $valid = $model->validate();
-            
             // $valid = Model::validateMultiple($modelsItem) && $valid;
-
             if ($valid) {
                 $transaction = \Yii::$app->db->beginTransaction();
                 try {
-                    if ($flag = $model->save(false)) {
+                    if($flag = $model->save(false)){
+                            $sells_return = 0;
+                            $cost_return = 0;
                         if (! empty($deletedIDs)) {
-                            InvoiceProduct::deleteAll(['id' => $deletedIDs]);
+                            //// need to calculate those/////
+                            foreach ($deletedIDs as $ID ) {
+                                $deleted = InvoiceProduct::findOne($ID);
+                                $stocking_out = Stocking::findOne($deleted->stocking_id);
+                                
+                                $sells_return += $deleted->selling_rate * $deleted->quantity;
+                                $cost_return += $stocking_out->buying_price * $stocking_out->quantity;
+
+                                /// stocking it in again/////
+                                $stocking_out->transaction= "in";
+                                $stocking_out->save(false);
+
+                                //// put back to stock /////
+                                    $stock = Stock::find()
+                                        ->where(['product_id' => $deleted->product_id])
+                                        ->andWhere(['inventory_id' => $model->inventory_id])
+                                        ->one();
+
+                                    $checkRate = Stocking::find()
+                                            ->where(['product_id' => $deleted->product_id])
+                                            ->andWhere(['inventory_id' => $inventory->id])
+                                            ->andWhere(['transaction' => 'in'])
+                                            ->max('rate');
+
+                                    if ($checkRate != $stock->highest_rate) {
+                                        $stock->highest_rate = $checkRate;
+                                    }
+                                    $stock->quantity += $stocking_out->quantity;
+                                    $stock->save(false); 
+                                //// put back to stock /////
+
+                                 // Update minimal ////
+                                    $min = Minimal::find()->where(['stock_id' => $stock->id])->one();
+                                    if ($min) {
+                                        if ($stock->quantity < $deleted->product->minimum) {
+                                            $remainingQuantity = $modelItem->product->minimum - $stock->quantity;
+                                            $min->quantity = $remainingQuantity;
+                                            $min->save(false);
+                                        }else{
+                                            $min->delete(false);
+                                        }
+                                    }
+
+                                
+                            } 
+                            InvoiceProduct::deleteAll(['id' => $deletedIDs]);   
                         }
                         foreach ($modelsItem as $modelItem) {
-                            $modelItem->invoice_id = $model->id;
+                                $stock = Stock::find()
+                                        ->where(['product_id' => $modelItem->product_id])
+                                        ->andWhere(['inventory_id' => $model->inventory_id])
+                                        ->one();
+
+                                $stocking_out = Stocking::findOne($modelItem->stocking_id);
+                                $q = $stocking_out->quantity - $modelItem->quantity;
+
+                                if ($q > 0) {
+                                    $sells_return += $modelItem->selling_rate * $q;
+                                    $cost_return += $stocking_out->buying_price * $q;
+                                    
+                                    $stocking_out->quantity = $modelItem->quantity;
+                                    $stocking_out->save(false);
+
+                                    $stocking_in = new Stocking();
+                                    $stocking_in->inventory_id = $stocking_out->inventory_id;
+                                    $stocking_in->product_id = $stocking_out->product_id;
+                                    $stocking_in->buying_price = $stocking_out->buying_price;
+                                    $stocking_in->selling_price = $stocking_out->selling_price;
+                                    $stocking_in->quantity = $q;
+                                    $stocking_in->transaction = "in";
+                                    $stocking_in->rate = $stocking_out->rate;
+                                    $stocking_in->save(false);                                
+                                    
+                                    $checkRate = Stocking::find()
+                                        ->where(['product_id' => $modelItem->product_id])
+                                        ->andWhere(['inventory_id' => $inventory->id])
+                                        ->andWhere(['transaction' => 'in'])
+                                        ->max('rate');
+
+                                    if ($checkRate != $stock->highest_rate) {
+                                        $stock->highest_rate = $checkRate;
+                                    }
+
+                                    $stock->quantity += $q;
+                                    $stock->save(false);
+
+                                    $min = Minimal::find()->where(['stock_id' => $stock->id])->one();
+                                    if ($min) {
+                                        if ($stock->quantity < $modelItem->product->minimum) {
+                                                $remainingQuantity = $modelItem->product->minimum - $stock->quantity;
+                                                $min->quantity = $remainingQuantity;
+                                                $min->save(false);
+                                        }else{
+                                            $min->delete(false);
+                                        }
+                                    }
+
+                                    
+                                }
+
+                                
                             if (! ($flag = $modelItem->save(false))) {
                                 $transaction->rollBack();
                                 break;
                             }
                         }
-                    }
+                    }//// endo of if ($flag = $model->save(false))
+                    
                     if ($flag) {
                         $transaction->commit();
-                        return $this->redirect(['view', 'id' => $model->id]);
                     }
                 } catch (Exception $e) {
                     $transaction->rollBack();
-                }
-            }
-        }
+                }///end of try
 
-        return $this->render('_try', [
+                $model->amount = $original_amount-$sells_return ;
+                $cost = $model->cost - $cost_return ;
+                $model->cost = $cost;
+                $model->save();
+
+                if($sells_return > 0 && $cost_return > 0){
+
+                    $outstanding = $model->outstanding;
+                    if ($outstanding) {
+                        foreach ($outstanding as $o) {
+                            $o->delete(false);
+                        }
+                    }
+                    
+
+                    $total_paid_amount = $model->totalPaid;
+                    if($total_paid_amount > $model->amount){
+                        $returned_amount = $total_paid_amount-$model->amount;
+                        $payments = $model->payments;
+                        foreach ($payments as $pay) {
+                            $pay->delete(false);
+                        }
+                        $payment = new Payments();
+                        $payment->invoice_id = $model->id;
+                        $payment->system_account_id = 1;
+                        $payment->amount = $model->amount ;
+                        $payment->mode = 'cash' ;
+                        $payment->save(false);
+                        $paid = True;
+
+                        $model->status = 'paid';
+                        $model->save(false);
+
+                    }
+                    
+                    //// Accounts and entry transcation  ////
+                        $sells_return_account =  SystemAccount::find()->where(['account_no' => '4100'])->one();
+                        $inventory_asset =  SystemAccount::find()->where(['id' => $inventory->asset_account_id])->one();
+                        $inventory_expenses =  SystemAccount::find()->where(['id' => $inventory->expense_account_id])->one();
+                        $client = Client::findOne($model->client_id);
+                        $clientRecievable = SystemAccount::find()->where(['id' => $client->account_id])->one();
+                        
+                        
+                        if ($clientRecievable->balance < $sells_return && $clientRecievable->balance > 0 ) {
+                            $payable = True;
+                            $payableAll = False;
+                            $recievableAll = False;
+                            $payable_amount = $sells_return-$clientRecievable->balance;
+                            $recievable_amount = $sells_return-$payable_amount;
+                            $clientPayable = SystemAccount::find()->where(['id' => $client->payable_id])->one();
+
+                            if (!($clientPayable)) {
+                                $payable_account = new SystemAccount();
+                                $max = SystemAccount::find()->where(['group'=> 'client payable'])->max('account_no');
+                                if($max){
+                                    $payable_account->account_no = $max+1;
+                                }else{
+                                    $payable_account->account_no = 2600;
+                                }
+                                $payable_account->system_account_name = $client->client_name." payable";
+                                $payable_account->account_type_id = 2;
+                                $payable_account->description = "Payable amount for client :".$client->client_name;
+                                $payable_account->opening_balance = 0;
+                                $payable_account->balance = 0;
+                                $payable_account->group = "client payable";
+                                $payable_account->to_increase = "credit";
+                                $payable_account->color_class = $client->color_class;
+                                $payable_account->save(false);
+                                $client->payable_id = $payable_account->id;
+                                $client->save(false);
+                                $clientPayable = $payable_account ;
+                            }    
+                        }elseif ($clientRecievable->balance <= 0) {
+                            $payable = False;
+                            $payableAll = True;
+                            $recievableAll = False;
+                            $payable_amount = $sells_return;
+                            $clientPayable = SystemAccount::find()->where(['id' => $client->payable_id])->one();
+                            if (!($clientPayable)) {
+                                $payable_account = new SystemAccount();
+                                $max = SystemAccount::find()->where(['group'=> 'client payable'])->max('account_no');
+                                if($max){
+                                    $payable_account->account_no = $max+1;
+                                }else{
+                                    $payable_account->account_no = 2600;
+                                }
+                                $payable_account->system_account_name = $client->client_name." payable";
+                                $payable_account->account_type_id = 2;
+                                $payable_account->description = "Payable amount for client :".$client->client_name;
+                                $payable_account->opening_balance = 0;
+                                $payable_account->balance = 0;
+                                $payable_account->group = "client payable";
+                                $payable_account->to_increase = "credit";
+                                $payable_account->color_class = $client->color_class;
+                                $payable_account->save(false);
+                                $client->payable_id = $payable_account->id;
+                                $client->save(false);
+                                $clientPayable = $payable_account ;
+                            }
+                        }else {
+                            $recievable_amount = $sells_return;
+                            $recievableAll = True;
+                            $payableAll = False;
+                            $payable = False;
+                        }
+
+                        $start = new Transaction();
+                        $start->description = "Returning Products";
+                        $start->reference = $model->id;
+                        $start->reference_type = "Invoices";
+                        if($start->save(false)){
+
+                            //// Depit inventory account + balance////
+                                $i_asset = new Entry();
+                                $account = $inventory_asset ;
+                                $i_asset->transaction_id = $start->id; 
+                                $i_asset->account_id = $account->id; 
+                                $i_asset->is_depit = 'yes'; 
+                                $i_asset->amount = $cost_return; 
+                                $i_asset->description = "Returning Products after selling"; 
+                                $i_asset->date = date('Y-m-d'); 
+                                $i_asset->balance = $account->balance + $cost_return; 
+                                if($i_asset->save(false)){
+                                    $account->balance += $cost_return;
+                                    $account->save(false); 
+                                }
+                            //// Depit inventory account + balance//// 
+
+                            //// Credit inventory expenses account - balance////
+                                $i_expenses = new Entry();
+                                $account = $inventory_expenses;
+                                $i_expenses->transaction_id = $start->id; 
+                                $i_expenses->account_id = $account->id; 
+                                $i_expenses->is_depit = 'no'; 
+                                $i_expenses->amount = $cost_return; 
+                                $i_expenses->description = "Returning Products after selling"; 
+                                $i_expenses->date = date('Y-m-d'); 
+                                $i_expenses->balance = $account->balance - $cost_return; 
+                                if($i_expenses->save(false)){
+                                    $account->balance -= $cost_return;
+                                    $account->save(false); 
+                                }
+                            //// Credit inventory expenses account - balance////
+
+                            //// Depit Sales return + balance////
+                                $sales_return_acc = new Entry();
+                                $account = $sells_return_account;
+                                $sales_return_acc->transaction_id = $start->id; 
+                                $sales_return_acc->account_id = $account->id; 
+                                $sales_return_acc->is_depit = 'yes'; 
+                                $sales_return_acc->amount = $sells_return;  
+                                $sales_return_acc->description = "Revenue has been reduced for this sale"; 
+                                $sales_return_acc->date = date('Y-m-d'); 
+                                $sales_return_acc->balance = $account->balance + $sells_return; 
+                                if($sales_return_acc->save(false)){
+                                    $account->balance += $sells_return;
+                                    $account->save(false); 
+                                }
+                            //// Depit Sales return + balance ////
+
+                            if ($payable) {
+                            //// Credit ClientRecievable account - balance////
+                                $recievable = new Entry();
+                                $account = $clientRecievable;
+                                $recievable->transaction_id = $start->id; 
+                                $recievable->account_id = $account->id; 
+                                $recievable->is_depit = 'no'; 
+                                $recievable->amount = $recievable_amount; 
+                                $recievable->description = "Substracting sold items"; 
+                                $recievable->date = date('Y-m-d'); 
+                                $recievable->balance = $account->balance - $recievable_amount; 
+                                if($recievable->save(false)){
+                                    $account->balance -= $recievable_amount;
+                                    $account->save(false); 
+                                }
+                            //// Credit ClientRecievable account - balance////
+
+                            //// Credit ClientPayable account + balance////
+                                $ClientPayableAcc = new Entry();
+                                $account = $clientPayable;
+                                $ClientPayableAcc->transaction_id = $start->id; 
+                                $ClientPayableAcc->account_id = $account->id; 
+                                $ClientPayableAcc->is_depit = 'no'; 
+                                $ClientPayableAcc->amount = $payable_amount; 
+                                $ClientPayableAcc->description = "Client pay back for returning products been sold this invoice"; 
+                                $ClientPayableAcc->date = date('Y-m-d'); 
+                                $ClientPayableAcc->balance = $account->balance + $payable_amount; 
+                                if($ClientPayableAcc->save(false)){
+                                    $account->balance += $payable_amount;
+                                    $account->save(false); 
+                                }
+                            //// Credit ClientPayable account + balance////
+                            }elseif ($payableAll) {
+                            //// Credit ClientPayable account + balance////
+                                $ClientPayableAcc = new Entry();
+                                $account = $clientPayable;
+                                $ClientPayableAcc->transaction_id = $start->id; 
+                                $ClientPayableAcc->account_id = $account->id; 
+                                $ClientPayableAcc->is_depit = 'no'; 
+                                $ClientPayableAcc->amount = $payable_amount; 
+                                $ClientPayableAcc->description = "Client pay back for returning products been sold this invoice"; 
+                                $ClientPayableAcc->date = date('Y-m-d'); 
+                                $ClientPayableAcc->balance = $account->balance + $payable_amount; 
+                                if($ClientPayableAcc->save(false)){
+                                    $account->balance += $payable_amount;
+                                    $account->save(false); 
+                                }
+                            //// Credit ClientPayable account + balance////
+                            }elseif ($recievableAll){
+                            //// Credit ClientRecievable account - balance////
+                                $recievable = new Entry();
+                                $account = $clientRecievable;
+                                $recievable->transaction_id = $start->id; 
+                                $recievable->account_id = $account->id; 
+                                $recievable->is_depit = 'no'; 
+                                $recievable->amount = $recievable_amount; 
+                                $recievable->description = "Substracting sold items"; 
+                                $recievable->date = date('Y-m-d'); 
+                                $recievable->balance = $account->balance - $recievable_amount; 
+                                if($recievable->save(false)){
+                                    $account->balance -= $recievable_amount;
+                                    $account->save(false); 
+                                }
+                            //// Credit ClientRecievable account - balance////
+                            }
+
+                            if ($paid) {
+                                $payment->transaction_id = $start->id;
+                                $payment->save(false);
+                            }
+
+                            $model->transaction_id = $start->id;
+                            $model->save(false);
+                        }
+                    //// Accounts and entry transcation  ////
+                    
+                }
+            }////end of if ($valid)
+            Yii::$app->getSession()->setFlash('success', ['type' => 'success']);
+            return $this->redirect(['view', 'id' => $model->id]);
+            
+        }////if($model->load(Yii::$app->request->post()))
+
+        return $this->renderAjax('update', [
             'model' => $model,
+            'inventory' => $inventory,
             'modelsItem' => (empty($modelsItem)) ? [new InvoiceProduct] : $modelsItem
         ]);
     }

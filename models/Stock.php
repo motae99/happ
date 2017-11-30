@@ -47,7 +47,7 @@ class Stock extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'inventory_id' => Yii::t('app', 'Inventory ID'),
+            'inventory_id' => Yii::t('app', 'Inventory'),
             'product_id' => Yii::t('app', 'Product ID'),
             'quantity' => Yii::t('app', 'Quantity'),
             'avg_cost' => Yii::t('app', 'average cost'),
@@ -71,6 +71,66 @@ class Stock extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Product::className(), ['id' => 'product_id']);
     }
+
+    public function getCategory()
+    {
+        return $this->hasOne(Product::className(), ['id' => 'product_id']);
+    }
+
+    public function Out($model)
+    {   
+        $out = Stocking::find()->where(['product_id' => $model->product_id, 'inventory_id'=> $model->inventory_id, 'transaction'=> 'out'])->sum('quantity');
+        if ($out) {
+            return $out ;
+        }
+        return 0 ;
+            
+
+    }
+
+    public function In($model)
+    {   
+        $in = Stocking::find()->where(['product_id' => $model->product_id, 'inventory_id'=> $model->inventory_id, 'transaction'=> 'in'])->sum('quantity');
+        if ($in) {
+            return $in ;
+        }
+        return 0 ;
+            
+
+    }
+
+    public function Trans($model)
+    {   
+        $trans = Stocking::find()->where(['product_id' => $model->product_id, 'inventory_id'=> $model->inventory_id, 'transaction'=> 'transfered'])->sum('quantity');
+        if ($trans) {
+            return $trans ;
+        }
+        return 0 ;
+            
+
+    }
+
+    public function Returned($model)
+    {   
+        $trans = Stocking::find()->where(['product_id' => $model->product_id, 'inventory_id'=> $model->inventory_id, 'transaction'=> 'retured'])->sum('quantity');
+        if ($trans) {
+            return $trans ;
+        }
+        return 0 ;
+            
+
+    }
+
+    // public function getCategory()
+    // {
+    //     return $this->hasOne(Product::className(), ['id' => 'product_id']);
+    // }
+
+    // public function getCategory()
+    // {
+    //     return $this->hasOne(Product::className(), ['id' => 'product_id']);
+    // }
+
 
     /**
      * @inheritdoc

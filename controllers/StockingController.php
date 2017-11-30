@@ -63,11 +63,11 @@ class StockingController extends Controller
             $product = Product::findOne($model->product_id);
             $inventory = Inventory::findOne($model->inventory_id);
             $inventoryAccount = SystemAccount::find()->where(['id' => $inventory->asset_account_id])->one();
-            $buying = Yii::$app->mycomponent->rateSdp($_POST['Stocking']['buying_price']);
-            $selling = Yii::$app->mycomponent->rateSdp($_POST['Stocking']['selling_price']);
+            $model->rate = Yii::$app->mycomponent->rate();
+            $buying = $_POST['Stocking']['buying_price']/$model->rate;
+            $selling = $_POST['Stocking']['selling_price']/$model->rate;
             $model->buying_price = $buying;
             $model->selling_price = $selling;
-            $model->rate = 22;
             $model->transaction = 'in';
             $model->created_at = new \yii\db\Expression('NOW()');
             $amount = $model->buying_price*$model->rate;
@@ -91,7 +91,7 @@ class StockingController extends Controller
                 $stock = Stock::find()
                         ->where(['product_id' => $model->product_id])
                         ->andWhere(['inventory_id' => $model->inventory_id])
-                        ->one();
+                        ->one(); 
                 if($stock){
                     //// calculate cost of goods sold ////
                         $stocking = Stocking::find()
@@ -188,7 +188,7 @@ class StockingController extends Controller
             return $this->redirect(['view', 'id' => $model->id]);
         }
 
-        return $this->render('create', [
+        return $this->renderAjax('_form', [
             'model' => $model,
         ]);
     }

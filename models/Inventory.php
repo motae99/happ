@@ -73,12 +73,12 @@ class Inventory extends \yii\db\ActiveRecord
 
     public function getAsset()
     {
-        return $this->hasOne(SystemAccount::className(), ['asset_account_id' => 'id']);
+        return $this->hasOne(SystemAccount::className(), ['id' => 'asset_account_id']);
     }
 
-    public function getEspense()
+    public function getExpense()
     {
-        return $this->hasOne(SystemAccount::className(), ['expense_account_id' => 'id']);
+        return $this->hasOne(SystemAccount::className(), ['id' => 'expense_account_id']);
     }
 
     public function getInvoices()
@@ -86,6 +86,15 @@ class Inventory extends \yii\db\ActiveRecord
         return $this->hasMany(Invoices::className(), ['inventory_id' => 'id']);
     }
 
+    public function getInvoicesCount()
+    {
+        return $this->hasMany(Invoices::className(), ['inventory_id' => 'id'])->count();
+    }
+
+    public function getStocksCount()
+    {
+        return $this->hasMany(Stock::className(), ['inventory_id' => 'id'])->count();
+    }
 
 
     

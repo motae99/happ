@@ -3,9 +3,12 @@
 namespace app\controllers;
 
 use Yii;
+
 use app\models\Inventory;
+use app\models\Stock;
 use app\models\SystemAccount;
 use app\models\InventorySearch;
+use app\models\StockSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -26,10 +29,15 @@ class InventoryController extends Controller
         ];
     }
 
+    public function actionTest()
+    {
+        return $this->render('_stocking');
+    }
     
     public function actionIndex()
-    {
-        $searchModel = new InventorySearch();
+    {   
+        $inventories = Inventory::find()->all();
+        $searchModel = new StockSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         
         // $inventories = Inventory::find()->all();
@@ -56,14 +64,25 @@ class InventoryController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'inventories' => $inventories,
         ]);
     }
 
     
     public function actionView($id)
-    {
+    {   
+        $model = $this->findModel($id);   
+        // $dataProvider =  new ActiveDataProvider([
+        //     'query' => Stock::find()->where(['inventory_id'=>$model->id])->all(),
+        //     // 'sort'=> ['defaultOrder' => ['date'=>SORT_DESC, 'account_id'=>SORT_ASC, 'timestamp'=>SORT_ASC]],
+
+        // ]);
+        // $searchModel = new StockSearch();
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            // 'searchModel' => $searchModel,
+            // 'dataProvider' => $dataProvider,
         ]);
     }
 

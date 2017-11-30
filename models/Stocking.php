@@ -58,6 +58,7 @@ class Stocking extends \yii\db\ActiveRecord
             'buying_price' => Yii::t('app', 'Buying Price'),
             'selling_price' => Yii::t('app', 'Selling Price'),
             'quantity' => Yii::t('app', 'Quantity'),
+            'transaction' => Yii::t('app', 'transaction'),
             'created_at' => Yii::t('app', 'Created At'),
         ];
     }
@@ -77,6 +78,11 @@ class Stocking extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Product::className(), ['id' => 'product_id']);
     }
+
+    // public function getSold()
+    // {
+    //     return $this->hasMany(Stock::className(), ['transaction' => 'out']);
+    // }
 
     /**
      * @inheritdoc

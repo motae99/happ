@@ -25,6 +25,7 @@ class Invoices extends \yii\db\ActiveRecord
      * @inheritdoc
      */
     public $pay ;
+    public $amountDue ;
     public static function tableName()
     {
         return '{{%invoices}}';
@@ -60,6 +61,7 @@ class Invoices extends \yii\db\ActiveRecord
             'status' => Yii::t('app', 'Status'),
             'created_at' => Yii::t('app', 'Created At'),
             'pay' => Yii::t('app', 'Pay'),
+            'inventory_id' => Yii::t('app', 'inventory_id'),
         ];
     }
 
@@ -79,12 +81,22 @@ class Invoices extends \yii\db\ActiveRecord
         return $this->hasOne(Client::className(), ['id' => 'client_id']);
     }
 
+    public function getInventory()
+    {
+        return $this->hasOne(Inventory::className(), ['id' => 'inventory_id']);
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */
     public function getPayments()
     {
         return $this->hasMany(Payments::className(), ['invoice_id' => 'id']);
+    }
+
+    public function getTotalPaid()
+    {
+        return $this->hasMany(Payments::className(), ['invoice_id' => 'id'])->sum('amount');
     }
 
     public function getOutstanding()

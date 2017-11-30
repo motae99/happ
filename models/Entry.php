@@ -71,6 +71,11 @@ class Entry extends \yii\db\ActiveRecord
         return $this->hasOne(Transaction::className(), ['id' => 'transaction_id']);
     }
 
+    public function getSystemAccount()
+    {
+        return $this->hasOne(SystemAccount::className(), ['id' => 'account_id']);
+    }
+
     /**
      * @inheritdoc
      * @return EntryQuery the active query used by this AR class.

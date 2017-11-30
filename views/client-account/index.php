@@ -13,27 +13,20 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="client-account-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
+    <?php $note = Yii::$app->fcm->createNotification("test title", "testing body");
+        $note->setIcon('notification_icon_resource_name')
+            ->setColor('#ffffff')
+            ->setBadge(1);
 
-    <p>
-        <?= Html::a(Yii::t('app', 'Create Client Account'), ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+        $message = Yii::$app->fcm->createMessage();
+        $message->addRecipient(new \paragraph1\phpFCM\Recipient\Device('dPt-kKrTUgg:APA91bFaZdVYMROmh9ueT3KZ2HgJcw0xnQw8qGadnnY4JSi9XXioB-_TYRG25qTPOJ1JrPmlkCoRehi_Z1SGtTFlPk0j64y1fQdnORGi8EWfCxhXqTIwBuw5IN1Vf2_OMSiCQ7PM_gOL'));
+        $message->setNotification($note)
+            ->setData(['someId' => 111]);
 
-    <?= GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+        $response = Yii::$app->fcm->send($message);
+        var_dump($response->getStatusCode());
+    ?>
 
-            'id',
-            'account_no',
-            'client_account_name',
-            'system_account_id',
-            'description',
-            'opening_balance',
-            'balance',
+    
 
-            ['class' => 'yii\grid\ActionColumn'],
-        ],
-    ]); ?>
 </div>

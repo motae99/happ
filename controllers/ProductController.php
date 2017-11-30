@@ -98,8 +98,8 @@ class ProductController extends Controller
         $model = new Product();
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->buying_price = Yii::$app->mycomponent->rateSdp($_POST['Product']['buying_price']);
-            $model->selling_price = Yii::$app->mycomponent->rateSdp($_POST['Product']['buying_price']);
+            $model->buying_price = $_POST['Product']['buying_price'] / Yii::$app->mycomponent->rate();
+            $model->selling_price = $_POST['Product']['selling_price'] / Yii::$app->mycomponent->rate();
             $model->save();
             //// Set flash Properties//
                 Yii::$app->getSession()->setFlash('success', ['type' => 'success']);

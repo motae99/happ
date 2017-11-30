@@ -12,7 +12,16 @@ $config = [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
     ],
+    'modules' => [
+       'gridview' =>  [
+            'class' => '\kartik\grid\Module'
+        ]
+    ],
     'components' => [
+            'fcm' => [
+                'class' => 'understeam\fcm\Client',
+                'apiKey' => 'AIzaSyDaOsu_ufjkwalfek3mQBmoIIJlzMtz8XA', 
+            ],
         'mycomponent' => [
             'class' => 'app\components\MyComponent',
         ],

@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\helpers\ArrayHelper;
 use yii\widgets\ActiveForm;
 use yii\web\JsExpression;
@@ -21,7 +22,14 @@ use kartik\select2\Select2;
 
 <div class="stocking-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(
+        [   
+            'id' => 'stocking-form',
+            'options'=>['method' => 'post'],
+            'action' => Url::to(['stocking/create']),
+            
+        ]); 
+    ?>
     <?= $form->field($model, 'inventory_id')->dropDownList(
                                 ArrayHelper::map(Inventory::find()->all(), 'id', 'name'),
                                 ['prompt'=>'Select An Inventory '])->label(false); 
