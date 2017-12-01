@@ -1,8 +1,8 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\DetailView;
 use yii\helpers\Url;
+use yii\widgets\DetailView;
 
 use app\models\SystemAccount;
 use app\models\OutStanding;
@@ -48,18 +48,28 @@ $this->params['breadcrumbs'][] = $this->title;
 	<div class="row">
 		<div class="col-sm-1"></div>
 		<div class="col-sm-10">
-			<div class="box box-info box-solid">
-				<div class="box-header">
+			<div class="box box-info">
+				<div class="">
 						<?php 
 							if($creditMax > 0){
-						        echo Html::button('<i class="fa fa-dollar"></i>', ['value' => Url::to(['cash', 'id' => $model->id]), 'title' => 'Cash', 'class' => 'btn btn-sm bg-purple showModalButton']); 
-						        echo Html::button('<i class="fa fa-money"></i>', ['value' => Url::to(['promise', 'id' => $model->id]), 'title' => 'Promise', 'class' => 'btn btn-sm bg-maroon showModalButton']); 
-						        echo Html::button('<i class="fa fa-bank"></i>', ['value' => Url::to(['cheque', 'id' => $model->id]), 'title' => 'Cheque', 'class' => 'btn btn-sm bg-blue showModalButton']); 
+						        echo Html::button('<i class="fa fa-2x fa-dollar"></i>', ['value' => Url::to(['cash', 'id' => $model->id]), 'title' => 'Cash', 'class' => 'btn btn-sm bg-purple showModalButton']); 
+						        
+						        echo " ".Html::button('<i class="fa fa-2x fa-money"></i>', ['value' => Url::to(['promise', 'id' => $model->id]), 'title' => 'Promise', 'class' => 'btn btn-sm bg-orange showModalButton']); 
+						        echo " ".Html::button('<i class="fa fa-2x fa-bank"></i>', ['value' => Url::to(['cheque', 'id' => $model->id]), 'title' => 'Cheque', 'class' => 'btn btn-sm bg-navy showModalButton']); 
 							}
 						?>
-        				<?= Html::button('<i class="fa fa-edit">Edit</i>', ['value' => Url::to(['invoices/update', 'id' => $model->id]), 'title' => 'update', 'class' => 'btn btn-flat bg-blue showModalButton']); ?>
+					<div class="box-tools pull-right">
+			          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+			          </button>
+			          <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+			        </div>
+
+					<div class="pull-right">
+        				<?= Html::button('<i class="fa fa-2x fa-edit"></i>', ['value' => Url::to(['invoices/update', 'id' => $model->id]), 'title' => 'update', 'class' => 'btn btn-flat btn-sm bg-maroon showModalButton']); ?>
+
+						<?=  Html::button('<i class="fa fa-2x fa-print"></i>', ['value' => Url::to(['print', 'id' => $model->id]), 'title' => 'export', 'class' => 'btn btn-sm bg-olive']);?>
+					</div>
 						
-						<?=  Html::button('<i class="fa fa-print"></i>', ['value' => Url::to(['print', 'id' => $model->id]), 'title' => 'export', 'class' => 'btn btn-sm bg-navy']);?>
 				</div>
 				<div class="box-body" style="min-height: 908px; max-height: auto;  box-shadow: 0 0 30px black; padding: 0 15px 0 15px;">
 					<div class="col-sm-8" style="min-height: 400px; border-right: 2px solid #ecf0f5;">
@@ -68,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
 						</h1>
 						<span class="text-bold"> #<?= $model->id?></span>
 						<span class="pull-right text-bold"> <?= $model->created_at?></span>
-						<hr style="margin-top: 0px; margin-bottom: 0px; border-top: 4px solid #e4b83c" >
+						<hr style="margin-top: 0px; margin-bottom: 0px; border-top: 3px solid #ddd" >
 						<?php if($outstandings){ ?>
 							<table class="table table-border table-responsive">
 								<tr>
@@ -117,17 +127,33 @@ $this->params['breadcrumbs'][] = $this->title;
 									    </span>
 									</td>
 								</tr>
-								<?php } ?>
+								<?php } ?> 
 							</table>
 							<?php }  ?>
 					</div>
 					<div class="col-sm-4" style="min-height: 400px; padding-left: 0; padding-right: 0;">
 						<div class="col-sm-12" style="min-height: 180px;">
-							<?= $model->inventory->name;?>
-
+				            <div style="margin-top: 40px; margin-left: 20px;">
+				              	<h3 style="font-weight: bold; color: brown;">
+				              		<?= $model->inventory->name;?>
+				              	</h3>
+				
+				              	<p><?= $model->inventory->address;?></p>
+				             	<p> <?= $model->inventory->phone_no;?></p>
+				            </div>
 						</div>
 						<div class="col-sm-12" style="min-height: 180px; border-top:2px solid #ecf0f5">
-							<?= $model->client->client_name;?>
+							<div class="col-sm-12" style="min-height: 180px;">
+					            <div style="margin-top: 40px; margin-left: 20px;">
+					              	<h3 style="font-weight: bold; color: brown;">
+					              		<?= $model->client->client_name;?>
+					              	</h3>
+					
+					              	<p><?= $model->client->address;?></p>
+					             	<p> <?= $model->client->phone;?></p>
+					            </div>
+							</div>
+
 						</div>
 					</div>
 
@@ -135,13 +161,13 @@ $this->params['breadcrumbs'][] = $this->title;
 					<div style="margin:70px"></div>
 
 					<table class="table table-responsive">
-								<tr>
-									<th class="text-center" style=" background-color: #00c0ef; width: 2%; color: white;"></th>
-									<th class="text-left" style=" background-color: #00c0ef; width: 40%; color: white;">Item</th>
-									<th class="text-center" style=" background-color: #00c0ef; width: 10%; color: white;">Quantity</th>
-									<th class="text-center" style=" background-color: #00c0ef; width: 10%; color: white;">Price</th>
-									<th class="text-center" style=" background-color: #00c0ef; width: 10%; color: white;">Tax</th>
-									<th class="text-right" style=" background-color: #00c0ef; width: 20%; color: white;">LineTotal</th>
+								<tr class="<?=$model->inventory->color_class?>">
+									<th class="text-center" style="width: 2%; color: white;"></th>
+									<th class="text-left" style="width: 40%; color: white;">Item</th>
+									<th class="text-center" style="width: 10%; color: white;">Quantity</th>
+									<th class="text-center" style="width: 10%; color: white;">Price</th>
+									<th class="text-center" style="width: 10%; color: white;">Tax</th>
+									<th class="text-right" style="width: 20%; color: white;">LineTotal</th>
 								</tr>
 								<?php 
 									$products = $model->invoiceProducts;
@@ -193,7 +219,7 @@ $this->params['breadcrumbs'][] = $this->title;
 									<td class="text-right" style="border-top: 0;  border-bottom:0; font-weight: bold;"> $<?= $model->amount?> </td>
 								</tr>
 
-								<tr style="border-bottom: 4px solid #000;">
+								<tr style="border-bottom: 2px solid #000;">
 									<td style="border-top: 0;  border-bottom:0;"></td>	
 									<td style="border-top: 0;  border-bottom:0;"></td>	
 									<td style="border-top: 0;  border-bottom:0;"></td>	
@@ -207,37 +233,49 @@ $this->params['breadcrumbs'][] = $this->title;
 									<td style="border-top: 0;  border-bottom:0;"></td>	
 									<td style="border-top: 0;  border-bottom:0;"></td>	
 									<td style="border-top: 0;  border-bottom:0;"></td>	
-									<td style="border-bottom: 4px solid #e4b83c; font-weight: bold; width: 30%">AMOUNT DUE: </td>
-									<td class="text-right" style="border-bottom: 4px solid #e4b83c; font-weight: bold;"> $<?= $remaining?>.00 </td>
+									<td style="border-bottom: 4px solid #ddd; font-weight: bold; width: 30%">AMOUNT DUE: </td>
+									<td class="text-right" style="border-bottom: 4px solid #ddd; font-weight: bold;"> $<?= $remaining?>.00 </td>
 								</tr>
 
 					</table>
 
-					<table class="table table-responsive">
-								<tr>
-									<th class="text-center" style=" background-color: #00ef; color: white;">Amount</th>
-									<th class="text-center" style=" background-color: #00ef; color: white;">Mode</th>
-									<th class="text-center" style=" background-color: #00ef; color: white;">Paid At</th>
-								</tr>
-								<?php 
-									$payments = $model->payments;
-									foreach ($payments as $payment ) { 
-								?>
-								<tr>
-									<td class="text-center" ><?=$payment->amount?></td>
-									<td class="text-center" ><?=$payment->mode?></td>
-									<td class="text-center" ><?=$payment->created_at?></td>
-									
-								</tr>
-								<?php } 
-
-								?>
-					</table>
-					<div style="margin-top: 50px;">
+					
 					</div>
 					
-				</div>
 			</div>
+		<div class="box box-info">
+		  <div class="box-header">
+		  	Payments
+			<div class="box-tools pull-right">
+	          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+	          </button>
+	          <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+	        </div>
+	      </div>
+	        <div class="box-body" >
+			<table class="table table-responsive">
+						<tr class="<?=$model->inventory->color_class?>">
+							<th class="text-center" style="color: white;">Amount</th>
+							<th class="text-center" style="color: white;">Mode</th>
+							<th class="text-center" style="color: white;">Paid At</th>
+						</tr>
+						<?php 
+							$payments = $model->payments;
+							foreach ($payments as $payment ) { 
+						?>
+						<tr>
+							<td class="text-center" ><?=$payment->amount?></td>
+							<td class="text-center" ><?=$payment->mode?></td>
+							<td class="text-center" ><?=$payment->created_at?></td>
+							
+						</tr>
+						<?php } 
+
+						?>
+			</table>
+			
+			</div>
+		</div>
 		</div>
 	</div>
 	

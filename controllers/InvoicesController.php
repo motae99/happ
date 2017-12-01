@@ -848,7 +848,7 @@ class InvoicesController extends Controller
                                 $cost_return += $stocking_out->buying_price * $stocking_out->quantity;
 
                                 /// stocking it in again/////
-                                $stocking_out->transaction= "in";
+                                $stocking_out->transaction= "returned";
                                 $stocking_out->save(false);
 
                                 //// put back to stock /////
@@ -908,8 +908,9 @@ class InvoicesController extends Controller
                                     $stocking_in->buying_price = $stocking_out->buying_price;
                                     $stocking_in->selling_price = $stocking_out->selling_price;
                                     $stocking_in->quantity = $q;
-                                    $stocking_in->transaction = "in";
+                                    $stocking_in->transaction = "returned";
                                     $stocking_in->rate = $stocking_out->rate;
+                                    // $stocking_in->rate = $stocking_out->rate;
                                     $stocking_in->save(false);                                
                                     
                                     $checkRate = Stocking::find()

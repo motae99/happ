@@ -54,6 +54,26 @@ class SiteController extends Controller
         ];
     }
 
+    public function actionLanguage()
+    {   
+
+        if(isset($_REQUEST['language'])) {
+            $language = Yii::$app->request->post()['language'];
+            Yii::$app->language = $language;
+
+            $languageCookie = new \yii\web\Cookie([
+                'name' => 'language',
+                'value' => $language,
+                'expire' => time() + 60 * 60 * 24 * 30, // 30 days
+            ]);
+            \Yii::$app->response->cookies->add($languageCookie);
+            // print_r(Yii::$app->response->cookies) ;
+            // die();
+            return $this->goBack();
+        }
+        // return $this->renderAjax('language-form');
+    }
+
     /**
      * Displays homepage.
      *

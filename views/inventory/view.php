@@ -128,7 +128,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     if ($current_rate > $model->highest_rate) {
                         $rate = $current_rate;
                     }else{
-                       $rate = $model->highest_rate; 
+                       $rate = $current_rate; 
                     }
                     return round($model->avg_cost*$rate, 2);                    
                 },
@@ -205,11 +205,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 //only for testing
                 'class'=>'kartik\grid\DataColumn',
                 'header'=> 'quantity',
-                'attribute'=> 'quantity',
                 // 'width'=>'15%',
+                'value'=>function ($model, $key, $index, $widget) { 
+                    return 0;
+                },
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
                 'vAlign'=>'center',
+                'group'=>'true',
                 //only for testing
             ],
             

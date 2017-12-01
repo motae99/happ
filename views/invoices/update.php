@@ -163,7 +163,7 @@ function calculateAmountDue(){
     ]); ?>
 
     <table class="table table-borderd table-responsive container-items">
-        <tr class="bg-maroon">
+        <tr class="<?= $inventory->color_class?>">
             <th class="text-center">Item</th>
             <th class="text-center">Quantity</th>
             <th class="text-center">Price</th>
@@ -261,7 +261,7 @@ function calculateAmountDue(){
         
     
     <div class="form-group">
-        <?= Html::submitButton($modelItem->isNewRecord ? 'Create' : 'Update', ['class' => 'btn bg-maroon btn-block']) ?>
+        <?= Html::submitButton('Update', ['class' => '<?=$inventory->color_class?> btn btn-flat btn-block']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
