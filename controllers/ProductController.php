@@ -61,8 +61,8 @@ class ProductController extends Controller
                 'product_name'=>$model->product_name,
                 'active'=>$model->active,
                 'percentage'=>$model->percentage,
-                'buying_price'=>Yii::$app->mycomponent->rateUsd($model->buying_price),
-                'selling_price'=>Yii::$app->mycomponent->rateUsd($model->selling_price),
+                'buying_price'=>Yii::$app->mycomponent->rate()*$model->buying_price,
+                'selling_price'=>Yii::$app->mycomponent->rate()*$model->selling_price,
 
             ]);
 

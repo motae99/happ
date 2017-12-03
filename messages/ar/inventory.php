@@ -17,9 +17,22 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Cost' => '',
-    'Gross Sale' => '',
+    'Active Rate' => '',
+    'Add New Category' => 'أضف نوع جديد',
+    'Add New Inventory' => '',
+    'Add New Item' => '',
+    'Buying Price' => '',
+    'Category' => '',
+    'Cost of Goods' => 'تكلفة المنتجات',
+    'Inventory' => '',
+    'Invoices' => '',
+    'Items' => '',
+    'Product' => '',
+    'Quantity' => '',
+    'Selling Price' => '',
+    'Stock Value' => '',
     'Total' => '',
-    'inventory total :' => '',
-    'checkMe' => 'اوكي',
+    'total category items : ' => '',
+    'total inventory items : ' => '',
+    'update' => '',
 ];

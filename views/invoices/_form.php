@@ -119,11 +119,19 @@ function calculateAmountDue(){
     if(amountPaid < total ){
         amountDue = parseFloat(total) - parseFloat( amountPaid );
         $('#info').show();
-        $('#invoices-amountDue').val(amountDue);
+        $('#invoices-amountdue').val(amountDue);
 
     }
     else{
          $('#info').hide();
+    }
+}
+
+function cash(){
+    if ($('#invoices-client_id').val() == 1) {
+        $('#invoices-pay').prop('readonly', true);
+    }else{
+        $('#invoices-pay').prop('readonly', false);
     }
 }
 
@@ -137,32 +145,14 @@ function calculateAmountDue(){
             'action' => Url::to(['invoices/create', 'id' => $inventory->id])
             ]);  
     ?>
-    <div class="col-sm-8" style="min-height: 400px; border-right: 2px solid #ecf0f5;">
-        <h1 style="text-align: center;  font-size: 40px; font-family: e; font-weight: bold;">
-             Invoice
-        </h1>
-        <span class="text-bold"> #</span>
-        <span class="pull-right text-bold"> </span>
-        <hr style="margin-top: 0px; margin-bottom: 0px; border-top: 2px solid #3434" >
-        
-    </div>
-    <div class="col-sm-4" style="min-height: 400px; padding-left: 0; padding-right: 0;">
-        <div class="col-sm-12" style="min-height: 180px;">
-            <?= $inventory->name;?>
-            <?= $inventory->address;?>
-
-        </div>
-        <div class="col-sm-12" style="min-height: 180px; border-top:2px solid #ecf0f5">
-            <?= $form->field($model, 'client_id')
+         <?= $form->field($model, 'client_id')
                 ->dropDownList(ArrayHelper::map(Client::find()->all(), 'id', 'client_name'),
                 [
-                    'prompt'=>'Client Name', 
-                    // 'onchange'=> 'pro($(this))'
+                    'prompt'=>Yii::t('app', 'Cient'), 
+                    'onchange'=> 'cash()',
 
                 ])->label(false);  
-            ?>
-        </div>
-    </div>    
+        ?>
 
     <?php DynamicFormWidget::begin([
         'widgetContainer' => 'dynamicform_wrapper', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]
@@ -182,12 +172,12 @@ function calculateAmountDue(){
 
     <table class="table table-borderd table-responsive container-items">
         <tr class="<?= $inventory->color_class?>">
-            <th class="text-center">Item</th>
-            <th class="text-center">Quantity</th>
-            <th class="text-center">Price</th>
-            <th class="text-center">LineTotal</th>
-            <th class="text-center">
-                <button type="button" class="add-item btn  btn-xs"><i class="glyphicon glyphicon-plus"></i></button>
+            <th ><?=Yii::t('app', 'Item')?></th>
+            <th ><?=Yii::t('app', 'Quantity')?></th>
+            <th ><?=Yii::t('app', 'Price')?></th>
+            <th ><?=Yii::t('app', 'LineTotal')?></th>
+            <th >
+                <button type="button" class="add-item <?= $inventory->color_class?> btn btn-xs"><i class="fa fa-plus"></i></button>
             </th>
         </tr>
         <?php foreach ($modelsItem as $i => $modelItem): ?>
@@ -198,44 +188,44 @@ function calculateAmountDue(){
                     echo Html::activeHiddenInput($modelItem, "[{$i}]id");
                 }
             ?>
-            <td class="text-center">
+            <td >
                 <?= $form->field($modelItem, "[{$i}]product_id")->dropDownList(
                         ArrayHelper::map(Stock::find()
                                 ->where(['inventory_id' => $inventory->id])
                                 ->andWhere('quantity > 0')
                                 ->all(), 'product_id', 'product_name'),
                         [
-                            'prompt'=>'Select A Product ',
+                            'prompt'=>Yii::t('app', 'Item'),
                             'onchange'=> 'pro($(this))'
 
                         ])->label(false); 
                 ?>
             </td>
-            <td class="text-center">
+            <td >
                 <?= $form->field($modelItem, "[{$i}]quantity")
                     ->textInput(
                         [
                             'type' => 'number', 
                             'onchange' => 'check($(this))',
                             'readonly' => true, 
-                            'placeholder'=>'Quantity'
+                            'placeholder'=>Yii::t('app', 'Quantity'),
                         ])
                     ->label(false) 
                 ?>
             </td>
-            <td class="text-center">
+            <td >
                 <?= $form->field($modelItem, "[{$i}]selling_rate")
                     ->textInput(
                         [
                             'type' => 'number',
-                            'placeholder'=>'Price',
+                            'placeholder'=>Yii::t('app', 'Price'),
                             'disabled' => true,
                             // 'onchange' => 'check($(this))',
                         ])
                     ->label(false) 
                 ?>
             </td>
-            <td class="text-center">
+            <td >
                 <?= $form->field($modelItem, "[{$i}]buying_rate")
                     ->textInput(
                         [   
@@ -243,70 +233,57 @@ function calculateAmountDue(){
                             'type' => 'number', 
                             'disabled' => True,
                             'onchange' => 'calculateTotal()', 
-                            'placeholder'=>'LineTotal'
+                            'placeholder'=>Yii::t('app', 'LineTotal')
                         ])
                     ->label(false)
                 ?>
             </td>
-            <td class="text-center">
-                <button type="button" class="remove-item btn btn-danger btn-xs"><i class="glyphicon glyphicon-minus"></i></button>
+            <td >
+                <button type="button" class="remove-item btn btn-danger btn-xs"><i class="fa fa-minus"></i></button>
             </td>
         <?php endforeach; ?>
     </table>
     <hr style=" border-bottom: 1px solid #000;">
 
     <?php DynamicFormWidget::end(); ?>
-        <div class="col-sm-offset-8">
-            <table class="table table-responsive">
-                <tr>
-                    <td> Total</td>
-                    <td> 
-                        <?= $form->field($model, 'amount')
-                            ->textInput(
-                                [
-                                    'placeholder'=>'Total', 
-                                    'onchange'=> 'calculateAmountDue()',
-                                    'readonly' => true,
-                                ])->label(false) 
-                        ?>
-                    </td>
-                </tr>
-                <tr>
-                    <td> Pay</td>
-                    <td> 
-                        <?= $form->field($model, 'pay')
-                            ->textInput(
-                            [
-                                'placeholder'=>'Pay',
-                                'type' => 'number',
-                                'onchange'=> 'calculateAmountDue()',
-                            ])->label(false) 
-                        ?> 
-                    </td>
-                </tr>
+    <div class="col-sm-5 eArLangCss">
+        <?= $form->field($model, 'amount')
+            ->textInput(
+                [
+                    'placeholder'=>Yii::t('app', 'Total'), 
+                    'onchange'=> 'calculateAmountDue()',
+                    'type' => 'number',
+                    'readonly' => true,
+                ])->label(false) 
+        ?>
+    </div>
+    <div class="col-sm-5 eArLangCss">
+        <?= $form->field($model, 'pay')
+            ->textInput(
+            [
+                'placeholder'=>Yii::t('app', 'Pay'),
+                'type' => 'number',
+                'onchange'=> 'calculateAmountDue()',
+            ])->label(false) 
+        ?> 
+    </div>
+    <div class="col-sm-2 eArLangCss" id="info" >
+        <?= $form->field($model, Yii::t('app', 'amountDue'))
+                    ->textInput(
+                    [
+                        'placeholder'=>Yii::t('app', 'amountDue'),
+                        'type' => 'number',
+                        'disabled' => True,
+                    ]
 
-                <!-- <tr>
-                    <td id="info">
-                        AMOUNT DUE:
-                    </td>
-                    <td>
-                        
-                    </td>
-                </tr> -->
-                <hr style=" border-bottom: 4px solid #000;">
-            </table>
-        </div>
-        <div class="col-sm-offset-8">
-            <div id="info" >
-                 AMOUNT DUE:  <?= $form->field($model, 'amountDue')
-                            ->textInput()->label(false);  ?>
-                <hr style=" border-bottom: 4px solid #3455;">
-            </div>
-        </div>
+            )->label(false);  
+        ?>
+        <hr style=" border-bottom: 4px solid red;">
+    </div>
         
     
     <div class="form-group">
-        <?= Html::submitButton($modelItem->isNewRecord ? 'Create' : 'Update', ['class' => "$inventory->color_class btn btn-flat btn-block"]) ?>
+        <?= Html::submitButton(Yii::t('app', 'Create'), ['class' => "$inventory->color_class btn btn-flat btn-block"]) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -6,8 +6,15 @@ $db = require __DIR__ . '/db.php';
 $config = [
     'id' => 'basic',
     'name' => 'Sajana Souq',
+    // 'language' => 'ar',
     'basePath' => dirname(__DIR__),
-    'bootstrap' => ['log'],
+    'bootstrap' => [
+        'log',
+            [
+                'class' => 'app\components\LanguageSelector',
+                'supportedLanguages' => ['en','ar', 'fr'],
+            ],
+    ],
     'aliases' => [
         '@bower' => '@vendor/bower-asset',
         '@npm'   => '@vendor/npm-asset',
@@ -27,7 +34,7 @@ $config = [
             // ],
         ]
     ],
-    // 'language' => 'ar',
+    
     'components' => [
         'fcm' => [
             'class' => 'understeam\fcm\Client',
@@ -44,14 +51,19 @@ $config = [
                         'app/error' => 'error.php',
                     ],*/
                 ],
-                'yii*' => [
-                    'class' => 'yii\i18n\PhpMessageSource',
-                    'basePath' => '@app/messages',
-                ],
                 'invo*' => [
                     'class' => 'yii\i18n\PhpMessageSource',
                     'basePath' => '@app/messages',
                 ],
+                'inventory*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@app/messages',
+                ],
+                
+                // 'yii*' => [
+                //     'class' => 'yii\i18n\PhpMessageSource',
+                //     'basePath' => '@app/messages',
+                // ],
                 // 'kvgrid*' => [
                 //     'class' => 'yii\i18n\PhpMessageSource',
                 //     'basePath' => '@app/messages',

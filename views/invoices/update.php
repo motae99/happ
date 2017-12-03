@@ -164,12 +164,12 @@ function calculateAmountDue(){
 
     <table class="table table-borderd table-responsive container-items">
         <tr class="<?= $inventory->color_class?>">
-            <th class="text-center">Item</th>
-            <th class="text-center">Quantity</th>
-            <th class="text-center">Price</th>
-            <th class="text-center">LineTotal</th>
-            <th class="text-center">
-                <button type="button" class=" btn  btn-xs"><i class="glyphicon glyphicon-plus"></i></button>
+            <th ><?=Yii::t('app', 'Item')?></th>
+            <th ><?=Yii::t('app', 'Quantity')?></th>
+            <th ><?=Yii::t('app', 'Price')?></th>
+            <th ><?=Yii::t('app', 'LineTotal')?></th>
+            <th >
+                <button type="button" class=" btn btn-xs"><i class="<?= $inventory->color_class?>"></i></button>
             </th>
         </tr>
         <?php foreach ($modelsItem as $i => $modelItem): ?>
@@ -180,7 +180,7 @@ function calculateAmountDue(){
                     echo Html::activeHiddenInput($modelItem, "[{$i}]id");
                 }
             ?>
-            <td class="text-center">
+            <td >
                 <?= $form->field($modelItem, "[{$i}]product_id")->textInput(
 
                         [
@@ -190,7 +190,7 @@ function calculateAmountDue(){
                         ])->label(false); 
                 ?>
             </td>
-            <td class="text-center">
+            <td >
                 <?= $form->field($modelItem, "[{$i}]quantity")
                     ->textInput(
                         [
@@ -203,7 +203,7 @@ function calculateAmountDue(){
                     ->label(false) 
                 ?>
             </td>
-            <td class="text-center">
+            <td >
                 <?= $form->field($modelItem, "[{$i}]selling_rate")
                     ->textInput(
                         [
@@ -216,7 +216,7 @@ function calculateAmountDue(){
                     ->label(false) 
                 ?>
             </td>
-            <td class="text-center">
+            <td >
                 <?= $form->field($modelItem, "[{$i}]buying_rate")
                     ->textInput(
                         [   
@@ -230,7 +230,7 @@ function calculateAmountDue(){
                     ->label(false)
                 ?>
             </td>
-            <td class="text-center">
+            <td >
                 <button type="button" class="remove-item btn btn-danger btn-xs"><i class="glyphicon glyphicon-minus"></i></button>
             </td>
         <?php endforeach; ?>
@@ -238,30 +238,24 @@ function calculateAmountDue(){
     <hr style=" border-bottom: 1px solid #000;">
 
     <?php DynamicFormWidget::end(); ?>
-        <div class="col-sm-offset-8">
-            <table class="table table-responsive">
-                <tr>
-                    <td> Total</td>
-                    <td> 
-                        <?= $form->field($model, 'amount')
-                            ->textInput(
-                                [
-                                    'placeholder'=>'Total', 
-                                    'onchange'=> 'calculateAmountDue()',
-                                    'readonly' => true,
-                                ])->label(false) 
-                        ?>
-                    </td>
-                </tr>
-                    
 
-            </table>
-        </div>
+
+    <div class="col-sm-5 eArLangCss">
+        <?= $form->field($model, 'amount')
+            ->textInput(
+                [
+                    'placeholder'=>Yii::t('app', 'Total'), 
+                    'onchange'=> 'calculateAmountDue()',
+                    'type' => 'number',
+                    'readonly' => true,
+                ])->label(false) 
+        ?>
+    </div>
         
         
     
     <div class="form-group">
-        <?= Html::submitButton('Update', ['class' => '<?=$inventory->color_class?> btn btn-flat btn-block']) ?>
+        <?= Html::submitButton(Yii::t('app', 'Update'), ['class' => "$inventory->color_class btn btn-flat btn-block"]) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

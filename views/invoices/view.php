@@ -48,58 +48,58 @@ $this->params['breadcrumbs'][] = $this->title;
 	<div class="row">
 		<div class="col-sm-1"></div>
 		<div class="col-sm-10">
+			<div >
+				<?php 
+					if($creditMax > 0){
+				        echo Html::button('<i class="fa fa-2x fa-dollar"></i>', ['value' => Url::to(['cash', 'id' => $model->id]), 'title' => 'Cash', 'class' => 'btn btn-sm bg-purple showModalButton']); 
+				        
+				        echo " ".Html::button('<i class="fa fa-2x fa-money"></i>', ['value' => Url::to(['promise', 'id' => $model->id]), 'title' => 'Promise', 'class' => 'btn btn-sm bg-orange showModalButton']); 
+				        echo " ".Html::button('<i class="fa fa-2x fa-bank"></i>', ['value' => Url::to(['cheque', 'id' => $model->id]), 'title' => 'Cheque', 'class' => 'btn btn-sm bg-navy showModalButton']); 
+					}
+				?>
+				<?= Html::button('<i class="fa fa-2x fa-edit"></i>', ['value' => Url::to(['invoices/update', 'id' => $model->id]), 'title' => 'update', 'class' => 'btn btn-flat btn-sm bg-maroon showModalButton']); ?>
+
+				<?=  Html::button('<i class="fa fa-2x fa-print"></i>', ['value' => Url::to(['print', 'id' => $model->id]), 'title' => 'export', 'class' => 'btn btn-sm bg-olive']);?>
+			</div>
+
+			
+			
 			<div class="box box-info">
-				<div class="">
-						<?php 
-							if($creditMax > 0){
-						        echo Html::button('<i class="fa fa-2x fa-dollar"></i>', ['value' => Url::to(['cash', 'id' => $model->id]), 'title' => 'Cash', 'class' => 'btn btn-sm bg-purple showModalButton']); 
-						        
-						        echo " ".Html::button('<i class="fa fa-2x fa-money"></i>', ['value' => Url::to(['promise', 'id' => $model->id]), 'title' => 'Promise', 'class' => 'btn btn-sm bg-orange showModalButton']); 
-						        echo " ".Html::button('<i class="fa fa-2x fa-bank"></i>', ['value' => Url::to(['cheque', 'id' => $model->id]), 'title' => 'Cheque', 'class' => 'btn btn-sm bg-navy showModalButton']); 
-							}
-						?>
-					<div class="box-tools pull-right">
-			          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-			          </button>
-			          <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-			        </div>
-
-					<div class="pull-right">
-        				<?= Html::button('<i class="fa fa-2x fa-edit"></i>', ['value' => Url::to(['invoices/update', 'id' => $model->id]), 'title' => 'update', 'class' => 'btn btn-flat btn-sm bg-maroon showModalButton']); ?>
-
-						<?=  Html::button('<i class="fa fa-2x fa-print"></i>', ['value' => Url::to(['print', 'id' => $model->id]), 'title' => 'export', 'class' => 'btn btn-sm bg-olive']);?>
-					</div>
+				<div class="box-tools">
+		          <button type="button" class="btn btn-sm btn-box-tool" data-widget="collapse"><i class="fa fa-2x fa-minus"></i>
+		          </button>
+		          <button type="button" class="btn btn-sm btn-box-tool" data-widget="remove"><i class="fa fa-2x fa-times"></i></button>
+		        </div>
 						
-				</div>
-				<div class="box-body" style="min-height: 908px; max-height: auto;  box-shadow: 0 0 30px black; padding: 0 15px 0 15px;">
-					<div class="col-sm-8" style="min-height: 400px; border-right: 2px solid #ecf0f5;">
-						<h1 style="text-align: center; margin: 30px; font-size: 69px; font-family: e; font-weight: bold;">
-							 Invoice
+				<div class="box-body" style="min-height: 800px; max-height: auto;  box-shadow: 0 0 30px black; padding: 0 15px 0 15px;">
+					<div class="col-sm-8 eArLangCss" style="min-height: 400px;">
+						<h1 style="text-align: center; margin: 30px; font-size: 40px; font-family: e; font-weight: bold;">
+							<?= Yii::t('app', 'Invoice') ." #". $model->id?> 
 						</h1>
-						<span class="text-bold"> #<?= $model->id?></span>
-						<span class="pull-right text-bold"> <?= $model->created_at?></span>
+						<span class="text-bold"></span>
+						<span class="text-bold"> <?= $model->created_at?></span>
 						<hr style="margin-top: 0px; margin-bottom: 0px; border-top: 3px solid #ddd" >
 						<?php if($outstandings){ ?>
 							<table class="table table-border table-responsive">
 								<tr>
-									<th class="text-center">#</th>
-									<th class="text-center">Due Date</th>
-									<th class="text-center">Type</th>
-									<th class="text-center">Total</th>
-									<th class="text-center"><span class="fa fa-check"><span></th>
+									<th>#</th>
+									<th><?= Yii::t('app', 'Due Date')?></th>
+									<th><?= Yii::t('app', 'Type')?></th>
+									<th><?= Yii::t('app', 'Total')?></th>
+									<th><span class="fa fa-check"><span></th>
 								</tr>
 								<?php foreach ($outstandings as $o) { ?>
 								<tr>
-									<td class="text-center"><?=Html::a(Yii::t('app', ''), ['reconcile-delete', 'id' => $o->id], ['class' => 'fa fa-remove'])?></td>
+									<td><?=Html::a(Yii::t('app', ''), ['reconcile-delete', 'id' => $o->id], ['class' => 'fa fa-remove'])?></td>
 									<?php if($o->type == 'cheque'){?>
-									<td class="text-center" style="width: 30%"><?=$o->cheque_date?></td>
+									<td style="width: 30%"><?=$o->cheque_date?></td>
 									<?php }else{?>
-									<td class="text-center" style="width: 30%"><?=$o->due_date?></td>
+									<td style="width: 30%"><?=$o->due_date?></td>
 									<?php }?>
-									<td class="text-center" style="width: 20%"><?=$o->type?></td>
-									<td class="text-center" style="width: 20%"><?=$o->amount?></td>
+									<td style="width: 20%"><?=$o->type?></td>
+									<td style="width: 20%"><?=$o->amount?></td>
 									
-									<td class="text-center">
+									<td>
 										<?php 
 											$cash = SystemAccount::find()->where(['group' => 'cash'])->one();
 											$class = " fa fa-money";
@@ -129,9 +129,9 @@ $this->params['breadcrumbs'][] = $this->title;
 								</tr>
 								<?php } ?> 
 							</table>
-							<?php }  ?>
+							<?php }?>
 					</div>
-					<div class="col-sm-4" style="min-height: 400px; padding-left: 0; padding-right: 0;">
+					<div class="col-sm-4 eArLangCss" style="min-height: 400px; padding-left: 0; padding-right: 0;">
 						<div class="col-sm-12" style="min-height: 180px;">
 				            <div style="margin-top: 40px; margin-left: 20px;">
 				              	<h3 style="font-weight: bold; color: brown;">
@@ -162,24 +162,24 @@ $this->params['breadcrumbs'][] = $this->title;
 
 					<table class="table table-responsive">
 								<tr class="<?=$model->inventory->color_class?>">
-									<th class="text-center" style="width: 2%; color: white;"></th>
-									<th class="text-left" style="width: 40%; color: white;">Item</th>
-									<th class="text-center" style="width: 10%; color: white;">Quantity</th>
-									<th class="text-center" style="width: 10%; color: white;">Price</th>
-									<th class="text-center" style="width: 10%; color: white;">Tax</th>
-									<th class="text-right" style="width: 20%; color: white;">LineTotal</th>
+									<th style="width: 2%; color: white;"></th>
+									<th style="width: 40%; color: white;"><?= Yii::t('app', 'Item')?></th>
+									<th style="width: 10%; color: white;"><?= Yii::t('app', 'Quantity')?></th>
+									<th style="width: 10%; color: white;"><?= Yii::t('app', 'Price')?></th>
+									<th style="width: 10%; color: white;"><?= Yii::t('app', 'Tax')?></th>
+									<th style="width: 20%; color: white;"><?= Yii::t('app', 'LineTotal')?></th>
 								</tr>
 								<?php 
 									$products = $model->invoiceProducts;
 									foreach ($products as $product => $p) { 
 								?>
 								<tr>
-									<td class="text-center" style="width: 2%"><?= $product+1 ?></td>
-									<td class="text-left" style="width: 40%"><?=$p->product->product_name?></td>
-									<td class="text-center" style="width: 10%"><?=$p->quantity?></td>
-									<td class="text-center" style="width: 10%"><?=$p->selling_rate?>.00</td>
-									<td class="text-center" style="width: 10%">0%</td>
-									<td class="text-right" style="width: 20%"><?= $p->quantity * $p->selling_rate?>.00</td>
+									<td style="width: 2%"><?= $product+1 ?></td>
+									<td style="width: 40%"><?=$p->product->product_name?></td>
+									<td style="width: 10%"><?=$p->quantity?></td>
+									<td style="width: 10%"><?=$p->selling_rate?></td>
+									<td style="width: 10%">0%</td>
+									<td style="width: 20%"><?= $p->quantity * $p->selling_rate?>.00</td>
 									
 								</tr>
 								<?php } 
@@ -199,24 +199,24 @@ $this->params['breadcrumbs'][] = $this->title;
 									<td></td>	
 									<td></td>	
 									<td></td>	
-									<td >SUBTOTAL: </td>
-									<td class="text-right" > $<?= $model->amount?> </td>
+									<td ><?= Yii::t('app', 'SUBTOTAL')?>: </td>
+									<td > $<?= $model->amount?> </td>
 								</tr>
 								<tr>
 									<td style="border-top: 0;  border-bottom:0;"></td>	
 									<td style="border-top: 0;  border-bottom:0;"></td>	
 									<td style="border-top: 0;  border-bottom:0;"></td>	
 									<td style="border-top: 0;  border-bottom:0;"></td>	
-									<td style="border-top: 0;  border-bottom:0;">TAX: </td>
-									<td class="text-right" style="border-top: 0;  border-bottom:0;"> 0.00% </td>
+									<td style="border-top: 0;  border-bottom:0;"><?= Yii::t('app', 'TAX')?>: </td>
+									<td style="border-top: 0;  border-bottom:0;"> 0.00% </td>
 								</tr>
 								<tr>
 									<td style="border-top: 0;  border-bottom:0;"></td>	
 									<td style="border-top: 0;  border-bottom:0;"></td>	
 									<td style="border-top: 0;  border-bottom:0;"></td>	
 									<td style="border-top: 0;  border-bottom:0;"></td>	
-									<td style="border-top: 0;  border-bottom:0; font-weight: bold;">TOTAL: </td>
-									<td class="text-right" style="border-top: 0;  border-bottom:0; font-weight: bold;"> $<?= $model->amount?> </td>
+									<td style="border-top: 0;  border-bottom:0; font-weight: bold;"><?= Yii::t('app', 'TOTAL')?>: </td>
+									<td style="border-top: 0;  border-bottom:0; font-weight: bold;"> $<?= $model->amount?> </td>
 								</tr>
 
 								<tr style="border-bottom: 2px solid #000;">
@@ -224,8 +224,8 @@ $this->params['breadcrumbs'][] = $this->title;
 									<td style="border-top: 0;  border-bottom:0;"></td>	
 									<td style="border-top: 0;  border-bottom:0;"></td>	
 									<td style="border-top: 0;  border-bottom:0;"></td>	
-									<td style="border-top: 0;  border-bottom:0; ">PAID: </td>
-									<td class="text-right" style="border-top: 0;  border-bottom:0; "> $<?= $total_paid?>.00</td>
+									<td style="border-top: 0;  border-bottom:0; "><?= Yii::t('app', 'PAID')?>: </td>
+									<td style="border-top: 0;  border-bottom:0; "> $<?= $total_paid?>.00</td>
 								</tr>
 
 								<tr>
@@ -233,47 +233,75 @@ $this->params['breadcrumbs'][] = $this->title;
 									<td style="border-top: 0;  border-bottom:0;"></td>	
 									<td style="border-top: 0;  border-bottom:0;"></td>	
 									<td style="border-top: 0;  border-bottom:0;"></td>	
-									<td style="border-bottom: 4px solid #ddd; font-weight: bold; width: 30%">AMOUNT DUE: </td>
-									<td class="text-right" style="border-bottom: 4px solid #ddd; font-weight: bold;"> $<?= $remaining?>.00 </td>
+									<td style="border-bottom: 4px solid #ddd; font-weight: bold; width: 30%"><?= Yii::t('app', 'AMOUNT DUE')?>: </td>
+									<td style="border-bottom: 4px solid #ddd; font-weight: bold;"> $<?= $remaining?>.00 </td>
 								</tr>
 
 					</table>
 
 					
-					</div>
+				</div>
 					
 			</div>
-		<div class="box box-info">
-		  <div class="box-header">
-		  	Payments
-			<div class="box-tools pull-right">
-	          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+		<div class="box box-success">
+		  	<div class="box-tools">
+	          <button type="button" class="btn btn-sm btn-box-tool" data-widget="collapse"><i class="fa fa-2x fa-minus"></i>
 	          </button>
-	          <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+	          <button type="button" class="btn btn-sm btn-box-tool" data-widget="remove"><i class="fa fa-2x fa-times"></i></button>
+	        	
 	        </div>
-	      </div>
+
 	        <div class="box-body" >
-			<table class="table table-responsive">
-						<tr class="<?=$model->inventory->color_class?>">
-							<th class="text-center" style="color: white;">Amount</th>
-							<th class="text-center" style="color: white;">Mode</th>
-							<th class="text-center" style="color: white;">Paid At</th>
+	        	<div class="col-sm-6 eArLangCss">
+					<table class="table table-responsive">
+						<tr class="<?=$model->client->color_class?>">
+							<th style="color: white;"><?= Yii::t('app', 'Amount')?></th>
+							<th style="color: white;"><?= Yii::t('app', 'Mode')?></th>
+							<th style="color: white;"><?= Yii::t('app', 'Paid At')?></th>
 						</tr>
 						<?php 
 							$payments = $model->payments;
 							foreach ($payments as $payment ) { 
 						?>
 						<tr>
-							<td class="text-center" ><?=$payment->amount?></td>
-							<td class="text-center" ><?=$payment->mode?></td>
-							<td class="text-center" ><?=$payment->created_at?></td>
+							<td ><?=$payment->amount?></td>
+							<td ><?=$payment->mode?></td>
+							<td ><?=$payment->created_at?></td>
 							
 						</tr>
 						<?php } 
 
 						?>
-			</table>
-			
+					</table>
+		  		</div>
+		  		<div class="col-sm-6 eArLangCss">
+		  			<table class="table table-responsive">
+								<tr class="<?=$model->client->color_class?>">
+									<th style="width: 2%; color: white;"></th>
+									<th style="width: 40%; color: white;"><?= Yii::t('app', 'Item')?></th>
+									<th style="width: 10%; color: white;"><?= Yii::t('app', 'Quantity')?></th>
+									<th style="width: 10%; color: white;"><?= Yii::t('app', 'Price')?></th>
+									<th style="width: 20%; color: white;"><?= Yii::t('app', 'LineTotal')?></th>
+								</tr>
+								<?php 
+									$products = $model->invoiceReturnedProducts;
+									foreach ($products as $product => $p) { 
+								?>
+								<tr>
+									<td style="width: 2%"><?= $product+1 ?></td>
+									<td style="width: 40%"><?=$p->product->product_name?></td>
+									<td style="width: 10%"><?=$p->quantity?></td>
+									<td style="width: 10%"><?=$p->selling_rate?></td>
+									<td style="width: 20%"><?= $p->quantity * $p->selling_rate?>.00</td>
+									
+								</tr>
+								<?php } 
+
+								?>
+								
+
+					</table>
+		  		</div> 
 			</div>
 		</div>
 		</div>

@@ -118,45 +118,44 @@ $this->params['breadcrumbs'][] = $this->title;
                 // 'width'=>'26%',
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
-                'vAlign'=>'center',
                 'value' =>function ($model, $key, $index, $widget) { 
                     return $model->inventory->name;                    
                     },
                 'group'=>true,
-                'groupFooter'=>function ($model, $key, $index, $widget) { 
-                    return [
-                       'mergeColumns'=>[[0,3], [7,8]],
-                        'content'=>[             
-                            1=>'inventory total : ',
-                            // 2=>GridView::F_COUNT,
-                            4=>GridView::F_SUM,
-                            5=>GridView::F_SUM,
-                            6=>GridView::F_SUM,
-                         ],
-                        'contentFormats'=>[      
-                            4=>['format'=>'number', 'decimals'=>2, 'thousandSep' => ' '],
-                            5=>['format'=>'number', 'decimals'=>2, 'thousandSep' => ' '],
-                            6=>['format'=>'number', 'decimals'=>2, 'thousandSep' => ' '],
+                // 'groupFooter'=>function ($model, $key, $index, $widget) { 
+                //     return [
+                //        'mergeColumns'=>[[0,3], [7,8]],
+                //         'content'=>[             
+                //             1=>Yii::t('invo', 'inventory total :'),
+                //             // 2=>GridView::F_COUNT,
+                //             4=>GridView::F_SUM,
+                //             5=>GridView::F_SUM,
+                //             6=>GridView::F_SUM,
+                //          ],
+                //         'contentFormats'=>[
+                //             1=>['style'=>'font-variant:small-caps'],      
+                //             4=>['format'=>'number', 'decimals'=>2, 'thousandSep' => ' '],
+                //             5=>['format'=>'number', 'decimals'=>2, 'thousandSep' => ' '],
+                //             6=>['format'=>'number', 'decimals'=>2, 'thousandSep' => ' '],
 
-                        ],
-                        'contentOptions'=>[      
+                //         ],
+                //         'contentOptions'=>[      
 
-                            4=>['style'=>'text-align:center; color:red;'],
-                            5=>['style'=>'text-align:center; color:blue;'],
-                            6=>['style'=>'text-align:center; color:green;'],
-                    ],
+                //             4=>['style'=>'color:red;'],
+                //             5=>['style'=>'color:blue;'],
+                //             6=>['style'=>'color:green;'],
+                //     ],
 
-                        'options'=>['class'=>'success','style'=>'font-weight:bold;']
-                    ];
-                },
+                //         'options'=>['class'=>'success','style'=>'font-weight:bold;']
+                //     ];
+                // },
             ],
             [
                 'class'=>'kartik\grid\DataColumn',
                 'attribute'=>'client_id',
-                // 'header'=> 'Client',
+                // 'header'=> Yii::t('invo', 'checkMe')'Client',
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
-                'vAlign'=>'center',
                 'group'=>true,
                 // 'width'=>'26%',
                 'format' => 'raw',
@@ -176,10 +175,9 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class'=>'kartik\grid\DataColumn',
                 'attribute'=>'id',
-                // 'header'=> '#NO',
+                // 'header'=> Yii::t('invo', 'checkMe')'#NO',
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
-                'vAlign'=>'center',
                 'group'=>true,
                 'width'=>'8%',
                 'format' => 'raw',
@@ -199,10 +197,9 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class'=>'kartik\grid\DataColumn',
                 'attribute'=>'cost',
-                'header'=> 'Cost',
+                'header'=> Yii::t('invo', 'Cost'),
                 'headerOptions'=>['class'=>'bg-red'],
                 'hAlign'=>'center',
-                'vAlign'=>'center',
                 'footer'=>true ,
                 'pageSummary'=>true,
                 'width'=>'10%',
@@ -221,10 +218,9 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class'=>'kartik\grid\DataColumn',
                 'attribute'=>'amount',
-                'header'=> 'Total',
+                'header'=> Yii::t('invo', 'Total'),
                 'headerOptions'=>['class'=>'bg-blue'],
                 'hAlign'=>'center',
-                'vAlign'=>'center',
                 'width'=>'10%',
                 'format' => 'raw',
                 'pageSummary'=> true,
@@ -241,13 +237,12 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [  
                 'class'=>'kartik\grid\FormulaColumn',
-                'header'=>'Gross Sale',
+                'header'=>Yii::t('invo', 'Gross Sale'),
                 'headerOptions'=>['class'=>'bg-green'],
                 // 'format'=>['decimal', 2],
                 'mergeHeader'=>true, 
                 'width'=>'10%',
                 'hAlign'=>'center', 
-                'vAlign'=>'center',
                 'value'=>function ($model, $key, $index, $widget) { 
                     $p = compact('model', 'key', 'index');
                     return $widget->col(5, $p) - $widget->col(4, $p) ;
@@ -259,10 +254,9 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class'=>'kartik\grid\DataColumn',
                 'attribute'=>'status',
-                // 'header'=> 'S',
+                // 'header'=> Yii::t('invo', 'S'),
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
-                'vAlign'=>'center',   
                 'width'=>'5%',
                 'format' => 'raw',
                 'value' =>function ($model, $key, $index, $widget) { 
@@ -278,10 +272,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute'=>'date',
-                // 'header'=> 'Date',
+                // 'header'=> Yii::t('invo', 'Date'),
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
-                'vAlign'=>'center',
                 'format' => 'raw',
                 'width'=>'8%',
                 /*'value' =>function ($model, $key, $index, $widget) { 

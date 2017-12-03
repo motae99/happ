@@ -9,6 +9,28 @@
 
 $this->registerCss('
 
+		body {
+	    	font-family: ArabicKufi, serif !important;
+		}
+
+		h1 {
+	    	font-family: ArabicKufi, serif !important;
+		}
+		h2 {
+	    	font-family: ArabicKufi, serif !important;
+		}
+		h3 {
+	    	font-family: ArabicKufi, serif !important;
+		}
+		h4 {
+	    	font-family: ArabicKufi, serif !important;
+		}
+		h5 {
+	    	font-family: ArabicKufi, serif !important;
+		}
+		h6 {
+	    	font-family: ArabicKufi, serif !important;
+		}
 
 		.sidebar-mini.sidebar-collapse .content-wrapper, .sidebar-mini.sidebar-collapse .right-side, .sidebar-mini.sidebar-collapse .main-footer {
 		    margin-left: 0px !important;
@@ -28,7 +50,7 @@ $this->registerCss('
 			float:right !important;
 			padding:5px !important;
 		}
-		.edusecArLangCss {
+		.eArLangCss {
 			float:right !important;
 		}
 		.edusecArLangHide {
@@ -44,6 +66,9 @@ $this->registerCss('
 			direction:ltr;
 		}
 		.table th {
+			text-align: right !important;
+		}
+		.table td {
 			text-align: right !important;
 		}
 		.popover {

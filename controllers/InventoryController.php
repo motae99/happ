@@ -12,6 +12,10 @@ use app\models\StockSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\helpers\Json;
+use yii\helpers\ArrayHelper;
+use yii\db\Query;
+
 
 
 class InventoryController extends Controller
@@ -29,9 +33,24 @@ class InventoryController extends Controller
         ];
     }
 
-    public function actionTest()
-    {
-        return $this->render('_stocking');
+    public function actionProduct() {
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $inventory_id = $parents[0];
+                $products = Stock::find()
+                            ->where(['inventory_id' => $inventory_id])
+                            ->andWhere('quantity > 0')
+                            ->all();
+                foreach ($products as $p) {
+                    $out[] = ['id' => $p->id, 'name' => $p->product_name];
+                }
+                echo Json::encode(['output'=>$out, 'selected'=>'']);
+                return;
+            }
+        }
+        echo Json::encode(['output'=>'', 'selected'=>'']);
     }
     
     public function actionIndex()

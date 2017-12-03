@@ -12,16 +12,19 @@ $(function(){
         //to ensure we get the right button and content. 
         if ($('#modal').data('bs.modal').isShown) {
             $('#modal').find('#modalContent')
-                    .load($(this).attr('value'));
+                .load($(this).attr('value'));
             //dynamiclly set the header for the modal
            // document.getElementById('modalHeader').innerHTML = '<h4>' + $(this).attr('title') + '</h4>';
         } else {
             //if modal isn't open; open it and load content
             $('#modal').modal('show')
-                    .find('#modalContent')
-                    .load($(this).attr('value'));
+              .find('#modalContent')
+              .load($(this).attr('value'));
              //dynamiclly set the header for the modal
           //  document.getElementById('modalHeader').innerHTML = '<h4>' + $(this).attr('title') + '</h4>';
         }
     });
+              //possible solution///
+              // setTimeout(function(){$('#modalContent').modal('show')}, 900)
+              // setTimeout(function(){$('#modalContent').modal('hide')}, 10);
 });

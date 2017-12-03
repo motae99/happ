@@ -5,6 +5,8 @@ use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
 use kartik\grid\GridView;
 use yii\widgets\Pjax;
+
+use app\models\Inventory;
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\InventorySearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -15,44 +17,105 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="inventory-index">
 
     <h1></h1>
-   
-        <div class="col-sm-12">
-        <?php foreach ($inventories as $k => $inventory ) { ?>
-        
-        <div class="col-sm-4" >
-          <div class="box box-widget widget-user-2">
-            <!-- Add the bg color to the header using any of the bg-* classes -->
-            <div class="widget-user-header <?= $inventory->color_class?>">
-              <span class="">
+         
+          <div class="box box-info collapsed-box">
+            <div class="box-header with-border">
+              <p class="box-title">
+                <?= Html::button('<i class="fa fa-plus"></i>', ['value' => Url::to(['inventory/create']), 'title' => Yii::t('inventory', 'Add New Inventory'), 'class' => 'btn btn-flat bg-blue showModalButton']); ?>
+                <?= Html::button('<i class="fa fa-plus"></i>', ['value' => Url::to(['category/create']), 'title' => Yii::t('inventory', 'Add New Category'), 'class' => 'btn btn-flat bg-green showModalButton']); ?>
+                <?= Html::button('<i class="fa fa-plus"></i>', ['value' => Url::to(['product/create']), 'title' => Yii::t('inventory', 'Add New Item'), 'class' => 'btn btn-flat bg-orange showModalButton']); ?>
 
-                <?=$inventory->alias?>
-              </span>
-              <!-- /.widget-user-image -->
-              <h3 class="widget-user-username"><?=$inventory->name?></h3>
-              <h5 class="widget-user-desc"><?=$inventory->address?></h5>
-              <h6 class="widget-user-desc"><?=$inventory->phone_no?></h6>
-            <?= Html::a('<i class="fa fa-search"></i>', ['inventory/view', 'id'=>$inventory->id], ['class' => 'btn btn-flat <?= $inventory->color_class?>']) ?>
-            <?= Html::button('<i class="fa fa-edit"></i>', ['value' => Url::to(['inventory/update', 'id'=>$inventory->id]), 'title' => 'View', 'class' => 'btn btn-flat $inventory->color_class showModalButton']); ?>
-
+              </p>
+              <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-2x fa-plus"></i>
+                </button>
+              </div>
+              <!-- /.box-tools -->
             </div>
-            <div class="box-footer no-padding">
-              <ul class="nav nav-stacked">
-                <li><a href="#">Items <span class="pull-right badge bg-blue"><?= $inventory->stocksCount ?></span></a></li>
-                <li><a href="#">Invoices<span class="pull-right badge bg-aqua"><?= $inventory->invoicesCount ?></span></a></li>
-                <li><a href="#">Stock Value <span class="pull-right badge bg-green"><?= round($inventory->asset->balance* Yii::$app->mycomponent->rate(), 2)?></span></a></li>
-                <li><a href="#">Cost of Goods <span class="pull-right badge bg-red"><?= round($inventory->expense->balance* Yii::$app->mycomponent->rate(), 2)?></span></a></li>
-              </ul>
+            <!-- /.box-header -->
+            <div class="box-body" style="display: none;">
+                <div class="col-sm-6 eArLangCss">
+                    <?= Html::button('<i class="fa fa-plus"> Stock</i>', ['value' => Url::to(['stocking/create']), 'title' => 'Add', 'class' => 'btn btn-flat bg-blue showModalButton']); ?>
+                </div>
+                <div class="col-sm-6 eArLangCss">
+                    
+                    <?php 
+                        $trans = new Inventory();
+                        echo $this->render('transfere', ['trans' => $trans]); 
+                    ?>
+                </div>
             </div>
+            <!-- /.box-body -->
           </div>
-        </div>
+        <div class="col-sm-12">
+        <?php foreach ($inventories as $k => $inventory ) {  $color = $inventory->color_class ;?>
+
+            <div class="col-md-4 eArLangCss">
+              <!-- Widget: user widget style 1 -->
+              <div class="box box-widget widget-user">
+                <!-- Add the bg color to the header using any of the bg-* classes -->
+                <div class="widget-user-header <?=$color?>">
+                  
+                  <h3 class="widget-user-username"><?=Html::a($inventory->name, ['inventory/view', 'id'=>$inventory->id], ['class' => 'text-white'])?></h3>
+                  <h5 class="widget-user-desc"><?=$inventory->address?></h5>
+                </div>
+                <div class="pull-left">
+                    <?= Html::button('<i class="fa fa-edit"></i>', ['value' => Url::to(['inventory/update', 'id'=>$inventory->id]), 'title' => Yii::t('inventory', 'update'), 'class' => ' btn btn-sm btn-flat <?= $color ?> showModalButton']); ?>
+                </div>
+                <div class="box-footer">
+                  <div class="row">
+                    <div class="col-sm-3 border-right eArLangCss">
+                      <div class="description-block">
+                        <h5 class="description-header">
+                            <span class="badge bg-red"><?= round($inventory->expense->balance* Yii::$app->mycomponent->rate(), 2)?></span>
+                        </h5>
+                        <span class="description-text"><?=Yii::t('inventory', 'Cost of Goods')?></span>
+                      </div>
+                      <!-- /.description-block -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-sm-3 border-right eArLangCss">
+                      <div class="description-block">
+                        <h5 class="description-header">
+                            <span class="badge bg-green"><?= round($inventory->asset->balance* Yii::$app->mycomponent->rate(), 2)?></span>
+                        </h5>
+                        <span class="description-text"><?=Yii::t('inventory', 'Stock Value')?></span>
+                      </div>
+                      <!-- /.description-block -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-sm-3 border-right eArLangCss">
+                      <div class="description-block">
+                        <h5 class="description-header">
+                            <span class="badge bg-aqua"> <?= $inventory->stocksCount ?></span>
+                        </h5>
+                        <span class="description-text"><?=Yii::t('inventory', 'Items')?></span>
+                      </div>
+                      <!-- /.description-block -->
+                    </div>
+                    <!-- /.col -->
+                    <div class="col-sm-3 border-right eArLangCss">
+                      <div class="description-block">
+                        <h5 class="description-header">
+                            <span class="badge bg-purple"><?= $inventory->invoicesCount ?></span>
+                        </h5>
+                        <span class="description-text"><?=Yii::t('inventory', 'Invoices')?></span>
+                      </div>
+                      <!-- /.description-block -->
+                    </div>
+                    <!-- /.col -->
+                  </div>
+                  <!-- /.row -->
+                </div>
+              </div>
+              <!-- /.widget-user -->
+            </div>
+
         <?php 
         }?>
         </div>
-    <p>
-        <?= Html::button('<i class="fa fa-plus"> Inventory</i>', ['value' => Url::to(['inventory/create']), 'title' => 'Add', 'class' => 'btn btn-flat bg-blue showModalButton']); ?>
-        <?= Html::button('<i class="fa fa-plus"> Stock</i>', ['value' => Url::to(['stocking/create']), 'title' => 'Add', 'class' => 'btn btn-flat bg-blue showModalButton']); ?>
-        <?= Html::button('<i class="fa fa-plus"> Transfere</i>', ['value' => Url::to(['inventory/create']), 'title' => 'Add', 'class' => 'btn btn-flat bg-blue showModalButton']); ?>
-    </p>
+        
+   
     <?php 
     $gridColumns  = 
         [   
@@ -60,7 +123,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class'=>'kartik\grid\DataColumn',
                 'attribute'=> 'inventory_id',
-                'header'=> 'Inventory',
+                'header'=> Yii::t('inventory', 'Inventory') ,
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
                 'vAlign'=>'center',
@@ -80,7 +143,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         return [
                            'mergeColumns'=>[[4,7]],
                             'content'=>[             
-                                0=>'total inventory items : ',
+                                0=>Yii::t('inventory', 'total inventory items : '),
                                 1=>GridView::F_COUNT,
                                 2=>GridView::F_COUNT,
                                 3=>GridView::F_SUM,
@@ -107,7 +170,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class'=>'kartik\grid\DataColumn',
                 'attribute'=> 'category',
-                'header'=> 'Category',
+                'header'=> Yii::t('inventory', 'Category') ,
                 'width'=>'13%',
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
@@ -128,7 +191,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     return [
                        'mergeColumns'=>[[4, 7]], 
                         'content'=>[             
-                            1=>'total category items : ',
+                            1=>Yii::t('inventory', 'total category items : '),
                             2=>GridView::F_COUNT,
                             3=>GridView::F_SUM,
                             8=>GridView::F_SUM,
@@ -150,7 +213,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute'=>'product_name',
-                'header'=> 'Product',
+                'header'=> Yii::t('inventory', 'Product'),
                 'width'=>'16%',
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
@@ -159,7 +222,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [   
                 'attribute'=>'quantity',
-                'header'=> 'Quantity',
+                'header'=> Yii::t('inventory', 'Quantity'),
                 'width'=>'11%',
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
@@ -169,7 +232,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'class'=>'kartik\grid\DataColumn',
-                'header'=> 'Buying Price',
+                'header'=> Yii::t('inventory', 'Buying Price') ,
                 'width'=>'11%',
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
@@ -188,7 +251,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'class'=>'kartik\grid\DataColumn',
-                'header'=> 'Selling Price',
+                'header'=> Yii::t('inventory', 'Selling Price'),
                 'width'=>'11%',
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
@@ -231,7 +294,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 },
             ],
             [
-                'header'=>'Active Rate',
+                'header'=> Yii::t('inventory', 'Active Rate'),
                 'format' => 'raw',
                 'value' =>function ($model, $key, $index, $widget) { 
                     $current_rate = Yii::$app->mycomponent->rate();
@@ -249,9 +312,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [  
                 'class'=>'kartik\grid\FormulaColumn',
-                'header'=>'Total',
+                'header'=> Yii::t('inventory', 'Total'),
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
-                'format'=>['decimal', 2],
+                // 'format'=>['decimal', 2],
                 // 'width'=>'9%',
                 'mergeHeader'=>true,
                 'hAlign'=>'center',
@@ -264,6 +327,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'pageSummary'=>true,
                 'footer'=>true 
             ],
+            /*[
+                'class' => 'kartik\grid\ActionColumn',
+                'header' => "",
+                'width' => '5%',
+                'template' => '{view} ',
+                // 'viewOptions'=>['lable'=>'<i class="glyphicon glyphicon-remove"></i>'],
+                // 'updateOptions'=>['null' => true],
+                // 'deleteOptions'=>['null' => true],
+            ],*/
         ]
 
     ?>
@@ -299,7 +371,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'responsive' => true,
         'responsiveWrap' => true,
         'hover' => true,
-        'floatHeader' => true,
+        // 'floatHeader' => true,
        // 'floatHeaderOptions' => ['scrollingTop' => $scrollingTop],
         'showPageSummary' => true,
         // 'panel' => [

@@ -8,12 +8,6 @@ use dosamigos\chartjs\ChartJs;
 
 <!-- Info boxes -->
 <div class="row">
-  <br>
-  <?= "language is: ".Yii::$app->language?>
-  <br>
-  <?php // Yii::$app->language = 'ar'?>
-  <br>
-  <?= "language is: ".Yii::$app->language?>
   <div class="col-md-3 col-sm-6 col-xs-12">
     <?php $sale = SystemAccount::find()->where(['account_no'=>'4000'])->one(); ?>
     <div class="info-box">

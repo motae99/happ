@@ -67,11 +67,9 @@ class SiteController extends Controller
                 'expire' => time() + 60 * 60 * 24 * 30, // 30 days
             ]);
             \Yii::$app->response->cookies->add($languageCookie);
-            // print_r(Yii::$app->response->cookies) ;
-            // die();
             return $this->goBack();
         }
-        // return $this->renderAjax('language-form');
+        return $this->renderAjax('language-form');
     }
 
     /**

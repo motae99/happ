@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
 
@@ -29,9 +30,16 @@ use kartik\date\DatePicker;
 
     $creditMax = $remaining - $credit ;
 ?>
-<div class="payments-form">
+<div class="cheque-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(
+             [   
+            'id' => 'cheque-form',
+            'options'=>['method' => 'post'],
+            'action' => Url::to(['invoices/cheque', 'id' => $model->id]),
+            
+            ]);
+    ?>
 
     	<?= $form->field($outstanding, "bank")
 	        ->textInput(

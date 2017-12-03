@@ -1,8 +1,10 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
+
 
 /* @var $this yii\web\View */
 /* @var $payment app\models\Payments */
@@ -29,9 +31,17 @@ use kartik\date\DatePicker;
 
     $creditMax = $remaining - $credit ;
 ?>
-<div class="payments-form">
+<div class="promix-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(
+        [   
+            'id' => 'promise-form',
+            'options'=>['method' => 'post'],
+            'action' => Url::to(['invoices/promise', 'id' => $model->id]),
+            
+        ]);
+
+    ?>
 
 
 

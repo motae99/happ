@@ -29,7 +29,7 @@ use yii\widgets\ActiveForm;
     $creditMax = $remaining - $credit ;
 
 ?>
-<div class="payments-form">
+<div class="cash-form">
 
     <?php $form = ActiveForm::begin(
         [   

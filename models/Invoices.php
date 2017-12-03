@@ -70,7 +70,17 @@ class Invoices extends \yii\db\ActiveRecord
      */
     public function getInvoiceProducts()
     {
+        return $this->hasMany(InvoiceProduct::className(), ['invoice_id' => 'id'])->onCondition(['returned' => '0']);
+    }
+
+    public function getInvoiceProductsAll()
+    {
         return $this->hasMany(InvoiceProduct::className(), ['invoice_id' => 'id']);
+    }
+
+    public function getInvoiceReturnedProducts()
+    {
+        return $this->hasMany(InvoiceProduct::className(), ['invoice_id' => 'id'])->onCondition(['returned' => '1']);
     }
 
     /**

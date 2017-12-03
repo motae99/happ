@@ -9,6 +9,7 @@ use yii\helpers\ArrayHelper;
 
 use app\models\InvoiceProduct;
 use app\models\Product;
+use app\models\ReturnedPayment;
 use app\models\Stock;
 use app\models\Stocking;
 use app\models\Model;
@@ -396,11 +397,11 @@ class InvoicesController extends Controller
                                 $modelItem->product_id = $product->id;                                
                                 if ($current_rate > $highest_rate) {
                                     $modelItem->selling_rate = $product->selling_price*$current_rate;
-                                    $modelItem->buying_rate = $product->buying_price*$current_rate;
+                                    $modelItem->buying_rate = $stock->avg_cost*$current_rate;
                                     $modelItem->d_rate = $current_rate;
                                 }else{
                                     $modelItem->selling_rate = $product->selling_price*$highest_rate;
-                                    $modelItem->buying_rate = $product->buying_price*$highest_rate;
+                                    $modelItem->buying_rate = $stock->avg_cost*$highest_rate;
                                     $modelItem->d_rate = $highest_rate; 
                                 }
 
@@ -408,6 +409,7 @@ class InvoicesController extends Controller
                                     ->where(['product_id' => $modelItem->product_id])
                                     ->andWhere(['inventory_id' => $inventory->id])
                                     ->andWhere(['transaction' => 'in'])
+                                    ->orWhere(['transaction' => 'returned'])
                                     ->orderBy(['rate' => SORT_DESC])
                                     ->all();
                                 $q = $modelItem->quantity;
@@ -438,6 +440,7 @@ class InvoicesController extends Controller
                                     ->where(['product_id' => $product->id])
                                     ->andWhere(['inventory_id' => $inventory->id])
                                     ->andWhere(['transaction' => 'in'])
+                                    ->orWhere(['transaction' => 'returned'])
                                     ->max('rate');
 
                                 if ($checkRate != $stock->highest_rate) {
@@ -474,14 +477,17 @@ class InvoicesController extends Controller
                                     $transaction->rollBack();
                                     //set flash success
                                     break;
+                                }else{
+                                    $stocking_out->reference = $modelItem->id;
+                                    $stocking_out->save(false);
                                 }
-                            }
+                            }// end if $modelItem->quantity <= $stock->quantity && $modelItem->quantity > 0
 
-                            Yii::$app->getSession()->setFlash('warning', ['type' => 'warning']);
-                            $model->amount = $tAmount;
-                            $model->cost = $tCost;
-                            $model->save(false);
-                        }
+                        }// end of foreach
+                        Yii::$app->getSession()->setFlash('warning', ['type' => 'warning']);
+                        $model->amount = $tAmount;
+                        $model->cost = $tCost;
+                        $model->save(false);
                     }
                     if ($flag) {
                         $transaction->commit();
@@ -811,6 +817,7 @@ class InvoicesController extends Controller
         $modelsItem = $model->invoiceProducts;
 
         $paid = False;
+        $clientRedirct = False;
         $original_amount = $model->amount;
         $payment_transaction = $model->transaction_id;
         $inventory = Inventory::find()->where(['id' => $model->inventory_id])->one();
@@ -838,6 +845,8 @@ class InvoicesController extends Controller
                     if($flag = $model->save(false)){
                             $sells_return = 0;
                             $cost_return = 0;
+                            $model_amount_return = 0;
+                            $model_cost_return = 0;
                         if (! empty($deletedIDs)) {
                             //// need to calculate those/////
                             foreach ($deletedIDs as $ID ) {
@@ -846,6 +855,9 @@ class InvoicesController extends Controller
                                 
                                 $sells_return += $deleted->selling_rate * $deleted->quantity;
                                 $cost_return += $stocking_out->buying_price * $stocking_out->quantity;
+                                
+                                $model_amount_return += $sells_return;
+                                $model_cost_return += $deleted->buying_rate * $deleted->quantity;
 
                                 /// stocking it in again/////
                                 $stocking_out->transaction= "returned";
@@ -861,6 +873,7 @@ class InvoicesController extends Controller
                                             ->where(['product_id' => $deleted->product_id])
                                             ->andWhere(['inventory_id' => $inventory->id])
                                             ->andWhere(['transaction' => 'in'])
+                                            ->orWhere(['transaction' => 'returned'])
                                             ->max('rate');
 
                                     if ($checkRate != $stock->highest_rate) {
@@ -881,10 +894,11 @@ class InvoicesController extends Controller
                                             $min->delete(false);
                                         }
                                     }
-
+                                $deleted->returned = 1;
+                                $deleted->save(false);
                                 
                             } 
-                            InvoiceProduct::deleteAll(['id' => $deletedIDs]);   
+                            // InvoiceProduct::deleteAll(['id' => $deletedIDs]);   
                         }
                         foreach ($modelsItem as $modelItem) {
                                 $stock = Stock::find()
@@ -898,6 +912,8 @@ class InvoicesController extends Controller
                                 if ($q > 0) {
                                     $sells_return += $modelItem->selling_rate * $q;
                                     $cost_return += $stocking_out->buying_price * $q;
+                                    $model_amount_return += $sells_return;
+                                    $model_cost_return += $modelItem->buying_rate * $q;
                                     
                                     $stocking_out->quantity = $modelItem->quantity;
                                     $stocking_out->save(false);
@@ -910,13 +926,29 @@ class InvoicesController extends Controller
                                     $stocking_in->quantity = $q;
                                     $stocking_in->transaction = "returned";
                                     $stocking_in->rate = $stocking_out->rate;
-                                    // $stocking_in->rate = $stocking_out->rate;
-                                    $stocking_in->save(false);                                
+                                    $stocking_in->reference = $modelItem->id;
+                                    $stocking_in->save(false);
+
+                                    $return_pro = new InvoiceProduct();
+                                    $return_pro->invoice_id = $model->id ;
+                                    $return_pro->product_id = $modelItem->product_id;
+                                    $return_pro->quantity = $q ;
+                                    $return_pro->buying_rate = $modelItem->buying_rate;
+                                    $return_pro->selling_rate = $modelItem->selling_rate;
+                                    $return_pro->d_rate = $modelItem->d_rate;
+                                    $return_pro->stocking_id = $stocking_in->id;
+                                    $return_pro->returned = 1;
+                                    $return_pro->save(false);
+
+                                    $stocking_in->reference = $return_pro->id;
+                                    $stocking_in->save(false);
+
                                     
                                     $checkRate = Stocking::find()
                                         ->where(['product_id' => $modelItem->product_id])
                                         ->andWhere(['inventory_id' => $inventory->id])
                                         ->andWhere(['transaction' => 'in'])
+                                        ->orWhere(['transaction' => 'returned'])
                                         ->max('rate');
 
                                     if ($checkRate != $stock->highest_rate) {
@@ -955,9 +987,8 @@ class InvoicesController extends Controller
                     $transaction->rollBack();
                 }///end of try
 
-                $model->amount = $original_amount-$sells_return ;
-                $cost = $model->cost - $cost_return ;
-                $model->cost = $cost;
+                $model->amount = $model_amount_return ;
+                $model->cost = $model_cost_return;
                 $model->save();
 
                 if($sells_return > 0 && $cost_return > 0){
@@ -987,6 +1018,13 @@ class InvoicesController extends Controller
 
                         $model->status = 'paid';
                         $model->save(false);
+
+                        $returnedPayment = new ReturnedPayment();
+                        $returnedPayment->invoice_id = $model->id;
+                        $returnedPayment->amount = $returned_amount;
+                        $returnedPayment->save(false);
+                        $clientRedirct = True;
+                        
 
                     }
                     
@@ -1193,6 +1231,14 @@ class InvoicesController extends Controller
                     
                 }
             }////end of if ($valid)
+
+            if ($clientRedirct) {
+                //// we want to show you how to pay back
+                Yii::$app->getSession()->setFlash('success', ['type' => 'success']);
+                Yii::$app->getSession()->setFlash('warning', ['type' => 'warning']);
+                return $this->redirect(['client/view', 'id' => $model->client_id]);
+            }
+
             Yii::$app->getSession()->setFlash('success', ['type' => 'success']);
             return $this->redirect(['view', 'id' => $model->id]);
             
