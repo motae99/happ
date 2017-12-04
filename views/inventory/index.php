@@ -127,7 +127,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
                 'vAlign'=>'center',
-                'width'=>'13%',
+                'width'=>'18%',
                 'format' => 'raw',
                 'value' =>function ($model, $key, $index, $widget) { 
                     return $model->inventory->name;                    
@@ -171,7 +171,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class'=>'kartik\grid\DataColumn',
                 'attribute'=> 'category',
                 'header'=> Yii::t('inventory', 'Category') ,
-                'width'=>'13%',
+                'width'=>'15%',
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
                 'vAlign'=>'center',
@@ -214,7 +214,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute'=>'product_name',
                 'header'=> Yii::t('inventory', 'Product'),
-                'width'=>'16%',
+                'width'=>'15%',
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
                 'vAlign'=>'center',
@@ -223,7 +223,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [   
                 'attribute'=>'quantity',
                 'header'=> Yii::t('inventory', 'Quantity'),
-                'width'=>'11%',
+                'width'=>'8%',
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
                 'vAlign'=>'center',
@@ -237,7 +237,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
                 'vAlign'=>'center',   
-                // 'width'=>'15%',
+                'width'=>'8%',
                 'format' => 'raw',
                 'value' =>function ($model, $key, $index, $widget) { 
                     $current_rate = Yii::$app->mycomponent->rate();
@@ -276,11 +276,11 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'class'=>'kartik\grid\DataColumn',
-                'attribute'=> 'Margin Profit',
+                'attribute'=> Yii::t('inventory', 'Margin Profit'),
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
                 'vAlign'=>'center',
-                // 'width'=>'15%',
+                'width'=>'8%',
                 'format' => 'raw',
                 'value' =>function ($model, $key, $index, $widget) { 
                     return $model->product->percentage."%";                    
@@ -315,7 +315,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'header'=> Yii::t('inventory', 'Total'),
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 // 'format'=>['decimal', 2],
-                // 'width'=>'9%',
+                'width'=>'8%',
                 'mergeHeader'=>true,
                 'hAlign'=>'center',
                 'vAlign'=>'top',
@@ -371,7 +371,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'responsive' => true,
         'responsiveWrap' => true,
         'hover' => true,
-        // 'floatHeader' => true,
+        'floatHeader' => true,
        // 'floatHeaderOptions' => ['scrollingTop' => $scrollingTop],
         'showPageSummary' => true,
         // 'panel' => [

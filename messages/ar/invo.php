@@ -20,6 +20,6 @@ return [
     'Cost' => '',
     'Gross Sale' => '',
     'Total' => '',
-    'inventory total :' => '',
+    'inventory total :' => '@@@@',
     'checkMe' => 'اوكي',
 ];

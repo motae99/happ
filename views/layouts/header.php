@@ -87,30 +87,30 @@ use yii\helpers\Html;
 
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="user-image" alt="User Image"/>
-                        <span class="hidden-xs">Alexander Pierce</span>
+                        <img src="<?= $directoryAsset ?>/img/mine.png" class="user-image" alt="User Image"/>
+                        <span class="hidden-xs">Mo Taha</span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header">
-                            <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle"
+                            <img src="<?= $directoryAsset ?>/img/mine.jpg" class="img-circle"
                                  alt="User Image"/>
 
                             <p>
-                                Alexander Pierce - Web Developer
-                                <small>Member since Nov. 2012</small>
+                                Mo Taha - Infrastructure Engineer
+                                <small>Developed . 2017</small>
                             </p>
                         </li>
                         <!-- Menu Body -->
                         <li class="user-body">
                             <div class="col-xs-4 text-center">
-                                <a href="#">Followers</a>
+                                <a href="#"><?= Yii::t('app', 'Inventory')?></a>
                             </div>
                             <div class="col-xs-4 text-center">
-                                <a href="#">Sales</a>
+                                <a href="#"></a>
                             </div>
                             <div class="col-xs-4 text-center">
-                                <a href="#">Friends</a>
+                                <a href="#"><?= Yii::t('app', 'Client')?></a>
                             </div>
                         </li>
                         <!-- Menu Footer-->

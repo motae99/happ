@@ -29,7 +29,8 @@
         "kartik-v/yii2-widget-growl": "*",
         "philippfrenzel/yii2fullcalendar": "*",
         "understeam/yii2-fcm": "~0.1",
-        "kartik-v/yii2-widget-depdrop": "@dev" 
+        "kartik-v/yii2-widget-depdrop": "@dev",
+        "marekpetras/yii2-ajax-box-widget": "^1.0" 
     },
     "require-dev": {
         "yiisoft/yii2-debug": "~2.0.0",

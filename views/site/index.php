@@ -1,10 +1,12 @@
 <?php 
 use yii\helpers\Html;
-use yii\helpers\Url;
 use app\models\SystemAccount;
 use dosamigos\chartjs\ChartJs;
+use yii\widgets\Pjax;
+use yii\helpers\Url;
 
-?>
+
+?> 
 
 <!-- Info boxes -->
 <div class="row">
@@ -242,13 +244,12 @@ use dosamigos\chartjs\ChartJs;
 <!-- Main row -->
 <div class="row">
   <!-- Left col -->
-  <div class="col-md-4">
+  <div class="col-md-4 eArLangCss">
     <!-- Info Boxes Style 2 -->
-   
-      outstanding checqus
-      <?php $dues = \app\models\Outstanding::find()->where(['due_date'=> date('Y-m-d')])->Orwhere(['cheque_date' => date('Y-m-d')])->all(); 
+      <?php $dues = \app\models\Outstanding::find()->where(['cheque_date' => date('Y-m-d'), 'status'=>'outstanding'])->all(); 
         if ($dues) {
-          foreach ($dues as $due) { ?>
+          foreach ($dues as $due) { 
+      ?>
 
     <div class="info-box <?= $due->client->color_class?>">
       <span class="info-box-icon" >
@@ -282,21 +283,21 @@ use dosamigos\chartjs\ChartJs;
       <!-- /.info-box-content -->
     </div>
     <!-- /.info-box -->
-    <?php 
+      <?php 
+              }
             }
-          }
-    ?>
+      ?>
     
     
-    <!-- /.box -->
+    <!-- DO IT LATER -->
 
-    <div class="box box-solid">
+    <!-- <div class="box box-solid">
       <div class="box-header with-border">
         <h4 class="box-title">Schedueled Pyaments</h4>
       </div>
       <div class="box-body">
         <!-- the events -->
-        <div id="external-events"><div style="background-color: rgb(243, 156, 18); border-color: rgb(243, 156, 18); color: rgb(255, 255, 255); position: relative;" class="external-event ui-draggable ui-draggable-handle">any</div>
+       <!--  <div id="external-events"><div style="background-color: rgb(243, 156, 18); border-color: rgb(243, 156, 18); color: rgb(255, 255, 255); position: relative;" class="external-event ui-draggable ui-draggable-handle">any</div>
           <div class="external-event bg-green ui-draggable ui-draggable-handle" style="position: relative; z-index: auto; width: 231.5px; right: auto; height: 30px; bottom: auto; left: 0px; top: 0px;">Lunch</div>
           <div class="external-event bg-yellow ui-draggable ui-draggable-handle" style="position: relative;">Go home</div>
           <div class="external-event bg-aqua ui-draggable ui-draggable-handle" style="position: relative;">Do homework</div>
@@ -309,14 +310,14 @@ use dosamigos\chartjs\ChartJs;
             </label>
           </div>
         </div>
-      </div>
+      </div> -->
       <!-- /.box-body -->
-    </div>
+    <!-- </div>  -->
 
     <!-- PRODUCT LIST -->
     <div class="box box-primary">
       <div class="box-header with-border">
-        <h3 class="box-title">Items Minimal</h3>
+        <h3 class="box-title"><?= Yii::t('app', 'Items Warning')?></h3>
 
         <div class="box-tools pull-right">
           <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -326,133 +327,31 @@ use dosamigos\chartjs\ChartJs;
       </div>
       <!-- /.box-header -->
       <div class="box-body">
-        <ul class="products-list product-list-in-box">
-          <li class="item">
-            <div class="product-img">
-              <img src="dist/img/default-50x50.gif" alt="Product Image">
-            </div>
-            <div class="product-info">
-              <a href="javascript:void(0)" class="product-title">Samsung TV
-                <span class="label label-warning pull-right">$1800</span></a>
-              <span class="product-description">
-                    Samsung 32" 1080p 60Hz LED Smart HDTV.
-                  </span>
-            </div>
-          </li>
-          <!-- /.item -->
-          <li class="item">
-            <div class="product-img">
-              <img src="dist/img/default-50x50.gif" alt="Product Image">
-            </div>
-            <div class="product-info">
-              <a href="javascript:void(0)" class="product-title">Bicycle
-                <span class="label label-info pull-right">$700</span></a>
-              <span class="product-description">
-                    26" Mongoose Dolomite Men's 7-speed, Navy Blue.
-                  </span>
-            </div>
-          </li>
-          <!-- /.item -->
-          <li class="item">
-            <div class="product-img">
-              <img src="dist/img/default-50x50.gif" alt="Product Image">
-            </div>
-            <div class="product-info">
-              <a href="javascript:void(0)" class="product-title">Xbox One <span
-                  class="label label-danger pull-right">$350</span></a>
-              <span class="product-description">
-                    Xbox One Console Bundle with Halo Master Chief Collection.
-                  </span>
-            </div>
-          </li>
-          <!-- /.item -->
-          <li class="item">
-            <div class="product-img">
-              <img src="dist/img/default-50x50.gif" alt="Product Image">
-            </div>
-            <div class="product-info">
-              <a href="javascript:void(0)" class="product-title">PlayStation 4
-                <span class="label label-success pull-right">$399</span></a>
-              <span class="product-description">
-                    PlayStation 4 500GB Console (PS4)
-                  </span>
-            </div>
-          </li>
-          <!-- /.item -->
-        </ul>
-      </div>
+        <?php $minimals = \app\models\Minimal::find()->all(); 
+          if ($minimals) {
+            foreach ($minimals as $product) { 
+        ?>
+        
+          <div class="col-sm-6 eArLangCss"><?=$product->stock->product_name?></div>
+          <div class="col-sm-6 eArLangCss"><?=$product->quantity?></div>
+        
+        <?php 
+                }
+              }
+        ?>
+        </div>
       <!-- /.box-body -->
       <div class="box-footer text-center">
-        <a href="javascript:void(0)" class="uppercase">View All Products</a>
+       <?php // Html::a(Yii::t('app', 'View Products'), ['create'], ['class' => 'btn btn-success']) ?>
       </div>
       <!-- /.box-footer -->
-    </div>
-    <!-- /.box -->
-  </div>
-  <!-- /.col -->
-
-  <div class="col-md-8">
-    <!-- MAP & BOX PANE -->
-    <div class="box box-success">
-      <div class="box-header with-border">
-        <h3 class="box-title">Outstanding Payments</h3>
-
-        <div class="box-tools pull-right">
-          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-          </button>
-          <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-        </div>
-      </div>
-      <!-- /.box-header -->
-      <div class="box-body no-padding">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="">
-              <?php 
-                $events = array();
-                //Testing
-                $Event = new \yii2fullcalendar\models\Event();
-                $Event->id = 1;
-                $Event->title = 'Testing';
-                $Event->start = date('Y-m-d\TH:i:s\Z');
-                // $event->nonstandard = [
-                //   'field1' => 'Something I want to be included in object #1',
-                //   'field2' => 'Something I want to be included in object #2',
-                // ];
-                $events[] = $Event;
-
-                $Event = new \yii2fullcalendar\models\Event();
-                $Event->id = 2;
-                $Event->title = 'Testing';
-                $Event->start = date('Y-m-d\TH:i:s\Z',strtotime('tomorrow 6am'));
-                $events[] = $Event;
-              ?>
-              <?= \yii2fullcalendar\yii2fullcalendar::widget(array(
-                      'header'=> false,
-                      'themeSystem'=> 'jquery-ui',    
-                      'theme'=> 'Vader',
-                      'options' => [
-                        'height' => 200,
-                        'columnHeader'=> false,
-                        //... more options to be defined here!
-                      ],
-                      'events'=> $events,
-                  ));
-              ?>
-            </div>
-          </div>
-          <!-- /.col -->
-        </div>
-        <!-- /.row -->
-      </div>
-      <!-- /.box-body -->
     </div>
     <!-- /.box -->
 
     <!-- TABLE: LATEST ORDERS -->
     <div class="box box-info">
       <div class="box-header with-border">
-        <h3 class="box-title">Latest Orders</h3>
+        <h3 class="box-title">Stocks </h3>
 
         <div class="box-tools pull-right">
           <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -545,6 +444,96 @@ use dosamigos\chartjs\ChartJs;
   </div>
   <!-- /.col -->
 
+  <div class="col-md-8 eArLangCss">
+    <!-- MAP & BOX PANE -->
+    <div class="box box-success">
+      <div class="box-header with-border">
+        <h3 class="box-title"><?= Yii::t('app', 'Outstanding Payments')?></h3>
+
+        <div class="box-tools pull-right">
+          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+          </button>
+          <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+        </div>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body no-padding">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="">
+              <?php Pjax::begin(['id'=>'timeTable']); ?>
+                 <?= \yii2fullcalendar\yii2fullcalendar::widget([        
+                  'clientOptions' => [
+                      'minTime'=> "08:00:00",
+                      'maxTime'=> "18:59:59",
+                      // 'defaultView' => 'agendaWeek',
+                      // 'fixedWeekCount' => false,
+                      // 'weekNumbers'=>true,
+                      // 'editable' => true,
+                      // 'selectable' => true,
+                      // 'eventLimit' => true,
+                      // 'eventLimitText' => '+ Lectures',
+                      // 'selectHelper' => true,
+                      'header' => [
+                          'right' => 'month,agendaWeek,agendaDay',
+                          'center' => 'title',
+                          'left' => 'today prev,next'
+                      ],
+                      // 'select' =>  new \yii\web\JsExpression($JSEvent),
+                      // 'eventClick' => new \yii\web\JsExpression($JSEventClick),
+                      // 'eventRender' => new \yii\web\JsExpression($JsF),
+                      // 'aspectRatio' => 2,
+                      // 'timeFormat' => 'hh(:mm) A'
+                  ],
+                  'events' => Url::toRoute(['table'])
+                ]); ?> 
+            <?php Pjax::end();  ?>
+            </div>
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div>
+      <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+
+  <!-- TABLE: LATEST ORDERS -->
+    <div class="box box-info">
+      <div class="box-header with-border">
+        <h3 class="box-title">Invoices</h3>
+
+        <div class="box-tools pull-right">
+          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+          </button>
+          <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+        </div>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body">
+        <div class="table-responsive">
+          <?php echo $this->render('_invoices');?>
+        </div>
+        <!-- /.table-responsive -->
+      </div>
+      <!-- /.box-body -->
+      <div class="box-footer clearfix">
+        <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-left">Place New Order</a>
+        <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat pull-right">View All Orders</a>
+      </div>
+      <!-- /.box-footer -->
+    </div>
+    <!-- /.box -->
+    
+  </div>
+  <!-- /.col -->
+
+
+    
+
+
+  
+    
   
 </div>
 <!-- /.row -->

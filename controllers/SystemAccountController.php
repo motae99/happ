@@ -5,6 +5,8 @@ namespace app\controllers;
 use Yii;
 use app\models\SystemAccount;
 use app\models\SystemAccountSearch;
+use app\models\Entry;
+use app\models\EntrySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -34,14 +36,22 @@ class SystemAccountController extends Controller
      * @return mixed
      */
     public function actionIndex()
-    {
-        $searchModel = new SystemAccountSearch();
+    {   
+        $searchModel = new EntrySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+        
+        // $searchModel = new SystemAccountSearch();
+        // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        // return $this->render('index', [
+        //     'searchModel' => $searchModel,
+        //     'dataProvider' => $dataProvider,
+        // ]);
     }
 
     /**
@@ -54,6 +64,11 @@ class SystemAccountController extends Controller
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
+    }
+
+    public function actionSys(){
+        // $balances = Entry::find()->all();
+        
     }
 
     /**

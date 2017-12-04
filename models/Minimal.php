@@ -40,10 +40,10 @@ class Minimal extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    // public function getProducts()
-    // {
-    //     return $this->hasMany(Product::className(), ['minimal_id' => 'id']);
-    // }
+    public function getStock()
+    {
+        return $this->hasOne(Stock::className(), ['id' => 'stock_id']);
+    }
 
     /**
      * @inheritdoc

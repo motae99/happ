@@ -15,6 +15,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\Json;
 use yii\helpers\ArrayHelper;
 use yii\db\Query;
+use yii\data\ActiveDataProvider;
 
 
 
@@ -56,8 +57,14 @@ class InventoryController extends Controller
     public function actionIndex()
     {   
         $inventories = Inventory::find()->all();
-        $searchModel = new StockSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        // $searchModel = new StockSearch();
+        $dataProvider =  new ActiveDataProvider([
+            'query' => \app\models\Stock::find(),
+            'sort'=> ['defaultOrder' => ['inventory_id'=>SORT_DESC, ]],
+            // 'pagination' => false,
+
+        ]);
+        // $searchModel->search(Yii::$app->request->queryParams);
         
         // $inventories = Inventory::find()->all();
         // // foreach ($inventories as $inventory) {
@@ -81,7 +88,7 @@ class InventoryController extends Controller
 
 
         return $this->render('index', [
-            'searchModel' => $searchModel,
+            // 'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'inventories' => $inventories,
         ]);
@@ -201,7 +208,9 @@ class InventoryController extends Controller
     
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
+        $stock = Stock::findOne($id);
+        // $inventory = $stock->inventory;
+        $model = $this->findModel($inventory->id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             

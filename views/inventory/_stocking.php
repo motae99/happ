@@ -24,7 +24,7 @@ use yii\data\ActiveDataProvider;
             [	
                 'class'=>'kartik\grid\DataColumn',
                 'attribute'=> 'rate',
-                'header'=> 'Rate',
+                'header'=> Yii::t('inventory', 'USD Rate'),
                 // 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
                 'vAlign'=>'center',   
@@ -43,7 +43,7 @@ use yii\data\ActiveDataProvider;
             [
                 'class'=>'kartik\grid\DataColumn',
                 'attribute'=> 'quantity',
-                'header'=> 'quantity',
+                'header'=> Yii::t('inventory', 'quantity'),
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
                 'vAlign'=>'center',
@@ -65,7 +65,7 @@ use yii\data\ActiveDataProvider;
             ],
             [
                 'attribute'=>'buying_price',
-                'header'=> 'Stocked_in',
+                'header'=> Yii::t('inventory', 'Stocked IN'),
                 'width'=>'16%',
                 'headerOptions'=>['class'=>'bg-blue'],
                 'hAlign'=>'center',
@@ -95,7 +95,7 @@ use yii\data\ActiveDataProvider;
             [
                 'class'=>'kartik\grid\DataColumn',
                 'attribute'=>'selling_price',
-                'header'=> 'Sold out',
+                'header'=> Yii::t('inventory', 'Sold OUT'),
                 'headerOptions'=>['class'=>'bg-green'],
                 'hAlign'=>'center',
                 'vAlign'=>'center',
@@ -123,7 +123,7 @@ use yii\data\ActiveDataProvider;
             ],
             [
                 'class'=>'kartik\grid\DataColumn',
-                'header'=> 'transfered',
+                'header'=> Yii::t('inventory', 'Transfered'),
                 'headerOptions'=>['class'=>'bg-orange'],
                 'hAlign'=>'center',
                 'vAlign'=>'center',
@@ -149,7 +149,7 @@ use yii\data\ActiveDataProvider;
             ],
             [
                 'class'=>'kartik\grid\DataColumn',
-                'header'=> 'Returned',
+                'header'=> Yii::t('inventory', 'Returned'),
                 'headerOptions'=>['class'=>'bg-red'],
                 'hAlign'=>'center',
                 'vAlign'=>'center',
@@ -177,7 +177,7 @@ use yii\data\ActiveDataProvider;
             
             [
                 'class'=>'kartik\grid\DataColumn',
-                'header'=> 'Reference',
+                'header'=> Yii::t('inventory', 'Reference'),
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
                 'vAlign'=>'center',   
@@ -189,13 +189,14 @@ use yii\data\ActiveDataProvider;
                     	$refere = \app\models\InvoiceProduct::find()->where(['stocking_id' => $model->id])->one();
                     	return $refere->invoice_id; 
                     }else{
-                    	return "No Reference";
+                    	return Yii::t('inventory', 'No Reference');
                     }
                 }
             ],
             [
                 'class'=>'kartik\grid\DataColumn',
                 'attribute'=> 'created_at',
+                'header'=> Yii::t('inventory', 'Created AT'),
                 'header'=> 'Time',
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
