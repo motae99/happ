@@ -30,11 +30,15 @@ class InvoiceProduct extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    public $discount;
+    public $inventory;
+    public $available;
+
     public function rules()
     {
         return [
-            [['product_id', 'quantity', 'buying_rate', 'selling_rate' ], 'required'],
-            [['invoice_id', 'product_id', 'quantity', 'buying_rate', 'selling_rate'], 'integer'],
+            [['product_id', 'quantity', 'buying_rate', 'selling_rate', 'inventory' ], 'required'],
+            [['invoice_id', 'product_id', 'quantity', 'buying_rate', 'selling_rate', 'discount'], 'integer'],
             // [['invoice_id'], 'exist', 'skipOnError' => true, 'targetClass' => Invoices::className(), 'targetAttribute' => ['invoice_id' => 'id']],
             [['product_id'], 'exist', 'skipOnError' => true, 'targetClass' => Product::className(), 'targetAttribute' => ['product_id' => 'id']],
         ];

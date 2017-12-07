@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'detail'=>function ($model, $key, $index, $column) {
                     return Yii::$app->controller->renderPartial('_stocking', ['model'=>$model]);
                 },
-                'group'=>false, 
+                // 'group'=>false, 
                 // 'subGroupOf'=>7,
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'expandOneOnly'=>true
@@ -125,12 +125,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'raw',
                 'value' =>function ($model, $key, $index, $widget) { 
                     $current_rate = Yii::$app->mycomponent->rate();
-                    if ($current_rate > $model->highest_rate) {
-                        $rate = $current_rate;
-                    }else{
-                       $rate = $current_rate; 
-                    }
-                    return round($model->avg_cost*$rate, 2);                    
+                    // if ($current_rate > $model->highest_rate) {
+                    //     $rate = $current_rate;
+                    // }else{
+                    //    $rate = $current_rate; 
+                    // }
+                    return round($model->avg_cost*$current_rate, 2);                    
                 },
             ],
             [
@@ -212,7 +212,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
                 'vAlign'=>'center',
-                'group'=>'true',
+                // 'group'=>'true',
                 //only for testing
             ],
             
@@ -248,11 +248,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'floatHeader' => true,
        // 'floatHeaderOptions' => ['scrollingTop' => $scrollingTop],
         'showPageSummary' => true,
-        // 'panel' => [
-        //     'type' => GridView::TYPE_INFO,
-        //     'heading' => '<i class="fa  fa-hospital-o"></i><strong>       Stock</strong>',
+        'panel' => [
+            'type' => GridView::TYPE_INFO,
+            'heading' => '<i class="fa  fa-hospital-o"></i><strong>       Stock</strong>',
 
-        // ],
+        ],
         
     ]); ?>
 </div>

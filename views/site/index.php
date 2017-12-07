@@ -4,6 +4,9 @@ use app\models\SystemAccount;
 use dosamigos\chartjs\ChartJs;
 use yii\widgets\Pjax;
 use yii\helpers\Url;
+use app\models\Invoices;
+use app\models\InvoiceProduct;
+
 
 
 ?> 
@@ -74,7 +77,22 @@ use yii\helpers\Url;
   <!-- /.col -->
 </div>
 <!-- /.row -->
+<div class="row">
+  <div class="col-md-12">
+    <div class="box">
+      <?php 
+        $model = new Invoices();
+        $modelsItem = [new InvoiceProduct];
+        echo $this->render('sell', [
+                  'model' => $model,
+                  'modelsItem' => (empty($modelsItem)) ? [new InvoiceProduct] : $modelsItem
+              ]);
 
+      ?>
+
+    </div>
+  </div>
+</div>
 <div class="row">
   <div class="col-md-12">
     <div class="box">
