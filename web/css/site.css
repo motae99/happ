@@ -3,6 +3,12 @@ body {
     height: 100%;
 }
 
+/*.table th {
+            text-align: right !important;
+}
+.table td {
+    text-align: right !important;
+}*/
 
 .breadcrumb {
     padding: 8px 15px;
@@ -19,6 +25,7 @@ body {
     margin: 0 auto -60px;
     padding: 0 0 60px;
 }
+
 
 .wrap > .container {
     padding: 70px 15px 20px;

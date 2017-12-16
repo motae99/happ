@@ -4,7 +4,7 @@ namespace app\models;
 
 use Yii;
 
-class Dollar extends \yii\db\ActiveRecord
+class Dolar extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc

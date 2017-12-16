@@ -66,6 +66,39 @@ class Client extends \yii\db\ActiveRecord
         return $this->hasMany(Invoices::className(), ['client_id' => 'id']);
     }
 
+    public function getRecievable()
+    {
+        return $this->hasOne(SystemAccount::className(), ['id' => 'account_id']);
+    }
+
+    public function getPayable()
+    {
+        return $this->hasOne(SystemAccount::className(), ['id' => 'payable_id']);
+    }
+
+    public function getInvoicescount()
+    {
+        $count = $this->hasMany(Invoices::className(), ['client_id' => 'id'])->count();
+        return $count;
+    }
+
+    public function getRecievablebalance()
+    {
+        $account = $this->hasOne(SystemAccount::className(), ['id' => 'account_id']);
+        return $account['balance'] ; 
+    }
+
+    public function getOpeningbalance()
+    {
+        $account = $this->hasOne(SystemAccount::className(), ['id' => 'account_id']);
+        return $account->opening_balance ; 
+    }
+
+    public function getPayablebalance()
+    {
+        $account = $this->hasOne(SystemAccount::className(), ['id' => 'payable_id']);
+        return $account->balance ; 
+    }
     /**
      * @inheritdoc
      * @return ClientQuery the active query used by this AR class.

@@ -55,6 +55,10 @@ $config = [
                     'class' => 'yii\i18n\PhpMessageSource',
                     'basePath' => '@app/messages',
                 ],
+                'client*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@app/messages',
+                ],
                 'inventory*' => [
                     'class' => 'yii\i18n\PhpMessageSource',
                     'basePath' => '@app/messages',
@@ -70,13 +74,32 @@ $config = [
                 // ],
             ],
         ],
+        'formatter' => [
+            'dateFormat' => 'dd-MM-yyyy',
+            'datetimeFormat' => 'php:d-m-Y H:i:s',
+            'timeFormat' => 'php:H:i:s',
+            'decimalSeparator' => '.',
+            'thousandSeparator' => ',',
+            // 'currencyCode' => 'Sdp.',
+            'class' => 'yii\i18n\Formatter',
+        ],
         'mycomponent' => [
             'class' => 'app\components\MyComponent',
+        ],
+        'exportPdf'=>[
+            'class'=>'app\components\ExportToPdf',
+        ],
+        'pdf' => [
+            'class' => \kartik\mpdf\Pdf::classname(),
+            // 'format' => Pdf::FORMAT_A4,
+            // 'orientation' => Pdf::ORIENT_PORTRAIT,
+            // 'destination' => Pdf::DEST_BROWSER,
+            // refer settings section for all configuration options
         ],
         'assetManager' => [
             'bundles' => [
                 'dmstr\web\AdminLteAsset' => [
-                    'skin' => 'skin-green',
+                    'skin' => 'skin-red-light',
                 ],
                 'wbraganca\dynamicform\DynamicFormAsset' => [
                     'sourcePath' => '@app/web/js',
@@ -125,6 +148,22 @@ $config = [
             ],
         ],
         
+    ],
+    'as beforeRequest' => [
+        'class' => 'yii\filters\AccessControl',
+        'rules' => [
+            [
+                'allow' => true,
+                'actions' => ['login'],
+            ],
+            [
+                'allow' => true,
+                'roles' => ['@'],
+            ],
+        ],
+        'denyCallback' => function () {
+            return Yii::$app->response->redirect(['site/login']);
+        },
     ],
     'params' => $params,
 ];

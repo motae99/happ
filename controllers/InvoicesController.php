@@ -25,6 +25,9 @@ use app\models\InvoicesSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use kartik\mpdf\Pdf;
+use yii\helpers\Html;
+
 
 /**
  * InvoicesController implements the CRUD actions for Invoices model.
@@ -697,6 +700,111 @@ class InvoicesController extends Controller
         return $this->render('view', [
             'model' => $model,
         ]);
+    }
+
+    public function actionPrint($id)
+    {   
+        $model = $this->findModel($id);
+        
+        $content = $this->renderPartial('font'
+                        ,[
+                            'model' => $model,
+                        ]);
+        $arr = [
+            'odd' => [
+                'L' => [
+                  'content' => '$title',
+                  'font-size' => 10,
+                  'font-style' => 'B',
+                  'font-family' => 'serif',
+                  'color'=>'#27292b'
+                ],
+                'C' => [
+                  'content' => 'Page - {PAGENO}/{nbpg}',
+                  'font-size' => 10,
+                  'font-style' => 'B',
+                  'font-family' => 'serif',
+                  'color'=>'#27292b'
+                ],
+                'R' => [ 
+                  'content' => 'Printed @ {DATE j-m-Y}',
+                  'font-size' => 10,
+                  'font-style' => 'B',
+                  'font-family' => 'serif',
+                  'color'=>'#27292b'
+                ],
+                'line' => 1,
+            ],
+            'even' => []
+        ];
+        $src = Yii::getAlias('@web').'/data/logo.jpg';
+        $image=Html::img($src,['alt'=>'No Image','width'=>90, 'height'=>70]);
+        $cssInline = '.fa {
+            display: inline-block;
+            font-family: FontAwesome;
+            font-feature-settings: normal;
+            font-kerning: auto;
+            font-language-override: normal;
+            font-size: inherit;
+            font-size-adjust: none;
+            font-stretch: normal;
+            font-style: normal;
+            font-synthesis: weight style;
+            font-variant: normal;
+            font-weight: normal;
+            line-height: 1;
+            text-rendering: auto;
+        } 
+        body { font-family: Alarabiya;}';
+        if(Yii::$app->language == 'ar') : $cssInline .= ' body { direction: rtl; } '; endif;
+        $pdf = new Pdf([
+            // 'defaultFont' => 'DroidKufi',
+            // set to use core fonts only
+            'mode' => Pdf::MODE_UTF8, 
+            // A4 paper format
+            'format' => Pdf::FORMAT_A4, 
+            // portrait orientation
+            'orientation' => Pdf::ORIENT_PORTRAIT, 
+            // stream to browser inline
+            'destination' => Pdf::DEST_BROWSER, 
+            // your html content input
+            'content' => $content,  
+            // format content from your own css file if needed or use the
+            // enhanced bootstrap css built by Krajee for mPDF formatting 
+            // 'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
+            // any css to be embedded if required
+            'cssFile' => Yii::getAlias('@web').'/css/ar/bootstrap-rtl.min.css',
+
+            'cssInline' => $cssInline, 
+             // set mPDF properties on the fly
+            'options' => ['title' => 'My Title'],
+             // call mPDF methods on the fly
+            'methods' => [ 
+                'SetHeader'=>['<table style="border-bottom:1.6px solid #999998;border-top:hidden;border-left:hidden;border-right:hidden;width:100%;"><tr style="border:hidden"><td vertical-align="center" style="width:35px;border:hidden" align="left">'.$image.'</td><td style="border:hidden;text-align:center;color:#555555;"><b style="font-size:22px;">'.'MBBS'.'</b><br/><span style="font-size:18px">'.'$level'.'<br>'.'$subject'.'</td></tr></table>'], 
+                'SetFooter'=>[$arr],
+                // 'SetWatermarkText' => 'motae',
+                'SetWatermarkText' => [
+                    'MOTAE', 0.60, 
+                ]
+            ]
+        ]);
+        $mpdf = $pdf->api;
+        // $mpdf->SetHeader('<table style="border-bottom:1.6px solid #999998;border-top:hidden;border-left:hidden;border-right:hidden;width:100%;"><tr style="border:hidden"><td vertical-align="center" style="width:35px;border:hidden" align="left">'.$image.'</td><td style="border:hidden;text-align:center;color:#555555;"><b style="font-size:22px;">'.'MBBS'.'</b><br/><span style="font-size:18px">'.'$level'.'<br>'.'$subject'.'</td></tr></table>');
+        // $mpdf->setAutoTopMargin = 'stritch';
+        $mpdf->setAutoTopMargin = 'pad';
+        // // $mpdf->WriteHTML('<watermarkimage src='.$src.' alpha="0.33" size="100,80"/>');
+        // // $mpdf->showWatermarkImage = true;
+        // $mpdf->SetFooter($arr);
+        // $mpdf->SetWatermarkText('DRAFT', 0.2); // Will cope with UTF-8 encoded text
+        // $mpdf->watermark_font = 'Serif'; // Uses default font if left blank
+        // $mpdf->watermarkTextAlpha = 0.2;
+        // $mpdf->watermarkImageAlpha = 0.5;
+        $mpdf->showWatermarkText = true;
+
+
+        
+        // return the pdf output as per the destination setting
+        return $pdf->render();
     }
 
     

@@ -2,13 +2,18 @@
 
 namespace app\controllers;
 
+use yii\helpers\Html;
+
 use Yii;
 use app\models\Client;
+use app\models\Invoices;
 use app\models\SystemAccount;
 use app\models\ClientSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use kartik\mpdf\Pdf;
+
 
 /**
  * ClientController implements the CRUD actions for Client model.
@@ -51,17 +56,120 @@ class ClientController extends Controller
      * @return mixed
      */
     public function actionView($id)
-    {
+    {   
+        $model = Client::findOne($id);
+        $invoices = $model->invoices;
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'invoices' => $invoices,
         ]);
     }
 
-    /**
-     * Creates a new Client model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
+    // public function actionPdf($id, $start=NULL,$end=NULL)
+    // {   
+    //     $model = Client::findOne($id);
+    //     $invoices = Invoices::find()
+    //                 ->where(['client_id'=> $model->id])
+    //                 ->all();
+    //                 // ->andWhere(['between', 'date', $start, $end])
+    //                 // ->count();
+
+    //     $html = $this->renderPartial('font'
+    //         ,[
+    //             'model' => $model,
+    //             'invoices' => $invoices,
+    //         ]
+    //         );
+    //     // $s = Semester::find()->where(['id' => $sem_id])->one();
+    //     // $level = $s->sem_name;
+
+    //     $fName = $model->id." ".date('M-d');
+    //     return Yii::$app->exportPdf->exportData('Attendance Report',$fName,$html);
+    // }
+
+    public function actionPdf($id, $start=NULL,$end=NULL) {
+        $model = Client::findOne($id);
+        $invoices = Invoices::find()
+                    ->where(['client_id'=> $model->id])
+                    ->all();
+                    // ->andWhere(['between', 'date', $start, $end])
+                    // ->count();
+
+        // get your HTML raw content without any layouts or scripts
+        // $content = $this->renderPartial('invoices',[ 'model' => $model,'invoices' => $invoices,]);
+        $content = $this->renderPartial('font'
+                        ,[
+                            'model' => $model,
+                            'invoices' => $invoices,
+                        ]);
+        $arr = [
+          'odd' => [
+            'L' => [
+              'content' => '$title',
+              'font-size' => 10,
+              'font-style' => 'B',
+              'font-family' => 'serif',
+              'color'=>'#27292b'
+            ],
+            'C' => [
+              'content' => 'Page - {PAGENO}/{nbpg}',
+              'font-size' => 10,
+              'font-style' => 'B',
+              'font-family' => 'serif',
+              'color'=>'#27292b'
+            ],
+            'R' => [ 
+              'content' => 'Printed @ {DATE j-m-Y}',
+              'font-size' => 10,
+              'font-style' => 'B',
+              'font-family' => 'serif',
+              'color'=>'#27292b'
+            ],
+            'line' => 1,
+          ],
+          'even' => []
+        ];
+        $src = Yii::getAlias('@web').'/data/logo.jpg';
+        $image=Html::img($src,['alt'=>'No Image','width'=>90, 'height'=>70]);
+        $cssInline = ' body { font-family: AlBattar;}';
+        // if(Yii::$app->language == 'ar') : $cssInline .= ' body { direction: rtl; } '; endif;
+        $pdf = new Pdf([
+            // 'defaultFont' => 'DroidKufi',
+            // set to use core fonts only
+            'mode' => Pdf::MODE_UTF8, 
+            // A4 paper format
+            'format' => Pdf::FORMAT_A4, 
+            // portrait orientation
+            'orientation' => Pdf::ORIENT_PORTRAIT, 
+            // stream to browser inline
+            'destination' => Pdf::DEST_BROWSER, 
+            // your html content input
+            'content' => $content,  
+            // format content from your own css file if needed or use the
+            // enhanced bootstrap css built by Krajee for mPDF formatting 
+            'cssFile' => '@vendor/kartik-v/yii2-mpdf/assets/kv-mpdf-bootstrap.min.css',
+            // any css to be embedded if required
+
+
+            'cssInline' => $cssInline, 
+             // set mPDF properties on the fly
+            'options' => ['title' => 'My Title'],
+             // call mPDF methods on the fly
+            'methods' => [ 
+                // 'SetHeader'=>['<table style="border-bottom:1.6px solid #999998;border-top:hidden;border-left:hidden;border-right:hidden;width:100%;"><tr style="border:hidden"><td vertical-align="center" style="width:35px;border:hidden" align="left">'.$image.'</td><td style="border:hidden;text-align:center;color:#555555;"><b style="font-size:22px;">'.'MBBS'.'</b><br/><span style="font-size:18px">'.'$level'.'<br>'.'$subject'.'</td></tr></table>'], 
+                'SetFooter'=>[$arr],
+            ]
+        ]);
+        $mpdf = $pdf->api;
+
+        $mpdf->WriteHTML('<watermarkimage src='.$src.' alpha="0.33" size="100,80"/>');
+        $mpdf->showWatermarkImage = true;
+        
+        // return the pdf output as per the destination setting
+        return $pdf->render(); 
+    }
+
     public function actionCreate()
     {
         $model = new Client();
@@ -95,10 +203,10 @@ class ClientController extends Controller
                 }
 
             }
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         }
 
-        return $this->render('create', [
+        return $this->renderAjax('create', [
             'model' => $model,
         ]);
     }
@@ -114,10 +222,10 @@ class ClientController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         }
 
-        return $this->render('update', [
+        return $this->renderAjax('update', [
             'model' => $model,
         ]);
     }

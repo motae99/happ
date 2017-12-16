@@ -168,7 +168,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'header'=> Yii::t('invo', 'Date'),
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
-                'format' => 'raw',
+                'format' => 'date',
                 'width'=>'8%',
                 /*'value' =>function ($model, $key, $index, $widget) { 
                     $current_rate = Yii::$app->mycomponent->rate();

@@ -33,12 +33,12 @@ use kartik\select2\Select2;
     <div class="col-lg-6 eArLangCss">
       <?= $form->field($model, 'inventory_id')->dropDownList(
                                   ArrayHelper::map(Inventory::find()->all(), 'id', 'name'),
-                                  ['prompt'=>'Select An Inventory '])->label(false); 
+                                  ['placeholder' => Yii::t('inventory', 'Select An Inventory '), ])->label(false); 
       ?>
     </div>
     <div class="col-lg-6 eArLangCss">
       <?= $form->field($model, 'product_id')->widget(Select2::classname(), [
-                  'options' => ['placeholder' => 'Type Product name ...'],
+                  'options' => ['placeholder' => Yii::t('inventory', 'Type Item Name ')],
                   'pluginOptions' => [
                       'allowClear' => false,
                       'minimumInputLength' => 3,
@@ -56,21 +56,21 @@ use kartik\select2\Select2;
       ?>
     </div>
     <div class="col-lg-5 eArLangCss">
-      <?= $form->field($model, 'buying_price')->textInput(['placeholder'=>'buying_price', 'maxlength' => true])->label(false) ?>
+      <?= $form->field($model, 'buying_price')->textInput(['placeholder'=>Yii::t('inventory', 'Buying Price'), 'maxlength' => true])->label(false) ?>
     </div>
     <div class="col-lg-2 eArLangCss">
-      <?= $form->field($model, 'percentage')->textInput(['placeholder'=>'percentage', 'maxlength' => true])->label(false) ?>
+      <?= $form->field($model, 'percentage')->textInput(['placeholder'=>Yii::t('inventory', 'Magin ratio'), 'maxlength' => true])->label(false) ?>
     </div>
     <div class="col-lg-5 eArLangCss">
-      <?= $form->field($model, 'selling_price')->textInput(['placeholder'=>'selling_price', 'maxlength' => true])->label(false) ?>
+      <?= $form->field($model, 'selling_price')->textInput(['placeholder'=>Yii::t('inventory', 'Selling Price'), 'maxlength' => true])->label(false) ?>
     </div>
 
     <div class="col-lg-12 eArLangCss">
-      <?= $form->field($model, 'quantity')->textInput(['placeholder'=>'quantity', 'maxlength' => true])->label(false) ?>
+      <?= $form->field($model, 'quantity')->textInput(['placeholder'=>Yii::t('inventory', 'Quantity'), 'maxlength' => true])->label(false) ?>
     </div>
     <div class="col-lg-12 eArLangCss">
       <div class="form-group">
-          <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn bg-maroon btn-flat btn-block']) ?>
+          <?= Html::submitButton(Yii::t('inventory', 'Add to Stock'), ['class' => 'btn bg-maroon btn-flat btn-block']) ?>
       </div>
     </div>
 

@@ -59,7 +59,15 @@ $this->params['breadcrumbs'][] = $this->title;
 				?>
 				<?= Html::button('<i class="fa fa-2x fa-edit"></i>', ['value' => Url::to(['invoices/update', 'id' => $model->id]), 'title' => Yii::t('invo', 'Return'), 'class' => 'btn btn-flat btn-sm bg-maroon showModalButton']); ?>
 
-				<?=  Html::button('<i class="fa fa-2x fa-print"></i>', ['value' => Url::to(['print', 'id' => $model->id]), 'title' => Yii::t('invo', 'Print'), 'class' => 'btn btn-sm bg-olive']);?>
+       			<?= Html::a('<i class="fa fa-2x fa-print"></i>', ['print', 'id' => $model->id], 
+       				[
+       				'class' => 'btn btn-sm bg-olive',
+       				'target'=>'_blank', 
+				    'data-toggle'=>'tooltip', 
+				    'title'=>'Will open the generated PDF file in a new window'
+       				]) ?>
+
+				<?php //echo  Html::button('<i class="fa fa-2x fa-print"></i>', ['value' => Url::to(['print', 'id' => $model->id]), 'title' => Yii::t('invo', 'Print'), 'class' => 'btn btn-sm bg-olive']);?>
 			</div>
 
 			
@@ -264,9 +272,9 @@ $this->params['breadcrumbs'][] = $this->title;
 							foreach ($payments as $payment ) { 
 						?>
 						<tr>
-							<td ><?=$payment->amount?></td>
-							<td ><?=$payment->mode?></td>
-							<td ><?=$payment->created_at?></td>
+							<td ><?=Yii::$app->formatter->asDecimal($payment->amount, 2)?></td>
+							<td ><?= Yii::t('invo', $payment->mode)?> </td>
+							<td ><?= Yii::$app->formatter->asDatetime($payment->created_at) ?></td>
 							
 						</tr>
 						<?php } 

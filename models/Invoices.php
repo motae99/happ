@@ -91,6 +91,11 @@ class Invoices extends \yii\db\ActiveRecord
         return $this->hasOne(Client::className(), ['id' => 'client_id']);
     }
 
+    public function getReturnedPayment()
+    {
+        return $this->hasOne(ReturnedPayment::className(), ['invoice_id' => 'id']);
+    }
+
     public function getInventory()
     {
         return $this->hasOne(Inventory::className(), ['id' => 'inventory_id']);

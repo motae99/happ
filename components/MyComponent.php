@@ -6,7 +6,7 @@ use yii\base\Component;
 
 use app\models\SystemAccount;
 use app\models\Entry;
-use app\models\Dollar;
+use app\models\Dolar;
 
 use yii\base\InvalidConfigException;
 
@@ -14,7 +14,7 @@ class MyComponent extends Component
 {	
 	
 	public function Rate(){
-		$rate = Dollar::find()->orderBy(['created_at' => SORT_DESC])->one();
+		$rate = Dolar::find()->orderBy(['created_at' => SORT_DESC])->one();
         return $rate->value;
 	}
   

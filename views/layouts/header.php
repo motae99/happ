@@ -51,7 +51,7 @@ use kartik\form\ActiveForm;
                         <li class="header">
                             <?php 
 
-                                $dollar = new app\models\Dollar();
+                                $dollar = new app\models\Dolar();
                                 $form = ActiveForm::begin([   
                                     'id' => 'dollar-exchange-form',
                                     'options'=>['method' => 'post'],
@@ -60,7 +60,7 @@ use kartik\form\ActiveForm;
                                 ]); 
                             
 
-                                echo $form->field($dollar, Yii::t('app', 'value'), [
+                                echo $form->field($dollar, 'value', [
                                         'feedbackIcon' => [
                                             'default' => 'ok',
                                             'error' => 'exclamation-sign',

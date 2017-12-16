@@ -5,7 +5,7 @@
 	<!-- Theme RTL style -->
 	<link rel="stylesheet" href="<?= Yii::getAlias('@web'); ?>/css/ar/AdminLTE-rtl.css">
 
-<?php 
+<?php  
 
 $this->registerCss('
 
@@ -83,6 +83,7 @@ $this->registerCss('
 		.edusecArLangPopover {
 			width: 6.667% !important;
 		}
+		
 ');
 
 endif; ?>
