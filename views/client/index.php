@@ -191,7 +191,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //     ]
             // ],
         ];
-        $src = Yii::getAlias('@web').'/data/logo.jpg';
+        $src = Yii::getAlias('@web').'/data/logo.png';
 
 
     ?>

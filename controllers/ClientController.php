@@ -130,7 +130,7 @@ class ClientController extends Controller
           ],
           'even' => []
         ];
-        $src = Yii::getAlias('@web').'/data/logo.jpg';
+        $src = Yii::getAlias('@web').'/data/logo.png';
         $image=Html::img($src,['alt'=>'No Image','width'=>90, 'height'=>70]);
         $cssInline = ' body { font-family: AlBattar;}';
         // if(Yii::$app->language == 'ar') : $cssInline .= ' body { direction: rtl; } '; endif;

@@ -69,9 +69,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
 				<?php //echo  Html::button('<i class="fa fa-2x fa-print"></i>', ['value' => Url::to(['print', 'id' => $model->id]), 'title' => Yii::t('invo', 'Print'), 'class' => 'btn btn-sm bg-olive']);?>
 			</div>
-
-			
-			
 			<div class="box box-info">
 				<div class="box-tools">
 		          <button type="button" class="btn btn-sm btn-box-tool" data-widget="collapse"><i class="fa fa-2x fa-minus"></i>
@@ -246,10 +243,8 @@ $this->params['breadcrumbs'][] = $this->title;
 								</tr>
 
 					</table>
-
 					
 				</div>
-					
 			</div>
 		<div class="box box-success">
 		  	<div class="box-tools">
