@@ -48,7 +48,7 @@ use kartik\form\ActiveForm;
     </div>
     
     <div class="col-lg-6 eArLangCss">
-    <?= $form->field($model, 'balance', [
+    <?php  /* echo $form->field($model, 'balance', [
                                         'feedbackIcon' => [
                                             'default' => 'ok',
                                             'error' => 'exclamation-sign',
@@ -62,7 +62,7 @@ use kartik\form\ActiveForm;
                                             ]
                                         ]
                                     ])
-    ->textInput(['placeholder' => Yii::t('client', 'Existing Balance')] )->label(false); ?>
+    ->textInput(['placeholder' => Yii::t('client', 'Existing Balance')] )->label(false);*/ ?>
     </div>
 
     <?php ActiveForm::end(); ?>

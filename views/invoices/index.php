@@ -148,7 +148,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class'=>'kartik\grid\DataColumn',
                 'attribute'=>'status',
                 'header'=> Yii::t('invo', 'Status'),
-                'headerOptions'=>['class'=>'kartik-sheet-style'],
+                'headerOptions'=>['class'=>'skip-export'],
+                'contentOptions'=>['class'=>'skip-export'],
+                'footerOptions'=>['class'=>'skip-export'],
+                'pageSummaryOptions'=>['class'=>'skip-export'],
                 'hAlign'=>'center',
                 'width'=>'5%',
                 'format' => 'raw',
@@ -202,6 +205,83 @@ $this->params['breadcrumbs'][] = $this->title;
                 return ['class' => 'danger'];
             }
         },*/
+        'exportConfig' => [ 
+            GridView::PDF => [
+                'label' => Yii::t('app', 'Type PDF'),
+                'icon' => 'floppy-disk',
+                'iconOptions' => ['class' => 'text-danger'],
+                'showHeader' => true,
+                'showPageSummary' => true,
+                'showFooter' => true,
+                'showCaption' => true,
+                'filename' => Yii::t('app', 'Invoices'),
+                'alertMsg' => Yii::t('app', 'Its downloading, Wait for it.'),
+                // 'options' => ['title' => Yii::t('app', 'Portable Document Format')],
+                'mime' => 'application/pdf',
+                'config' => [
+                    // 'mode' => 'c',
+                    'format' => 'A4-L',
+                    'destination' => 'I',
+                    'marginTop' => 20,
+                    'marginBottom' => 20,
+                  // 'cssFile' => '@web/css/ar/bootstrap-rtl.min.css',
+                  'cssInline' => 'body { direction: rtl; font-family: Alarabiya;} th { text-align: right; } td { text-align: right;}',
+                  'methods' => [
+                    'SetHeader' => [
+                        [
+                        'odd' => [
+                                'L' => [
+                                  'content' => Yii::$app->mycomponent->name(),
+                                  'font-size' => 10,
+                                  'font-style' => 'B',
+                                  'font-family' => 'serif',
+                                  'color'=>'#27292b'
+                                ],
+                                'C' => [
+                                  'content' => 'Page - {PAGENO}/{nbpg}',
+                                  'font-size' => 10,
+                                  'font-style' => 'B',
+                                  'font-family' => 'serif',
+                                  'color'=>'#27292b'
+                                ],
+                                'R' => [ 
+                                  'content' => 'Printed @ {DATE j-m-Y}',
+                                  'font-size' => 10,
+                                  'font-style' => 'B',
+                                  'font-family' => 'serif',
+                                  'color'=>'#27292b'
+                                ],
+                                'line' => 1,
+                            ],
+                            'even' => []
+                        ]
+                    ],
+                    // 'SetFooter' => [
+                    //     $arr,
+                    // ],
+                    // 'SetWatermarkText' => ['motae', 0.3],
+                    'SetWatermarkImage' => [
+                        Yii::$app->mycomponent->logo(),
+                        0.1, 
+                        [100,100],
+                    ],
+                    'SetAuthor' => [
+                        'Motae',
+                    ],
+                    'SetCreator' => [
+                        'System Name',
+                    ],
+                    // 'SetProtection' => [
+                    //     [],
+                    //     'UserPassword',
+                    //     'MyPassword',
+                    // ],
+                  
+                  ],
+                  
+                ]
+            ],
+        ],
         'pjax' => true,
         'pjaxSettings'=>[
           'neverTimeout'=>true,
@@ -219,11 +299,11 @@ $this->params['breadcrumbs'][] = $this->title;
         // 'floatHeader' => true,
        // 'floatHeaderOptions' => ['scrollingTop' => $scrollingTop],
         'showPageSummary' => true,
-        // 'panel' => [
-        //     'type' => GridView::TYPE_INFO,
-        //     'heading' => '<i class="fa  fa-hospital-o"></i><strong></strong>',
+        'panel' => [
+            'type' => GridView::TYPE_INFO,
+            'heading' => '<i class="fa  fa-hospital-o"></i><strong></strong>',
 
-        // ],
+        ],
         
     ]); ?>
 </div>

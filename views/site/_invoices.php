@@ -154,24 +154,24 @@ use yii\data\ActiveDataProvider;
             'format' => 'raw',
             'value' =>function ($model, $key, $index, $widget) { 
                 if ($model->status == "paid") {
-                    return '<i class="fa fa-2x fa-check-circle" style="color: green;"></i>';
+                    return '<i class="fa fa-check-circle" style="color: green;"></i>';
                 }elseif($model->status == "partially"){
-                    return '<i class="fa fa-2x fa-minus-circle" style="color: orange;"></i>';
+                    return '<i class="fa fa-minus-circle" style="color: orange;"></i>';
                 }else{
-                    return '<i class="fa fa-2x fa-times-circle" style="color: red;"></i>';
+                    return '<i class="fa fa-times-circle" style="color: red;"></i>';
                 }
                                   
             },
         ],
-        [
-            'class' => 'kartik\grid\ActionColumn',
-            'header' => Yii::t('invo', 'View'),
-            'width' => '5%',
-            'template' => '{view} ',
-            // 'viewOptions'=>['lable'=>'<i class="glyphicon glyphicon-remove"></i>'],
-            // 'updateOptions'=>['null' => true],
-            // 'deleteOptions'=>['null' => true],
-        ],
+        // [
+        //     'class' => 'kartik\grid\ActionColumn',
+        //     'header' => Yii::t('invo', 'View'),
+        //     'width' => '5%',
+        //     'template' => '{view} ',
+        //     // 'viewOptions'=>['lable'=>'<i class="glyphicon glyphicon-remove"></i>'],
+        //     // 'updateOptions'=>['null' => true],
+        //     // 'deleteOptions'=>['null' => true],
+        // ],
     ];
 
 ?>

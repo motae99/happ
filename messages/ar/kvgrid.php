@@ -86,5 +86,5 @@ return [
     'items-few' => '',
     'items-many' => '',
     'krajee, grid, export, yii2-grid, pdf' => '',
-    '© Krajee Yii2 Extensions' => '',
+    '© Krajee Yii2 Extensions' => '© patternscope.com',
 ];

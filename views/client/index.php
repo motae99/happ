@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
         $arr = [
                 'odd' => [
                     'L' => [
-                      'content' => '$title',
+                      'content' => Yii::$app->mycomponent->name(),
                       'font-size' => 10,
                       'font-style' => 'B',
                       'font-family' => 'serif',
@@ -191,7 +191,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //     ]
             // ],
         ];
-        $src = Yii::getAlias('@web').'/data/logo.png';
+        $src = Yii::$app->mycomponent->logo();
 
 
     ?>
@@ -208,7 +208,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'icon' => 'floppy-disk',
             ],
             '{export}',
-            // '{toggleData}',
+            '{toggleData}',
         ],
         /*'export' => [
             'PDF' => [
@@ -221,23 +221,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ],*/
         'exportConfig' => [ 
-            // 'icon' => '',
-            // GridView::EXCEL => [
-            //     'label' => ( 'Exportar en Excel'),
-            //     'iconOptions' => ['class' => 'text-success'],
-            //     'showHeader' => true,
-            //     'showPageSummary' => true,
-            //     'showFooter' => true,
-            //     'showCaption' => true,
-            //     'filename' => ('myReportPDF'),
-            //     'alertMsg' => ( 'El archivo de exportación EXCEL se generará para descargar.'),
-            //     'options' => ['title' => ( 'Microsoft Excel 95+')],
-            //     'mime' => 'application/vnd.ms-excel',
-            //     'config' => [
-            //         'worksheet' => ( 'ExportWorksheet'),
-            //         'cssFile' => ''
-            //     ],
-            // ],
             GridView::PDF => [
                 'label' => Yii::t('app', 'Type PDF'),
                 'icon' => 'floppy-disk',
@@ -246,30 +229,56 @@ $this->params['breadcrumbs'][] = $this->title;
                 'showPageSummary' => true,
                 'showFooter' => true,
                 'showCaption' => true,
-                'filename' => Yii::t('app', 'Export'),
-                'alertMsg' => Yii::t('app', 'Wait for it.'),
+                'filename' => Yii::t('app', 'Clients'),
+                'alertMsg' => Yii::t('app', 'Its downloading, Wait for it.'),
                 // 'options' => ['title' => Yii::t('app', 'Portable Document Format')],
                 'mime' => 'application/pdf',
                 'config' => [
                     // 'mode' => 'c',
                     'format' => 'A4-L',
-                    'destination' => 'D',
+                    'destination' => 'I',
                     'marginTop' => 20,
                     'marginBottom' => 20,
                   // 'cssFile' => '@web/css/ar/bootstrap-rtl.min.css',
-                  // 'cssInline' => 'body { direction: rtl; } th { text-align: right; } td { text-align: right;}',
+                  'cssInline' => 'body { direction: rtl; font-family: Alarabiya;} th { text-align: right; } td { text-align: right;}',
                   'methods' => [
                     'SetHeader' => [
-                        $arr,
+                        [
+                        'odd' => [
+                                'L' => [
+                                  'content' => Yii::$app->mycomponent->name(),
+                                  'font-size' => 10,
+                                  'font-style' => 'B',
+                                  'font-family' => 'serif',
+                                  'color'=>'#27292b'
+                                ],
+                                'C' => [
+                                  'content' => 'Page - {PAGENO}/{nbpg}',
+                                  'font-size' => 10,
+                                  'font-style' => 'B',
+                                  'font-family' => 'serif',
+                                  'color'=>'#27292b'
+                                ],
+                                'R' => [ 
+                                  'content' => 'Printed @ {DATE j-m-Y}',
+                                  'font-size' => 10,
+                                  'font-style' => 'B',
+                                  'font-family' => 'serif',
+                                  'color'=>'#27292b'
+                                ],
+                                'line' => 1,
+                            ],
+                            'even' => []
+                        ]
                     ],
-                    'SetFooter' => [
-                        $arr,
-                    ],
-                    'SetWatermarkText' => ['motae', 0.3],
+                    // 'SetFooter' => [
+                    //     $arr,
+                    // ],
+                    // 'SetWatermarkText' => ['motae', 0.3],
                     'SetWatermarkImage' => [
-                        $src,
+                        Yii::$app->mycomponent->logo(),
                         0.1, 
-                        [100,80],
+                        [100,100],
                     ],
                     'SetAuthor' => [
                         'Motae',
@@ -286,11 +295,11 @@ $this->params['breadcrumbs'][] = $this->title;
                     //     '978095422461',
                     // ],
                   ],
-                  'options' => [
-                    'title' => 'Preceptors',
-                    'subject' => 'Preceptors',
-                    'keywords' => 'pdf, preceptors, export, other, keywords, here'
-                  ],
+                  // 'options' => [
+                  //   'title' => 'Preceptors',
+                  //   'subject' => 'Preceptors',
+                  //   'keywords' => 'pdf, preceptors, export, other, keywords, here'
+                  // ],
                 ]
             ],
         ],
@@ -310,12 +319,11 @@ $this->params['breadcrumbs'][] = $this->title;
         'responsiveWrap' => true,
         'hover' => true,
         'showPageSummary' => true,
-        'panel' => false,
-        // [
-        //     'type' => GridView::TYPE_INFO,
-        //     'heading' => '<i class="fa fa-users "></i><strong></strong>',
+        'panel' => [
+            'type' => GridView::TYPE_INFO,
+            'heading' => '<i class="fa fa-users "></i><strong></strong>',
 
-        // ],
+        ],
         'columns' => [
             [
                 'class' => 'kartik\grid\DataColumn',

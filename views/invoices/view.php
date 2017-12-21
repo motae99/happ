@@ -166,7 +166,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					<div style="margin:70px"></div>
 
 					<table class="table table-responsive">
-								<tr class="bg-aqua">
+								<tr style="border-top: 1px solid #f4f4f4; line-height: 1.8; background-color: #044849;">
 									<th style="width: 2%; color: white;"></th>
 									<th style="width: 40%; color: white;"><?= Yii::t('invo', 'Item')?></th>
 									<th style="width: 10%; color: white;"><?= Yii::t('invo', 'Quantity')?></th>

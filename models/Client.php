@@ -22,6 +22,7 @@ class Client extends \yii\db\ActiveRecord
      */
 
     public $balance;
+    public $clear;
 
     public static function tableName()
     {
@@ -34,8 +35,8 @@ class Client extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['client_name', 'phone', 'color_class'], 'required'],
-            [['phone', 'account_id', 'balance'], 'integer'],
+            [['client_name', 'phone', 'color_class', 'clear'], 'required'],
+            [['phone', 'account_id', 'balance', 'clear'], 'integer'],
             [['address'], 'string'],
             [['client_name'], 'string', 'max' => 45],
         ];
@@ -55,6 +56,7 @@ class Client extends \yii\db\ActiveRecord
             'balance' => Yii::t('app', 'Existing Balance'),
             'color_class' => Yii::t('app', 'Color'),
             'balance' => Yii::t('app', 'balance'),
+            'clear' => Yii::t('app', 'Clear'),
         ];
     }
 

@@ -86,15 +86,15 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'pjax'=>true,
             'striped'=>true,
             'hover'=>true,
-            // 'toolbar' =>  [
-            //  ['content'=>
-            //     Html::button('<i class="glyphicon glyphicon-plus"></i>', ['type'=>'button', 'title'=>'Do Something', 'class'=>'btn btn-info', 'onclick'=>'alert("This will launch nothing.\n\nBut set to do something later!");']) . ' ' .
-            //     Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['index'], ['data-pjax'=>0, 'class' => 'btn btn-default', 'title'=>'Reset'])
-            //     ],
-            //     '{export}',
-            //     '{toggleData}'
-            // ],
-            // 'panel'=>['type'=>'primary', 'heading'=>'Double Entry'],
+            'toolbar' =>  [
+             ['content'=>
+                Html::button('<i class="glyphicon glyphicon-plus"></i>', ['type'=>'button', 'title'=>'Do Something', 'class'=>'btn btn-info', 'onclick'=>'alert("This will launch nothing.\n\nBut set to do something later!");']) . ' ' .
+                Html::a('<i class="glyphicon glyphicon-repeat"></i>', ['index'], ['data-pjax'=>0, 'class' => 'btn btn-default', 'title'=>'Reset'])
+                ],
+                '{export}',
+                '{toggleData}'
+            ],
+            'panel'=>['type'=>'primary', 'heading'=>'Double Entry'],
             'columns' => [
                // ['class'=>'kartik\grid\SerialColumn'],
                 [

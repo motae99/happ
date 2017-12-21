@@ -10,7 +10,7 @@ use yii\helpers\Url;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\Outstanding;
-use app\models\Dollar;
+use app\models\Dolar;
 use app\models\ContactForm;
 
 
@@ -60,7 +60,7 @@ class SiteController extends Controller
 
     public function actionDollar()
     {   
-        $model = new Dollar();
+        $model = new Dolar();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         }

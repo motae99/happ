@@ -12,6 +12,19 @@ use yii\base\InvalidConfigException;
 
 class MyComponent extends Component
 {	
+    
+    public function logo(){
+        return Yii::getAlias('@web').'/data/logo.png';
+    }
+    public function name(){
+        return'motae';
+    }
+    public function phone(){
+        return '09389483948';
+    }
+    public function address(){
+        return 'address of some place on earth';
+    }
 	
 	public function Rate(){
 		$rate = Dolar::find()->orderBy(['created_at' => SORT_DESC])->one();

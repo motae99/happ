@@ -148,7 +148,7 @@ class InvoicesController extends Controller
                                 if ($checkRate != $stock->highest_rate) {
                                     $stock->highest_rate = $checkRate;
                                 }
-                                $stock->quantity -= $stocking_out->quantity;
+                                $stock->quantity -= $modelItem->quantity;
                                 $stock->save(false);
 
 
@@ -697,7 +697,7 @@ class InvoicesController extends Controller
     {   
         $model = $this->findModel($id);
         // $products = $this->findModel($id);
-        return $this->render('invpdf', [
+        return $this->render('view', [
             'model' => $model,
         ]);
     }
@@ -710,10 +710,15 @@ class InvoicesController extends Controller
                         ,[
                             'model' => $model,
                         ]);
+        if ($model->status == 'paid') {
+            $status = "PAID";
+        }else{
+            $status = "";
+        }
         $arr = [
             'odd' => [
                 'L' => [
-                  'content' => '$title',
+                  'content' => 'SENTIMENT',
                   'font-size' => 10,
                   'font-style' => 'B',
                   'font-family' => 'serif',
@@ -737,6 +742,7 @@ class InvoicesController extends Controller
             ],
             'even' => []
         ];
+
         $src = Yii::getAlias('@web').'/data/logo.png';
         $image=Html::img($src,['alt'=>'No Image','width'=>90, 'height'=>70]);
         $cssInline = '.fa {
@@ -756,12 +762,33 @@ class InvoicesController extends Controller
             text-rendering: auto;
         } 
         body { font-family: Alarabiya;}
-        .col-lg-8 { width: 66.66666667%;  float: left;}
+        .col-lg-8 { width: 55%;  float: left; }
         .w80 { height: 400px; }
+        // .padding { padding-left: 2em !important; padding-right: 2em !important; padding-top: 0px !important; padding-right: 0px !important; }
+        .padding { margin-right: 30px; }
+        .textcolor { color: #044849;}
+        .textcolor2 { color: #ceb8b8;}
+        .centerize { text-align: center;}
         .col-lg-4 { width: 33.33333333%;  float: left;}
-        .w40 {height: 400px; padding-left: 0;}
-        .table { width: 100%; }
+        .w40 {height: 400px; text-align: center;}
+        .table { width: 100%;  border-collapse: collapse;}
+        // th { border-top: 1px solid #f4f4f4; line-height: 1.8; }
+        hr { border: 3px solid #ae873d ; }
+        td { border-bottom: 1.5px solid #ceb8b8 ; line-height: 1.5;}
         .client { border-top:2px solid #ecf0f5}
+        .trcolor { background-color: #044849;}
+        .th1 {width: 2%; color: #fff;}
+        .th2 {width: 40%; color: #fff;}
+        .th3 {width: 10%; color: #fff;}
+        .th4 {width: 10%; color: #fff;}
+        .th5 {width: 23%; color: #fff;}
+        .th6 {width: 15%; color: #fff; text-align: center;}
+        .td6 {text-align: center; }
+        .tdd6 {text-align: center;}
+        .hrline {line-height: 2.5; border:0 !important;}
+        .linefirst { border-bottom: 3px solid #ceb8b8 !important;}
+        .linesecond { border-bottom: 3px solid #000 !important;}
+        .bottom { border-bottom: 4px solid #ae873d !important;}
         ';
         if(Yii::$app->language == 'ar') : $cssInline .= ' 
             body { direction: rtl;} 
@@ -797,15 +824,16 @@ class InvoicesController extends Controller
                 'SetFooter'=>[$arr],
                 // 'SetWatermarkText' => 'motae',
                 'SetWatermarkText' => [
-                    $model->status, 0.3, 
+                    $status, 0.2, 
                 ]
             ]
         ]);
         $mpdf = $pdf->api;
         // $mpdf->SetHeader('<table style="border-bottom:1.6px solid #999998;border-top:hidden;border-left:hidden;border-right:hidden;width:100%;"><tr style="border:hidden"><td vertical-align="center" style="width:35px;border:hidden" align="left">'.$image.'</td><td style="border:hidden;text-align:center;color:#555555;"><b style="font-size:22px;">'.'MBBS'.'</b><br/><span style="font-size:18px">'.'$level'.'<br>'.'$subject'.'</td></tr></table>');
-        // $mpdf->setAutoTopMargin = 'stritch';
-        $mpdf->setAutoBottomMargin = 'pad';
-        $mpdf->WriteHTML('<watermarkimage src='.$src.' alpha="0.33" size="100,80"/>');
+        $mpdf->setAutoTopMargin = 'stritch';
+        $mpdf->setAutoBottomMargin = 'stritch';
+        // $mpdf->setAutoBottomMargin = 'pad';
+        $mpdf->WriteHTML('<watermarkimage src='.$src.' alpha="0.3" size="100,100"/>');
         $mpdf->showWatermarkImage = true;
         // $mpdf->SetFooter($arr);
         // $mpdf->SetWatermarkText('DRAFT', 0.2); // Will cope with UTF-8 encoded text

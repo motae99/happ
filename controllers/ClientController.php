@@ -8,6 +8,7 @@ use Yii;
 use app\models\Client;
 use app\models\Invoices;
 use app\models\SystemAccount;
+use app\models\Transaction;
 use app\models\ClientSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -48,6 +49,41 @@ class ClientController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
+    }
+
+    public function actionClear($id)
+    {   
+        $model = $model = Client::findOne($id);
+        if($model->load(Yii::$app->request->post())){
+          $amount = $model->clear;
+          $clientAccount = $model->recievable;
+          $cashAccount = SystemAccount::find()->where(['system_account_name' => 'cash'])->one();
+            
+
+        // Keeping journal entry by registering the cash in //
+            $start = new Transaction();
+            $start->description = "Clearing ".$model->id;
+            $start->reference = $model->id;
+            $start->reference_type = "Clearing";
+            if($start->save(false)){
+              //// Depit Cash account + balance////
+              $cash = Yii::$app->mycomponent->increase($cashAccount, $amount, $start->id);
+              //// Credut ClientRecievable account - balance////
+              $recievable = Yii::$app->mycomponent->decrease($clientAccount, $amount, $start->id);
+
+            
+        // Keeping journal entry by registering the cash in //
+
+
+            return $this->redirect(['view', 'id' => $model->id]);
+          }
+        }
+
+        // return $this->renderAjax('cash', [
+        //     'model' => $model,
+        //     'payment' => $payment,
+        // ]);
+
     }
 
     /**

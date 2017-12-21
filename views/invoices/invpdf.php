@@ -31,21 +31,21 @@ use app\models\OutStanding;
     $creditMax = $remaining - $credit ;
 ?> 		
 <div class="all">
-	<div class="col-lg-12">
-	<div class="col-lg-8 w80 eArLangCss ">
-		<h1 >
+	<div class="col-lg-8 eArLangCss ">
+		<h1 class="centerize">
 			<?= Yii::t('invo', 'Invoice') ." #". $model->id?> 
 		</h1>
 		<span class="text-bold"></span>
 		<span class="text-bold"> <?= $model->created_at?></span>
 		<hr>
 		<?php if($outstandings){ ?>
-			<table class="table table-border table-responsive">
+			<div class="col-lg-10">
+			<table class="table">
 				<tr>
 					<th>#</th>
 					<th><?= Yii::t('invo', 'Due Date')?></th>
 					<th><?= Yii::t('invo', 'Type')?></th>
-					<th><?= Yii::t('invo', 'Total')?></th>
+					<th><?= Yii::t('invo', 'Amount')?></th>
 					<th><span class="fa fa-check"><span></th>
 				</tr>
 				<?php foreach ($outstandings as $o) { ?>
@@ -62,24 +62,28 @@ use app\models\OutStanding;
 				</tr>
 				<?php } ?> 
 			</table>
+			</div>
 			<?php }?>
 	</div>
-	<div class="col-lg-4 w40 eArLangCss" >
-		<div class="col-lg-12" >
+	<div class="col-lg-4 eArLangCss" >
+		<div class="padding" >
             <div >
-              	<h3 >
+              	<h4 class="textcolor">
               		Client Name
-              	</h3>
+              	</h4>
 
               	<p>Address</p>
-             	<p> 09934348</p>
+             	<p><?php //echo Yii::$app->formatter->asDatetime($payment->created_at) ?> 09934348</p>
             </div>
 		</div>
-		<div class="col-lg-12 client" >
+		<div class="padding client" >
             <div >
-              	<h3 >
+            	<span class="textcolor2">
+            	<?=Yii::t('invo', 'Bill to' )?>
+              	</span>
+              	<h4 >
               		<?= $model->client->client_name;?>
-              	</h3>
+              	</h4>
 
               	<p><?= $model->client->address;?></p>
              	<p> <?= $model->client->phone;?></p>
@@ -91,13 +95,13 @@ use app\models\OutStanding;
 
 
 	<table class="table table-responsive">
-				<tr class="bg-aqua">
-					<th ></th>
-					<th ><?= Yii::t('invo', 'Item')?></th>
-					<th ><?= Yii::t('invo', 'Quantity')?></th>
-					<th ><?= Yii::t('invo', 'Price')?></th>
-					<th ><?= Yii::t('invo', 'Discount')?></th>
-					<th ><?= Yii::t('invo', 'LineTotal')?></th>
+				<tr class="trcolor">
+					<th class="th1"></th>
+					<th class="th2"><?= Yii::t('invo', 'Item')?></th>
+					<th class="th3"><?= Yii::t('invo', 'Quantity')?></th>
+					<th class="th4"><?= Yii::t('invo', 'Price')?></th>
+					<th class="th5"><?= Yii::t('invo', 'Discount')?></th>
+					<th class="th6"><?= Yii::t('invo', 'LineTotal')?></th>
 				</tr>
 				<?php 
 					$products = $model->invoiceProducts;
@@ -109,7 +113,7 @@ use app\models\OutStanding;
 					<td ><?=$p->quantity?></td>
 					<td ><?=$p->selling_rate?></td>
 					<td ><?=$p->discount?></td>
-					<td ><?= $p->quantity * $p->selling_rate - $p->discount?>.00</td>
+					<td class="td6"><?= $p->quantity * $p->selling_rate - $p->discount?>.00</td>
 					
 				</tr>
 				<?php } 
@@ -125,46 +129,46 @@ use app\models\OutStanding;
 				</tr>
 
 				<tr >
-					<td></td>	
-					<td></td>	
-					<td></td>	
-					<td></td>	
-					<td ><?= Yii::t('invo', 'SUBTOTAL')?>: </td>
-					<td > $<?= $model->amount?> </td>
+					<td class="hrline linefirst"></td>	
+					<td class="hrline linefirst"></td>	
+					<td class="hrline linefirst"></td>	
+					<td class="hrline linefirst"></td>	
+					<td class="hrline linefirst"><?= Yii::t('invo', 'SUBTOTAL')?>: </td>
+					<td class="hrline linefirst tdd6"> $<?= $model->amount?> </td>
 				</tr>
 				<tr>
-					<td ></td>	
-					<td ></td>	
-					<td ></td>	
-					<td ></td>	
-					<td ><?= Yii::t('invo', 'TAX')?>: </td>
-					<td > 0.00% </td>
+					<td class="hrline"></td>	
+					<td class="hrline"></td>	
+					<td class="hrline"></td>	
+					<td class="hrline"></td>	
+					<td class="hrline"><?= Yii::t('invo', 'TAX')?>: </td>
+					<td class="hrline tdd6"> 0.00% </td>
 				</tr>
 				<tr>
-					<td ></td>	
-					<td ></td>	
-					<td ></td>	
-					<td ></td>	
-					<td ><?= Yii::t('invo', 'TOTAL')?>: </td>
-					<td > $<?= $model->amount?> </td>
+					<td class="hrline"></td>	
+					<td class="hrline"></td>	
+					<td class="hrline"></td>	
+					<td class="hrline"></td>	
+					<td class="hrline"><?= Yii::t('invo', 'TOTAL')?>: </td>
+					<td class="hrline tdd6"> $<?= $model->amount?> </td>
 				</tr>
 
 				<tr >
-					<td ></td>	
-					<td ></td>	
-					<td ></td>	
-					<td ></td>	
-					<td ><?= Yii::t('invo', 'PAID')?>: </td>
-					<td > $<?= $total_paid?>.00</td>
+					<td class="hrline linesecond "></td>	
+					<td class="hrline linesecond "></td>	
+					<td class="hrline linesecond "></td>	
+					<td class="hrline linesecond "></td>	
+					<td class="hrline linesecond "><?= Yii::t('invo', 'PAID')?>: </td>
+					<td class="hrline linesecond tdd6"> $<?= $total_paid?>.00</td>
 				</tr>
 
-				<tr>
-					<td ></td>	
-					<td ></td>	
-					<td ></td>	
-					<td ></td>	
-					<td ><?= Yii::t('invo', 'AMOUNT DUE')?>: </td>
-					<td > $<?= $remaining?>.00 </td>
+				<tr class="hrline">
+					<td class="hrline "></td>	
+					<td class="hrline "></td>	
+					<td class="hrline "></td>	
+					<td class="hrline "></td>	
+					<td class="hrline bottom"><?= Yii::t('invo', 'AMOUNT DUE')?>: </td>
+					<td class="hrline tdd6 bottom"> $<?= $remaining?>.00 </td>
 				</tr>
 	</table>	
 </div>
