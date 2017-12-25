@@ -345,6 +345,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'class'=>'kartik\grid\DataColumn',
                 'header'=> Yii::t('client', 'Invoices') ,
                 // 'width'=>'11%',
+                'format' => 'decimal',
                 'headerOptions'=>['class'=>'kartik-sheet-style', ],
                 'hAlign'=>'center',
                 'vAlign'=>'center',   
@@ -361,7 +362,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
                 'vAlign'=>'center',   
-                'format' => 'raw',
+                'format' => 'decimal',
                 'value' =>function ($model, $key, $index, $widget) { 
                     return round($model->recievable->opening_balance) ;                    
                 },
@@ -373,7 +374,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
                 'vAlign'=>'center',   
-                'format' => 'raw',
+                'format' => 'decimal',
                 'value' =>function ($model, $key, $index, $widget) { 
                     return round($model->recievable->balance) ;                    
                 },
@@ -387,7 +388,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
                 'vAlign'=>'center',   
-                'format' => 'raw',
+                'format' => 'decimal',
                 'value' =>function ($model, $key, $index, $widget) { 
                     if ($model->payable) {
                         return round($model->payable->balance) ;                    

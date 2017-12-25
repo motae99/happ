@@ -60,7 +60,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="col-sm-4 border-right eArLangCss">
                           <div class="description-block">
                             <h5 class="description-header">
-                                <span class="badge bg-red"><?= $inventory->expense->balance* Yii::$app->mycomponent->rate()?></span>
+                                <span class="badge bg-red"><?= Yii::$app->formatter->asDecimal(round($inventory->expense->balance * Yii::$app->mycomponent->rate())) ?></span>
                             </h5>
                             <span class="description-text"><?=Yii::t('inventory', 'Cost of Goods')?></span>
                           </div>
@@ -70,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="col-sm-4 border-right eArLangCss">
                           <div class="description-block">
                             <h5 class="description-header">
-                                <span class="badge bg-green"><?= $inventory->asset->balance* Yii::$app->mycomponent->rate()?></span>
+                                <span class="badge bg-green"><?= Yii::$app->formatter->asDecimal(round($inventory->asset->balance* Yii::$app->mycomponent->rate())) ?></span>
                             </h5>
                             <span class="description-text"><?=Yii::t('inventory', 'Stock Value')?></span>
                           </div>
@@ -80,7 +80,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="col-sm-4 border-right eArLangCss">
                           <div class="description-block">
                             <h5 class="description-header">
-                                <span class="badge bg-aqua"> <?= $inventory->stocksCount ?></span>
+                                <span class="badge bg-aqua"> <?= Yii::$app->formatter->asDecimal($inventory->stocksCount)  ?></span>
                             </h5>
                             <span class="description-text"><?=Yii::t('inventory', 'Items Count')?></span>
                           </div>
@@ -206,6 +206,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'attribute'=>'quantity',
                             'header'=> Yii::t('inventory', 'Quantity'),
                             'width'=>'8%',
+                            'format'=>['decimal'],
                             'headerOptions'=>['class'=>'kartik-sheet-style'],
                             'hAlign'=>'center',
                             'vAlign'=>'center',
@@ -220,7 +221,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'hAlign'=>'center',
                             'vAlign'=>'center',   
                             'width'=>'8%',
-                            'format' => 'raw',
+                            'format'=>['decimal'],
                             'value' =>function ($model, $key, $index, $widget) { 
                                 $current_rate = Yii::$app->mycomponent->rate();
                                 if ($current_rate > $model->highest_rate) {
@@ -228,7 +229,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 }else{
                                    $rate = $model->highest_rate; 
                                 }
-                                return $model->product->buying_price*$rate;                    
+                                return round($model->product->buying_price*$rate);                    
                             },
                         ],
                         [
@@ -238,7 +239,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'headerOptions'=>['class'=>'kartik-sheet-style'],
                             'hAlign'=>'center',
                             'vAlign'=>'center',
-                            'format' => 'raw',
+                            'format'=>['decimal'],
                             'value' =>function ($model, $key, $index, $widget) { 
                                 $current_rate = Yii::$app->mycomponent->rate();
                                 if ($current_rate > $model->highest_rate) {
@@ -263,6 +264,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'hAlign'=>'center',
                             'vAlign'=>'center',
                             'width'=>'8%',
+                            
                             'format' => 'raw',
                             'value' =>function ($model, $key, $index, $widget) { 
                                 return $model->product->percentage."%";                    
@@ -277,7 +279,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         ],
                         [
                             'header'=> Yii::t('inventory', 'Active Rate'),
-                            'format' => 'raw',
+                            'format'=>['decimal'],
                             'value' =>function ($model, $key, $index, $widget) { 
                                 $current_rate = Yii::$app->mycomponent->rate();
                                 if ($current_rate > $model->highest_rate) {
@@ -296,7 +298,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class'=>'kartik\grid\FormulaColumn',
                             'header'=> Yii::t('inventory', 'Total'),
                             'headerOptions'=>['class'=>'kartik-sheet-style'],
-                            // 'format'=>['decimal', 2],
+                            'format'=>['decimal'],
                             'width'=>'8%',
                             'mergeHeader'=>true,
                             'hAlign'=>'center',

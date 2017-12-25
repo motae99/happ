@@ -93,7 +93,7 @@ class SiteController extends Controller
         foreach ($outstanding as $value) {
             $Event = new \yii2fullcalendar\models\Event();
             $Event->id = $value->id;
-            $Event->title = $value->client->client_name;
+            $Event->title = $value->amount;
             $Event->className = $value->client->color_class;
             $Event->amount = $value->amount;
             $Event->url = Url::toRoute(['invoices/view', 'id'=>$value->invoice_id]);
@@ -110,11 +110,11 @@ class SiteController extends Controller
             if ($value->type == 'promise') {
                 $Event->className = $Event->className.' fa fa-dollar';
                 $Event->start = $value->due_date;
-                $Event->end = $value->due_date;  
+                $Event->end = $value->due_date;
             }else{
                 $Event->className = $Event->className.' fa fa-money';
-                $Event->start = $value->cheque_date." 09:00:00";
-                $Event->end = $value->cheque_date." 03:00:00"; 
+                $Event->start = $value->cheque_date;
+                $Event->end = $value->cheque_date; 
             }
             
             $events[] = $Event;

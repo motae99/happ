@@ -6,6 +6,7 @@
           <th style="color: white;"><?= Yii::t('invo', 'Item')?></th>
           <th style="color: white;"><?= Yii::t('invo', 'Quantity')?></th>
           <th style="color: white;"><?= Yii::t('invo', 'Price')?></th>
+          <th style="color: white;"><?= Yii::t('invo', 'Discount')?></th>
           <th style="color: white;"><?= Yii::t('invo', 'LineTotal')?></th>
         </tr>
           <?php 
@@ -18,11 +19,12 @@
             }
         
           ?>
-          <td><?= $product+1 ?></td>
+          <td><?= Yii::$app->formatter->asDecimal($product+1)  ?></td>
           <td><?=$p->product->product_name?></td>
-          <td><?=$p->quantity?></td>
-          <td><?=$p->selling_rate?></td>
-          <td><?= $p->quantity * $p->selling_rate?>.00</td>
+          <td><?=Yii::$app->formatter->asDecimal($p->quantity) ?></td>
+          <td><?=Yii::$app->formatter->asDecimal($p->selling_rate) ?></td>
+          <td><?=$p->discount ?></td>
+          <td><?= Yii::$app->formatter->asDecimal($p->quantity * $p->selling_rate )?></td>
           
         </tr>
           <?php } 
@@ -32,7 +34,7 @@
   </div>
 
   <div class="col-sm-4 eArLangCss">
-    <table class="table table-responsive">
+    <table class="table table-bordered table-responsive">
       <tr class="<?=$model->client->color_class?>">
         <th style="color: white;"><?= Yii::t('invo', 'Amount')?></th>
         <th style="color: white;"><?= Yii::t('invo', 'Mode')?></th>
@@ -43,9 +45,9 @@
           foreach ($payments as $payment ) { 
         ?>
       <tr>
-        <td ><?=$payment->amount?></td>
+        <td ><?=Yii::$app->formatter->asDecimal($payment->amount) ?></td>
         <td ><?=$payment->mode?></td>
-        <td ><?=$payment->created_at?></td>
+        <td ><?=Yii::$app->formatter->asDate($payment->created_at) ?></td>
         
       </tr>
         <?php } 

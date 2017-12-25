@@ -65,7 +65,7 @@ use app\models\InvoiceProduct;
 
       <div class="info-box-content">
         <span class="info-box-text"><?=$due->client->client_name?></span>
-        <span class="info-box-number"><?=$due->amount?></span>
+        <span class="info-box-number"><?=Yii::$app->formatter->asDecimal($due->amount) ?></span>
 
         <div class="progress">
           <div class="progress-bar" style="width: 50%"></div>
@@ -127,8 +127,8 @@ use app\models\InvoiceProduct;
             <tr>
               <td width="35%"><?= Html::a($m->stock->inventory->name , ['inventory/view', 'id' => $m->stock->inventory->id])?></td>
               <td width="35%"><?=$m->stock->product_name?></td>
-              <td width="15%"> <i class="badge bg-red"><?=$m->stock->quantity?></i> </td>
-              <td width="15%"> <i style="color: orange;" class="fa fa-angle-double-down"> </i>  <?=$m->quantity?></td>
+              <td width="15%"> <i class="badge bg-red"><?=Yii::$app->formatter->asDecimal($m->stock->quantity) ?></i> </td>
+              <td width="15%"> <i style="color: orange;" class="fa fa-angle-double-down"> </i>  <?=Yii::$app->formatter->asDecimal($m->quantity) ?></td>
             </tr>  
         <?php } ?>
           </table>
@@ -163,10 +163,10 @@ use app\models\InvoiceProduct;
                 <td width="35%"><?= Html::a($s->inventory->name , ['inventory/view', 'id' => $s->inventory->id])?></td>
                 <td width="35%"><?=$s->product->product_name?></td>
                 <?php if ($s->transaction == 'in') {?>
-                <td width="15%"> <i style="color: red;" class="fa fa-arrow-circle-down"> </i>  <?=$s->quantity?></td>
+                <td width="15%"> <i style="color: red;" class="fa fa-arrow-circle-down"> </i>  <?=Yii::$app->formatter->asDecimal($s->quantity) ?></td>
 
                 <?php }elseif ($s->transaction == 'out') {?>
-                <td width="15%"> <?= Html::a('<i style="color: green;" class="fa fa-arrow-circle-up"> </i>' , ['invoices/view', 'id' => $s->invoproduct->invoice_id])?>  <?=$s->quantity?></td>
+                <td width="15%"> <?= Html::a('<i style="color: green;" class="fa fa-arrow-circle-up"> </i>' , ['invoices/view', 'id' => $s->invoproduct->invoice_id])?>  <?=Yii::$app->formatter->asDecimal($s->quantity) ?></td>
                 <?php }elseif ($s->transaction == 'transfered') {
                   $ref = \app\models\Stocking::find()->where(['id' => $s->reference])->one();
                   // if ($ref) {
@@ -176,9 +176,9 @@ use app\models\InvoiceProduct;
                   // // print_r($ref);
                   // // echo $ref->id;
                 ?>
-                <td width="15%"> <?= Html::a('<i style="color: orange;" class="fa fa-arrow-circle-right"> </i>' , ['inventory/view', 'id' => $ref['inventory_id']])?>  <?=$s->quantity?></td>
+                <td width="15%"> <?= Html::a('<i style="color: orange;" class="fa fa-arrow-circle-right"> </i>' , ['inventory/view', 'id' => $ref['inventory_id']])?>  <?=Yii::$app->formatter->asDecimal($s->quantity) ?></td>
                 <?php }elseif ($s->transaction == 'returned'){?>
-                <td width="15%"> <?= Html::a('<i style="color: purple;" class="fa fa-arrow-circle-down"> </i>' , ['invoices/view', 'id' => $s->invoproduct->invoice_id])?>  <?=$s->quantity?></td>
+                <td width="15%"> <?= Html::a('<i style="color: purple;" class="fa fa-arrow-circle-down"> </i>' , ['invoices/view', 'id' => $s->invoproduct->invoice_id])?>  <?=Yii::$app->formatter->asDecimal($s->quantity) ?></td>
                 <?php }?>
               </tr>  
           <?php }?>
@@ -187,8 +187,8 @@ use app\models\InvoiceProduct;
       </div>
       <!-- /.box-body -->
       <div class="box-footer clearfix">
-        <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-left">Place New Order</a>
-        <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat pull-right">View All Orders</a>
+        <!-- <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-left">Place New Order</a>
+        <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat pull-right">View All Orders</a> -->
       </div>
       <!-- /.box-footer -->
     </div>
@@ -270,8 +270,8 @@ use app\models\InvoiceProduct;
       </div>
       <!-- /.box-body -->
       <div class="box-footer clearfix">
-        <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-left">Place New Order</a>
-        <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat pull-right">View All Orders</a>
+       <!--  <a href="javascript:void(0)" class="btn btn-sm btn-info btn-flat pull-left">Place New Order</a>
+        <a href="javascript:void(0)" class="btn btn-sm btn-default btn-flat pull-right">View All Orders</a> -->
       </div>
       <!-- /.box-footer -->
     </div>

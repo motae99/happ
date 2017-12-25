@@ -11,7 +11,7 @@ class Client extends \api\components\db\ActiveRecord
 	 */
 	public static function tableName()
 	{
-		return '{{users}}';
+		return '{{client}}';
 	}
 
 	public static function find() {

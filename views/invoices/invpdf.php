@@ -36,7 +36,7 @@ use app\models\OutStanding;
 			<?= Yii::t('invo', 'Invoice') ." #". $model->id?> 
 		</h1>
 		<span class="text-bold"></span>
-		<span class="text-bold"> <?= $model->created_at?></span>
+		<span class="text-bold"> <?= Yii::$app->formatter->asDate($model->created_at) ?></span>
 		<hr>
 		<?php if($outstandings){ ?>
 			<div class="col-lg-10">
@@ -52,12 +52,12 @@ use app\models\OutStanding;
 				<tr>
 					<td><?=Html::a(Yii::t('invo', ''), ['reconcile-delete', 'id' => $o->id], ['class' => 'fa fa-remove'])?></td>
 					<?php if($o->type == 'cheque'){?>
-					<td ><?=$o->cheque_date?></td>
+					<td ><?=Yii::$app->formatter->asDate($o->cheque_date) ?></td>
 					<?php }else{?>
-					<td ><?=$o->due_date?></td>
+					<td ><?=Yii::$app->formatter->asDate($o->due_date)?></td>
 					<?php }?>
 					<td ><?=$o->type?></td>
-					<td ><?=$o->amount?></td>
+					<td ><?=Yii::$app->formatter->asDecimal($o->amount) ?></td>
 					<td></td>
 				</tr>
 				<?php } ?> 
@@ -108,12 +108,12 @@ use app\models\OutStanding;
 					foreach ($products as $product => $p) { 
 				?>
 				<tr>
-					<td><?= $product+1 ?></td>
+					<td><?= Yii::$app->formatter->asDecimal($product+1)  ?></td>
 					<td ><?=$p->product->product_name?></td>
-					<td ><?=$p->quantity?></td>
-					<td ><?=$p->selling_rate?></td>
+					<td ><?=Yii::$app->formatter->asDecimal($p->quantity)?></td>
+					<td ><?=Yii::$app->formatter->asDecimal($p->selling_rate)?></td>
 					<td ><?=$p->discount?></td>
-					<td class="td6"><?= $p->quantity * $p->selling_rate - $p->discount?>.00</td>
+					<td class="td6"><?= Yii::$app->formatter->asDecimal($p->quantity * $p->selling_rate - $p->discount) ?></td>
 					
 				</tr>
 				<?php } 
@@ -134,7 +134,7 @@ use app\models\OutStanding;
 					<td class="hrline linefirst"></td>	
 					<td class="hrline linefirst"></td>	
 					<td class="hrline linefirst"><?= Yii::t('invo', 'SUBTOTAL')?>: </td>
-					<td class="hrline linefirst tdd6"> $<?= $model->amount?> </td>
+					<td class="hrline linefirst tdd6"> <?=Yii::$app->formatter->asDecimal($model->amount)?> </td>
 				</tr>
 				<tr>
 					<td class="hrline"></td>	
@@ -142,7 +142,7 @@ use app\models\OutStanding;
 					<td class="hrline"></td>	
 					<td class="hrline"></td>	
 					<td class="hrline"><?= Yii::t('invo', 'TAX')?>: </td>
-					<td class="hrline tdd6"> 0.00% </td>
+					<td class="hrline tdd6"> <?=Yii::$app->formatter->asDecimal(0, 2)?>% </td>
 				</tr>
 				<tr>
 					<td class="hrline"></td>	
@@ -150,7 +150,7 @@ use app\models\OutStanding;
 					<td class="hrline"></td>	
 					<td class="hrline"></td>	
 					<td class="hrline"><?= Yii::t('invo', 'TOTAL')?>: </td>
-					<td class="hrline tdd6"> $<?= $model->amount?> </td>
+					<td class="hrline tdd6"> <?=Yii::$app->formatter->asDecimal($model->amount) ?> </td>
 				</tr>
 
 				<tr >
@@ -159,7 +159,7 @@ use app\models\OutStanding;
 					<td class="hrline linesecond "></td>	
 					<td class="hrline linesecond "></td>	
 					<td class="hrline linesecond "><?= Yii::t('invo', 'PAID')?>: </td>
-					<td class="hrline linesecond tdd6"> $<?= $total_paid?>.00</td>
+					<td class="hrline linesecond tdd6"> <?=Yii::$app->formatter->asDecimal($total_paid) ?></td>
 				</tr>
 
 				<tr class="hrline">
@@ -168,7 +168,7 @@ use app\models\OutStanding;
 					<td class="hrline "></td>	
 					<td class="hrline "></td>	
 					<td class="hrline bottom"><?= Yii::t('invo', 'AMOUNT DUE')?>: </td>
-					<td class="hrline tdd6 bottom"> $<?= $remaining?>.00 </td>
+					<td class="hrline tdd6 bottom"> <?= Yii::$app->formatter->asDecimal($remaining) ?> </td>
 				</tr>
 	</table>	
 </div>

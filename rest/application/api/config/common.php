@@ -10,13 +10,13 @@ $config =  [
 
 	'bootstrap' => ['log'],
     'modules' => [
-        'gii' => [ //for development only
-            'class' => 'yii\gii\Module',
-        ],
+        // 'gii' => [ //for development only
+        //     'class' => 'yii\gii\Module',
+        // ],
 		'oauth2' => [
 			'class' => 'filsh\yii2\oauth2server\Module',
 			'options' => [
-				'token_param_name' => 'token',
+				'token_param_name' => 'access_token',
 				'access_lifetime' => 3600 * 8400
 			],
 			'storageMap' => [
@@ -44,7 +44,7 @@ $config =  [
     'components' => [
 		'db' => [
 			'class' => 'yii\db\Connection',
-			'dsn' => 'mysql:host=localhost;dbname=rest',
+			'dsn' => 'mysql:host=localhost;dbname=inventory',
 			'username' => 'root',
 			'password' => 'motae999',
 			'charset' => 'utf8',

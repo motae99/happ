@@ -96,7 +96,7 @@ use yii\data\ActiveDataProvider;
             'footer'=>true ,
             'pageSummary'=>true,
             'width'=>'10%',
-            'format' => 'raw',
+            'format' => 'decimal',
             // 'value' =>function ($model, $key, $index, $widget) { 
             //     return $model->trans($model);                    
             // },
@@ -115,7 +115,7 @@ use yii\data\ActiveDataProvider;
             'headerOptions'=>['class'=>'kartik-sheet-style'],
             'hAlign'=>'center',
             'width'=>'10%',
-            'format' => 'raw',
+            'format' => 'decimal',
             'pageSummary'=> true,
            /* 'value' =>function ($model, $key, $index, $widget) { 
                 return $model->in($model);                    
@@ -132,7 +132,7 @@ use yii\data\ActiveDataProvider;
             'class'=>'kartik\grid\FormulaColumn',
             'header'=>Yii::t('invo', 'Gross Sale'),
             'headerOptions'=>['class'=>'kartik-sheet-style'],
-            // 'format'=>['decimal', 2],
+            'format' => 'decimal',
             'mergeHeader'=>true, 
             'width'=>'10%',
             'hAlign'=>'center', 

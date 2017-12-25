@@ -9,7 +9,7 @@ use kartik\mpdf\Pdf;
 /* @var $this yii\web\View */
 /* @var $model app\models\Client */
 
-$this->title = $model->id;
+$this->title = $model->client_name;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Clients'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -38,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= DetailView::widget([
                     'model' => $model,
                     'attributes' => [
-                        'id',
+                        // 'id',
                         'client_name',
                         'phone',
                         'address:ntext',
@@ -51,7 +51,7 @@ $this->params['breadcrumbs'][] = $this->title;
                    <div class="col-lg-6 eArLangCss">
                     <div class="small-box bg-green">
                         <div class="inner">
-                          <h3><?=round($model->recievable->balance, 2)?><sup style="font-size: 20px">$</sup></h3>
+                          <h3><?= Yii::$app->formatter->asDecimal(round($model->recievable->balance, 2)) ?><sup style="font-size: 20px">$</sup></h3>
 
                           <h4><?= Yii::t('app', 'Recivable') ?></h4>
                         </div>
@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
                    <div class="col-lg-6 eArLangCss">
                     <div class="small-box bg-red">
                         <div class="inner">
-                          <h3><?=round($model->payable->balance, 2)?><sup style="font-size: 20px">$</sup></h3>
+                          <h3><?=Yii::$app->formatter->asDecimal(round($model->payable->balance, 2)) ?><sup style="font-size: 20px">$</sup></h3>
 
                           <h4><?= Yii::t('app', 'Payable') ?></h4>
                         </div>
@@ -79,7 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="col-lg-12 eArLangCss">
                         <div class="small-box bg-green">
                             <div class="inner">
-                              <h3><?=round($model->recievable->balance, 2)?><sup style="font-size: 20px">$</sup></h3>
+                              <h3><?=Yii::$app->formatter->asDecimal(round($model->recievable->balance, 2)) ?><sup style="font-size: 20px">$</sup></h3>
 
                               <h4><?= Yii::t('app', 'Recivable') ?></h4>
                             </div>

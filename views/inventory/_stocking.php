@@ -6,6 +6,7 @@ use kartik\grid\GridView;
 use yii\widgets\Pjax;
 use yii\data\ActiveDataProvider;
 
+// Yii::$app->formatter->asDecimal($model->returned($model))
 ?>
 <div class="col-sm-10">
 	 <?php 
@@ -26,8 +27,10 @@ use yii\data\ActiveDataProvider;
                 'header'=> Yii::t('inventory', 'USD'),
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
-                'vAlign'=>'center',   
+                'vAlign'=>'center', 
+                'format'=>['decimal'],
                 'width'=>'8%',
+
             ],
            /* [
                 'class'=>'kartik\grid\DataColumn',
@@ -47,13 +50,14 @@ use yii\data\ActiveDataProvider;
                 'hAlign'=>'center',
                 'vAlign'=>'center',
                 'width'=>'10%',
-                'format' => 'raw',
+                'format' => 'decimal',
+                
+
                 'value' =>function ($model, $key, $index, $widget) { 
                     if ($model->transaction == 'out') {
-                        // return round($model->quantity*$model->selling_price*$model->rate, 2); 
                         return $model->quantity; 
                     }else{
-                        return "----";
+                        return "";
                     }
                 },
                 'contentOptions' => function ($model, $key, $index, $column) {
@@ -74,13 +78,13 @@ use yii\data\ActiveDataProvider;
                 'hAlign'=>'center',
                 'vAlign'=>'center',
                 'width'=>'10%',
-                'format' => 'raw',
+                'format' => 'decimal',
                 'value' =>function ($model, $key, $index, $widget) { 
                     if ($model->transaction == "transfered") {
                         return $model->quantity;
                         // return round($model->buying_price*$model->rate, 2);                    
                     }else{
-                        return "----";
+                        return "0";
                     }
                 },
                 // 'contentOptions' => function ($model, $key, $index, $column) {
@@ -101,13 +105,13 @@ use yii\data\ActiveDataProvider;
                 'hAlign'=>'center',
                 'vAlign'=>'center',
                 'width'=>'10%',
-                'format' => 'raw',
+                'format' => 'decimal',
                 'value' =>function ($model, $key, $index, $widget) { 
                     if ($model->transaction == "returned") {
                         return $model->quantity;                   
                         // return round($model->buying_price*$model->rate, 2);                    
                     }else{
-                        return "----";
+                        return "0";
                     }                   
                 },
                 // 'contentOptions' => function ($model, $key, $index, $column) {
@@ -129,14 +133,14 @@ use yii\data\ActiveDataProvider;
                 'hAlign'=>'center',
                 'vAlign'=>'center',
                 'width'=>'10%',
-                'format' => 'raw',
+                'format' => 'decimal',
                 'value' =>function ($model, $key, $index, $widget) { 
                     if ($model->transaction == "in") {
                         return $model->quantity;                   
 	                    
                         // return round($model->buying_price*$model->quantity*$model->rate, 2);                    
                     }else{
-                    	return "----";
+                    	return "0";
                     }  
                     
                                       
@@ -175,8 +179,8 @@ use yii\data\ActiveDataProvider;
                 'headerOptions'=>['class'=>'kartik-sheet-style'],
                 'hAlign'=>'center',
                 'vAlign'=>'center',   
+                'format' => 'date',
                 // // 'width'=>'15%',
-                // 'format' => 'raw',
                 // 'value' =>function ($model, $key, $index, $widget) { 
                 //     $current_rate = Yii::$app->mycomponent->rate();
                 //     if ($current_rate > $model->highest_rate) {

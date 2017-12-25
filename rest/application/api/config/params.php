@@ -1,6 +1,6 @@
 <?php
 return [
-    'adminEmail' => 'motae99@gmal.com',
+    'adminEmail' => 'motae99@gmail.com',
 	'formats' => [
 		'application/json' => yii\web\Response::FORMAT_JSON,
 		'application/xml' => yii\web\Response::FORMAT_XML,

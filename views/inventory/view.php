@@ -58,7 +58,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'width'=>'8%',
                     'format' => 'raw',
                     'value' =>function ($model, $key, $index, $widget) { 
-                        return "<i class='fa fa-caret-up'></i>  ".$model->out($model); 
+                        return "<i class='fa fa-caret-up'></i>  ".Yii::$app->formatter->asDecimal($model->out($model)); 
                                           
                     },
                     'contentOptions' => function ($model, $key, $index, $column) {
@@ -75,7 +75,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'width'=>'8%',
                     'format' => 'raw',
                     'value' =>function ($model, $key, $index, $widget) { 
-                        return "<i class='fa fa-caret-left'></i>  ".$model->trans($model);                    
+                        return "<i class='fa fa-caret-left'></i>  ".Yii::$app->formatter->asDecimal($model->trans($model));                    
                     },
                     'contentOptions' => function ($model, $key, $index, $column) {
                         return ['style' => 'color:orange; font-weight: bold;' ];
@@ -91,7 +91,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'width'=>'8%',
                     'format' => 'raw',
                     'value' =>function ($model, $key, $index, $widget) { 
-                        return "<i class='fa fa-caret-down'></i>  ".$model->returned($model);                    
+                        return "<i class='fa fa-caret-down'></i>  ".Yii::$app->formatter->asDecimal($model->returned($model));                    
                     },
                     'contentOptions' => function ($model, $key, $index, $column) {
                         return ['style' => 'color:red; font-weight: bold;' ];
@@ -104,7 +104,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'hAlign'=>'center',
                     'vAlign'=>'center',
                     'width'=>'8%',
-                    'format' => 'raw',
+                    'format'=>['decimal'],
                     'value' =>function ($model, $key, $index, $widget) { 
                         return $model->returned($model)+$model->in($model);                    
                     },
@@ -120,7 +120,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'hAlign'=>'center',
                     'vAlign'=>'center',   
                     'width'=>'8%',
-                    'format' => 'raw',
+                    'format'=>['decimal'],
                     'value' =>function ($model, $key, $index, $widget) { 
                         $current_rate = Yii::$app->mycomponent->rate();
                         return round($model->avg_cost*$current_rate, 3);                    
@@ -128,7 +128,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 ],
                 [
                     'header'=> Yii::t('inventory', 'Highest Rate'),
-                    'format' => 'raw',
+                    'format'=>['decimal'],
                     'width'=>'8%',
                     'value' =>function ($model, $key, $index, $widget) { 
                         $current_rate = Yii::$app->mycomponent->rate();
@@ -147,7 +147,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class'=>'kartik\grid\FormulaColumn',
                     'header'=> Yii::t('inventory', 'Stock Value'),
                     'headerOptions'=>['class'=>'kartik-sheet-style'],
-                    // 'format'=>['decimal', 2],
+                    'format'=>['decimal'],
                     'mergeHeader'=>true, 
                     'width'=>'10%',
                     'hAlign'=>'center', 
@@ -164,7 +164,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class'=>'kartik\grid\FormulaColumn',
                     'header'=> Yii::t('inventory', 'Gross Sale'),
                     'headerOptions'=>['class'=>'kartik-sheet-style'],
-                    // 'format'=>['decimal', 2],
+                    'format'=>['decimal'],
                     'mergeHeader'=>true, 
                     'width'=>'10%',
                     'hAlign'=>'center', 
@@ -182,7 +182,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     'class'=>'kartik\grid\FormulaColumn',
                     'header'=> Yii::t('inventory', 'Margin Profit'),
                     'headerOptions'=>['class'=>'kartik-sheet-style'],
-                    // 'format'=>['decimal', 2],
+                    'format'=>['decimal'],
                     'mergeHeader'=>true, 
                     'width'=>'10%',
                     'hAlign'=>'center', 

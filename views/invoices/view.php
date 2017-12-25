@@ -82,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
 							<?= Yii::t('invo', 'Invoice') ." #". $model->id?> 
 						</h1>
 						<span class="text-bold"></span>
-						<span class="text-bold"> <?= $model->created_at?></span>
+						<span class="text-bold"> <?= Yii::$app->formatter->asDate($model->created_at) ?></span>
 						<hr style="margin-top: 0px; margin-bottom: 0px; border-top: 3px solid #ddd" >
 						<?php if($outstandings){ ?>
 							<table class="table table-border table-responsive">
@@ -90,19 +90,19 @@ $this->params['breadcrumbs'][] = $this->title;
 									<th>#</th>
 									<th><?= Yii::t('invo', 'Due Date')?></th>
 									<th><?= Yii::t('invo', 'Type')?></th>
-									<th><?= Yii::t('invo', 'Total')?></th>
+									<th><?= Yii::t('invo', 'Amount')?></th>
 									<th><span class="fa fa-check"><span></th>
 								</tr>
 								<?php foreach ($outstandings as $o) { ?>
 								<tr>
 									<td><?=Html::a(Yii::t('invo', ''), ['reconcile-delete', 'id' => $o->id], ['class' => 'fa fa-remove'])?></td>
 									<?php if($o->type == 'cheque'){?>
-									<td style="width: 30%"><?=$o->cheque_date?></td>
+									<td style="width: 30%"><?= Yii::$app->formatter->asDate($o->cheque_date) ?></td>
 									<?php }else{?>
-									<td style="width: 30%"><?=$o->due_date?></td>
+									<td style="width: 30%"><?= Yii::$app->formatter->asDate($o->due_date) ?></td>
 									<?php }?>
 									<td style="width: 20%"><?=$o->type?></td>
-									<td style="width: 20%"><?=$o->amount?></td>
+									<td style="width: 20%"><?= Yii::$app->formatter->asDecimal($o->amount) ?></td>
 									
 									<td>
 										<?php 
@@ -179,12 +179,12 @@ $this->params['breadcrumbs'][] = $this->title;
 									foreach ($products as $product => $p) { 
 								?>
 								<tr>
-									<td style="width: 2%"><?= $product+1 ?></td>
+									<td style="width: 2%"><?= Yii::$app->formatter->asDecimal($product+1)?></td>
 									<td style="width: 40%"><?=$p->product->product_name?></td>
-									<td style="width: 10%"><?=$p->quantity?></td>
-									<td style="width: 10%"><?=$p->selling_rate?></td>
+									<td style="width: 10%"><?=Yii::$app->formatter->asDecimal($p->quantity) ?></td>
+									<td style="width: 10%"><?=Yii::$app->formatter->asDecimal($p->selling_rate) ?></td>
 									<td style="width: 10%"><?=$p->discount?></td>
-									<td style="width: 20%"><?= $p->quantity * $p->selling_rate - $p->discount?>.00</td>
+									<td style="width: 20%"><?=Yii::$app->formatter->asDecimal($p->quantity * $p->selling_rate - $p->discount)  ?></td>
 									
 								</tr>
 								<?php } 
@@ -205,7 +205,7 @@ $this->params['breadcrumbs'][] = $this->title;
 									<td></td>	
 									<td></td>	
 									<td ><?= Yii::t('invo', 'SUBTOTAL')?>: </td>
-									<td > $<?= $model->amount?> </td>
+									<td ><?= Yii::$app->formatter->asDecimal($model->amount) ?> </td>
 								</tr>
 								<tr>
 									<td style="border-top: 0;  border-bottom:0;"></td>	
@@ -221,7 +221,7 @@ $this->params['breadcrumbs'][] = $this->title;
 									<td style="border-top: 0;  border-bottom:0;"></td>	
 									<td style="border-top: 0;  border-bottom:0;"></td>	
 									<td style="border-top: 0;  border-bottom:0; font-weight: bold;"><?= Yii::t('invo', 'TOTAL')?>: </td>
-									<td style="border-top: 0;  border-bottom:0; font-weight: bold;"> $<?= $model->amount?> </td>
+									<td style="border-top: 0;  border-bottom:0; font-weight: bold;"><?= Yii::$app->formatter->asDecimal($model->amount)?> </td>
 								</tr>
 
 								<tr style="border-bottom: 2px solid #000;">
@@ -230,7 +230,7 @@ $this->params['breadcrumbs'][] = $this->title;
 									<td style="border-top: 0;  border-bottom:0;"></td>	
 									<td style="border-top: 0;  border-bottom:0;"></td>	
 									<td style="border-top: 0;  border-bottom:0; "><?= Yii::t('invo', 'PAID')?>: </td>
-									<td style="border-top: 0;  border-bottom:0; "> $<?= $total_paid?>.00</td>
+									<td style="border-top: 0;  border-bottom:0; "> <?=Yii::$app->formatter->asDecimal($total_paid) ?></td>
 								</tr>
 
 								<tr>
@@ -239,7 +239,7 @@ $this->params['breadcrumbs'][] = $this->title;
 									<td style="border-top: 0;  border-bottom:0;"></td>	
 									<td style="border-top: 0;  border-bottom:0;"></td>	
 									<td style="border-bottom: 4px solid #ddd; font-weight: bold; width: 30%"><?= Yii::t('invo', 'AMOUNT DUE')?>: </td>
-									<td style="border-bottom: 4px solid #ddd; font-weight: bold;"> $<?= $remaining?>.00 </td>
+									<td style="border-bottom: 4px solid #ddd; font-weight: bold;"> <?= Yii::$app->formatter->asDecimal($remaining) ?></td>
 								</tr>
 
 					</table>
@@ -267,11 +267,11 @@ $this->params['breadcrumbs'][] = $this->title;
 							foreach ($payments as $payment ) { 
 						?>
 						<tr>
-							<td ><?=Yii::$app->formatter->asDecimal($payment->amount, 2)?></td>
+							<td ><?=Yii::$app->formatter->asDecimal($payment->amount)?></td>
 							<td ><?= Yii::t('invo', $payment->mode)?> </td>
-							<td ><?= Yii::$app->formatter->asDatetime($payment->created_at) ?></td>
+							<td ><?= Yii::$app->formatter->asDate($payment->created_at) ?></td>
 							
-						</tr>
+						</tr> 
 						<?php } 
 
 						?>
@@ -291,11 +291,11 @@ $this->params['breadcrumbs'][] = $this->title;
 									foreach ($products as $product => $p) { 
 								?>
 								<tr>
-									<td style="width: 2%"><?= $product+1 ?></td>
+									<td style="width: 2%"><?= Yii::$app->formatter->asDecimal($product+1)  ?></td>
 									<td style="width: 40%"><?=$p->product->product_name?></td>
-									<td style="width: 10%"><?=$p->quantity?></td>
-									<td style="width: 10%"><?=$p->selling_rate?></td>
-									<td style="width: 20%"><?= $p->quantity * $p->selling_rate?>.00</td>
+									<td style="width: 10%"><?= Yii::$app->formatter->asDecimal($p->quantity)  ?></td>
+									<td style="width: 10%"><?= Yii::$app->formatter->asDecimal($p->selling_rate)  ?></td>
+									<td style="width: 20%"><?= Yii::$app->formatter->asDecimal($p->quantity * $p->selling_rate)  ?></td>
 									
 								</tr>
 								<?php } 

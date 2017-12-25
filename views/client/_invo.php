@@ -19,12 +19,12 @@
             }
         
           ?>
-          <td><?= $product+1 ?></td>
+          <td><?= Yii::$app->formatter->asDecimal($product+1 )?></td>
           <td><?=$p->product->product_name?></td>
-          <td><?=$p->quantity?></td>
-          <td><?=$p->selling_rate?></td>
+          <td><?=Yii::$app->formatter->asDecimal($p->quantity)?></td>
+          <td><?=Yii::$app->formatter->asDecimal($p->selling_rate)?></td>
           <td><?=$p->discount?></td>
-          <td><?= $p->quantity * $p->selling_rate - $p->discount?>.00</td>
+          <td><?=Yii::$app->formatter->asDecimal($p->quantity * $p->selling_rate - $p->discount) ?></td>
           
         </tr>
           <?php } 
@@ -45,9 +45,9 @@
           foreach ($payments as $payment ) { 
         ?>
       <tr>
-        <td ><?=$payment->amount?></td>
+        <td ><?=Yii::$app->formatter->asDecimal($payment->amount)?></td>
         <td ><?=$payment->mode?></td>
-        <td ><?=$payment->created_at?></td>
+        <td ><?=Yii::$app->formatter->asDate($payment->created_at) ?></td>
         
       </tr>
         <?php } 

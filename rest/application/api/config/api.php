@@ -4,7 +4,7 @@ return [
 	'name' => '',
 
     'controllerNamespace' => 'api\controllers',
-	'defaultRoute' => 'task',
+	// 'defaultRoute' => 'task',
 
     'components' => [
 		'urlManager' => [
@@ -13,59 +13,36 @@ return [
 				'POST /oauth2/<action:\w+>' => 'oauth2/default/<action>',
 				[
 					'class' => 'yii\rest\UrlRule',
-					'controller' => ['v1/loan', 'v1/vacation', 'v1/financial', 'v1/account', 'v1/report', 'v1/purchase', 'v1/attendance', 'v1/user', 'v1/social', ],
-					'extraPatterns' => [
-						'GET accept/<id>' => 'accept',
-						'GET reject/<id>' => 'reject',
-						'GET only/<id>' => 'only',
-						'GET oname/<id>' => 'oname',
-					],
+					'controller' => ['v1/category', 'v1/client', 'v1/dolar', 'v1/inventory', 'v1/invoiceProduct', 'v1/invoices', 'v1/minimal', 'v1/outstaning', 'v1/payments', 'v1/product', 'v1/stock', 'v1/stocking', 'v1/systemAccount', ],
+					// 'extraPatterns' => [
+					// 	'GET accept/<id>' => 'accept',
+					// 	'GET reject/<id>' => 'reject',
+					// 	'GET only/<id>' => 'only',
+					// 	'GET oname/<id>' => 'oname',
+					// ],
 				],		
-				[
-					'class' => 'yii\rest\UrlRule',
-					'controller' => ['v1/task'],
-					'extraPatterns' => [
-						'GET custom/<id>' => 'custom',
-						'GET accept/<id>' => 'accept',
-						'GET reject/<id>' => 'reject',
-						'GET only/<id>' => 'only',
-						'GET oname/<id>' => 'oname',
-						'POST note/<id>' => 'note',
-					],
-				],
-				[
-					'class' => 'yii\rest\UrlRule',
-					'controller' => ['v1/client'],
-					'extraPatterns' => [
-						'GET profile' => 'profile',
-						'POST google' => 'google',
-						'POST eval/<id>' => 'eval',
-						'GET idname' => 'idname',
-						
-					],
-				],
 			]
 		],
-		'apns' => [
-			'class' => 'bryglen\apnsgcm\Apns',
-			'environment' => \bryglen\apnsgcm\Apns::ENVIRONMENT_SANDBOX,
-			'pemFile' => dirname(__FILE__).'/apnssert/apns-dev.pem',
-			// 'retryTimes' => 3,
-			'options' => [
-				'sendRetryTimes' => 5
-			]
-		],
-		'gcm' => [
-			'class' => 'bryglen\apnsgcm\Gcm',
-			'apiKey' => 'AIzaSyD8rUMEY_RBu0Tkgfiu0Tqm-uqMvqBdsgU',
-		],
-		// using both gcm and apns, make sure you have 'gcm' and 'apns' in your component
-		'apnsGcm' => [
-			'class' => 'bryglen\apnsgcm\ApnsGcm',
-			// custom name for the component, by default we will use 'gcm' and 'apns'
-			//'gcm' => 'gcm',
-			//'apns' => 'apns',
-		],
+		// 'apns' => [
+		// 	'class' => 'bryglen\apnsgcm\Apns',
+		// 	'environment' => \bryglen\apnsgcm\Apns::ENVIRONMENT_SANDBOX,
+		// 	'pemFile' => dirname(__FILE__).'/apnssert/apns-dev.pem',
+		// 	// 'retryTimes' => 3,
+		// 	'options' => [
+		// 		'sendRetryTimes' => 5
+		// 	]
+		// ],
+		// 'gcm' => [
+		// 	'class' => 'bryglen\apnsgcm\Gcm',
+		// 	'apiKey' => 'AIzaSyD8rUMEY_RBu0Tkgfiu0Tqm-uqMvqBdsgU',
+		// ],
+		// // using both gcm and apns, make sure you have 'gcm' and 'apns' in your component
+		// 'apnsGcm' => [
+		// 	'class' => 'bryglen\apnsgcm\ApnsGcm',
+		// 	// custom name for the component, by default we will use 'gcm' and 'apns'
+		// 	//'gcm' => 'gcm',
+		// 	//'apns' => 'apns',
+		// ],
 		'request' => [
 			'parsers' => [
 				'application/json' => 'yii\web\JsonParser',

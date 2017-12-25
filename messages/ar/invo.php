@@ -42,7 +42,7 @@ return [
     'Invoice' => 'فاتورة',
     'Invoices' => 'فواتير',
     'Item' => 'صنف',
-    'LineTotal' => 'اجمالي السطر',
+    'LineTotal' => 'اجمالي',
     'Mode' => 'طريقة',
     'PAID' => 'مدفوع',
     'Paid At' => 'دفع بتاريخ',
