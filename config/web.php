@@ -149,22 +149,22 @@ $config = [
         ],
         
     ],
-    'as beforeRequest' => [
-        'class' => 'yii\filters\AccessControl',
-        'rules' => [
-            [
-                'allow' => true,
-                'actions' => ['login'],
-            ],
-            [
-                'allow' => true,
-                'roles' => ['@'],
-            ],
-        ],
-        'denyCallback' => function () {
-            return Yii::$app->response->redirect(['site/login']);
-        },
-    ],
+    // 'as beforeRequest' => [
+    //     'class' => 'yii\filters\AccessControl',
+    //     'rules' => [
+    //         [
+    //             'allow' => true,
+    //             'actions' => ['login'],
+    //         ],
+    //         [
+    //             'allow' => true,
+    //             'roles' => ['@'],
+    //         ],
+    //     ],
+    //     'denyCallback' => function () {
+    //         return Yii::$app->response->redirect(['site/login']);
+    //     },
+    // ],
     'params' => $params,
 ];
 
@@ -174,7 +174,7 @@ if (YII_ENV_DEV) {
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
         // uncomment the following to add your IP if you are not connecting from localhost.
-        'allowedIPs' => ['154.98.219.188', '::1'],
+        'allowedIPs' => ['154.96.28.79', '::1'],
     ];
 
     $config['bootstrap'][] = 'gii';
