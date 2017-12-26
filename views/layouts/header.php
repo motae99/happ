@@ -90,13 +90,13 @@ use kartik\form\ActiveForm;
 
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img src="<?= $directoryAsset ?>/img/mine.png" class="user-image" alt="User Image"/>
+                        <img src="<?= Yii::getAlias('@web')?>/data/avatar.png" class="user-image" alt="User Image"/>
                         <span class="hidden-xs">Mo Taha</span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header">
-                            <img src="<?= $directoryAsset ?>/img/mine.jpg" class="img-circle"
+                            <img src="<?= Yii::getAlias('@web')?>/data/mine.png" class="img-circle"
                                  alt="User Image"/>
 
                             <p>
@@ -105,17 +105,7 @@ use kartik\form\ActiveForm;
                             </p>
                         </li>
                         <!-- Menu Body -->
-                        <li class="user-body">
-                            <div class="col-xs-4 text-center">
-                                <a href="#"><?= Yii::t('app', 'Inventory')?></a>
-                            </div>
-                            <div class="col-xs-4 text-center">
-                                <a href="#"></a>
-                            </div>
-                            <div class="col-xs-4 text-center">
-                                <a href="#"><?= Yii::t('app', 'Client')?></a>
-                            </div>
-                        </li>
+                        
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
