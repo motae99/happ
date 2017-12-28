@@ -1,9 +1,4 @@
-DirectoryIndex index.php
-Options +FollowSymLinks
 RewriteEngine on
-
-# redirect all api calls to /api/index.php
-RewriteRule ^rest/application/api/www/((?!index\.php$).+)$ rest/application/api/www/index.php [L,NC]
 
 # If a directory or a file exists, use it directly
 RewriteCond %{REQUEST_FILENAME} !-f

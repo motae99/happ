@@ -19,8 +19,7 @@
   "require": {
     "php": ">=5.4.0",
     "yiisoft/yii2": "*",
-    "filsh/yii2-oauth2-server": "2.0.0",
-    "bryglen/yii2-apns-gcm": "1.0.5"
+    "filsh/yii2-oauth2-server": "2.0.0"
   },
   "extra": {
     "writable": [
