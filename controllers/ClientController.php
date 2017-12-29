@@ -233,7 +233,7 @@ class ClientController extends Controller
                 }
 
                 $account->group = "client";
-                $account->to_increase = 'depit';
+                $account->to_increase = 'debit';
                 $account->created_at = new \yii\db\Expression('NOW()');
                 $account->created_by = 1;
                 if($account->save(false)){
