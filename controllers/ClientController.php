@@ -212,7 +212,8 @@ class ClientController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
           $model->account_id = 00;
-
+          $model->created_at = new \yii\db\Expression('NOW()');
+          $model->created_by = 1;
             if($model->save(false)){
                 $account = new SystemAccount();
                 $max = SystemAccount::find()->where(['group'=> 'client'])->max('account_no');
