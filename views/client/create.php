@@ -8,7 +8,8 @@ use kartik\form\ActiveForm;
 /* @var $model app\models\Client */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
+<div class="client-form">
+  <div class="row">
     <?php $form = ActiveForm::begin([   
             'id' => 'client-create-form',
             'options'=>['method' => 'post'],
@@ -55,19 +56,18 @@ use kartik\form\ActiveForm;
                                             'defaultOptions' => ['class'=>'text-primary']
                                         ],
 
-                                        'addon' => [
-                                            'append' => [
-                                                'content' => Html::submitButton('<i class="fa fa-dollar"></i>', ['class'=>'btn btn-flat btn-block']),
-                                                'asButton' => true
-                                            ]
-                                        ]
                                     ])
     ->textInput(['placeholder' => Yii::t('client', 'Existing Balance')] )->label(false); ?>
     </div>
-
+    <div class="col-lg-12">
+      <div class="form-group">
+        <?= Html::submitButton(Yii::t('app', 'Create'), ['class' => 'btn btn-block btn-flat btn-info']) ?>
+      </div>
+    </div>
     <?php ActiveForm::end(); ?>
-
-    <?php 
+  </div>
+</div>
+<?php 
 $script = <<< JS
 $(document).ready(function () {
     $("#color").hide();

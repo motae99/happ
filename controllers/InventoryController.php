@@ -396,8 +396,11 @@ class InventoryController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->created_at = new \yii\db\Expression('NOW()');
             $model->created_by = 1;
+            $model->asset_account_id = 000;
+            $model->expense_account_id = 000;
 
-            if($model->save(false)){
+
+            if($model->save()){
                 
                 //// CREATING ASSET ACCOUNT ////
                     $asset = new SystemAccount();

@@ -211,8 +211,9 @@ class ClientController extends Controller
         $model = new Client();
 
         if ($model->load(Yii::$app->request->post())) {
+          $model->account_id = 00;
 
-            if($model->save()){
+            if($model->save(false)){
                 $account = new SystemAccount();
                 $max = SystemAccount::find()->where(['group'=> 'client'])->max('account_no');
                 if($max){
@@ -233,6 +234,8 @@ class ClientController extends Controller
 
                 $account->group = "client";
                 $account->to_increase = 'depit';
+                $account->created_at = new \yii\db\Expression('NOW()');
+                $account->created_by = 1;
                 if($account->save(false)){
                     $model->account_id = $account->id;
                     $model->save(false);
@@ -257,7 +260,10 @@ class ClientController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            // print_r($model);
+            // die();
+            $model->save(false);
             return $this->redirect(['index']);
         }
 

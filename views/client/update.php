@@ -8,14 +8,15 @@ use kartik\form\ActiveForm;
 /* @var $model app\models\Client */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-
+<div class="client-updateform">
     <?php $form = ActiveForm::begin([   
-            'id' => 'client-create-form',
+            'id' => 'client-update-form',
             'options'=>['method' => 'post'],
             'action' => Url::to(['client/update', 'id' => $model->id]),
             
         ]); 
     ?>
+  <div class="row">
     <div class="col-lg-8 eArLangCss">
     <?= $form->field($model, 'client_name' )->textInput(['placeholder' => Yii::t('client', 'Client Name'),  'maxlength' => true])->label(false); ?>
     </div>
@@ -48,25 +49,13 @@ use kartik\form\ActiveForm;
     </div>
     
     <div class="col-lg-6 eArLangCss">
-    <?php  /* echo $form->field($model, 'balance', [
-                                        'feedbackIcon' => [
-                                            'default' => 'ok',
-                                            'error' => 'exclamation-sign',
-                                            'defaultOptions' => ['class'=>'text-primary']
-                                        ],
-
-                                        'addon' => [
-                                            'append' => [
-                                                'content' => Html::submitButton('<i class="fa fa-dollar"></i>', ['class'=>'btn btn-flat btn-block']),
-                                                'asButton' => true
-                                            ]
-                                        ]
-                                    ])
-    ->textInput(['placeholder' => Yii::t('client', 'Existing Balance')] )->label(false);*/ ?>
+      <div class="form-group">
+        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-block btn-flat btn-success']) ?>
+      </div>
     </div>
-
+  </div>
     <?php ActiveForm::end(); ?>
-
+</div>
     <?php 
 $script = <<< JS
 $(document).ready(function () {
