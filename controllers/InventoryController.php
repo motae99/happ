@@ -400,7 +400,7 @@ class InventoryController extends Controller
             $model->expense_account_id = 000;
 
 
-            if($model->save()){
+            if($model->save(false)){
                 
                 //// CREATING ASSET ACCOUNT ////
                     $asset = new SystemAccount();
