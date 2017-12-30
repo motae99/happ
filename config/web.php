@@ -68,10 +68,10 @@ $config = [
                 //     'class' => 'yii\i18n\PhpMessageSource',
                 //     'basePath' => '@app/messages',
                 // ],
-                // 'kvgrid*' => [
-                //     'class' => 'yii\i18n\PhpMessageSource',
-                //     'basePath' => '@app/messages',
-                // ],
+                'kvgrid*' => [
+                    'class' => 'yii\i18n\PhpMessageSource',
+                    'basePath' => '@app/messages',
+                ],
             ],
         ],
         'formatter' => [

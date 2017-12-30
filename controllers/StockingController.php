@@ -66,8 +66,8 @@ class StockingController extends Controller
             $model->rate = Yii::$app->mycomponent->rate();
             $buying = $_POST['Stocking']['buying_price']/$model->rate;
             $selling = $_POST['Stocking']['selling_price']/$model->rate;
-            $model->buying_price = $buying;
-            $model->selling_price = $selling;
+            $model->buying_price = round($buying, 4);
+            $model->selling_price = round($selling, 4);
             $model->transaction = 'in';
             $model->created_at = new \yii\db\Expression('NOW()');
             $amount = $model->buying_price*$model->rate;
