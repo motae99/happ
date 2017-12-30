@@ -132,7 +132,7 @@ class InvoicesController extends Controller
                                 $stocking_out->inventory_id = $modelItem->inventory_id;
                                 $stocking_out->product_id = $modelItem->product_id;
                                 $stocking_out->buying_price = $stock->avg_cost;
-                                $stocking_out->selling_price = $modelItem->selling_rate/$modelItem->d_rate;
+                                $stocking_out->selling_price = round($modelItem->selling_rate/$modelItem->d_rate, 4);
                                 $stocking_out->quantity = $modelItem->quantity;
                                 $stocking_out->rate = $modelItem->d_rate;
                                 $stocking_out->transaction = "out";
