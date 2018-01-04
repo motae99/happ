@@ -17,13 +17,13 @@ class MyComponent extends Component
         return Yii::getAlias('@web').'/data/logo.png';
     }
     public function name(){
-        return'motae';
+        return'AYA';
     }
     public function phone(){
-        return '09389483948';
+        return '0922080015';
     }
     public function address(){
-        return 'address of some place on earth';
+        return 'أعمال عبدالله أحمد محمد علي التجارية';
     }
 	
 	public function Rate(){
