@@ -69,11 +69,11 @@ use app\models\OutStanding;
 		<div class="padding" >
             <div >
               	<h4 class="textcolor">
-              		Client Name
+              		<?=Yii::$app->mycomponent->name();?>
               	</h4>
 
-              	<p>Address</p>
-             	<p><?php //echo Yii::$app->formatter->asDatetime($payment->created_at) ?> 09934348</p>
+              	<p><?=Yii::$app->mycomponent->address();?></p>
+             	<p><?=Yii::$app->mycomponent->phone();?></p>
             </div>
 		</div>
 		<div class="padding client" >

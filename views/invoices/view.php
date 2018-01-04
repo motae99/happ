@@ -140,11 +140,11 @@ $this->params['breadcrumbs'][] = $this->title;
 						<div class="col-sm-12" style="min-height: 180px;">
 				            <div style="margin-top: 40px; margin-left: 20px;">
 				              	<h3 style="font-weight: bold; color: brown;">
-				              		
+				              		<?=Yii::$app->mycomponent->name();?>
 				              	</h3>
 				
-				              	<p></p>
-				             	<p> </p>
+				              	<p><?=Yii::$app->mycomponent->address();?></p>
+				             	<p><?=Yii::$app->mycomponent->phone();?> </p>
 				            </div>
 						</div>
 						<div class="col-sm-12" style="min-height: 180px; border-top:2px solid #ecf0f5">
