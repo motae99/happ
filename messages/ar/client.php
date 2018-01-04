@@ -17,10 +17,14 @@
  * NOTE: this file must be saved in UTF-8 encoding.
  */
 return [
-    'Address' => '',
-    'Client Name' => '',
-    'Confirm' => '',
-    'Existing Balance' => '',
-    'Phone No' => '',
-    'Pick a Color' => '',
+    'Address' => 'العنوان',
+    'Invoices' => 'الفواتير',
+    'Opening Balance' => 'الرصيد الافتتاحي',
+    'Recievable' => 'مدين',
+    'Payable' => 'دائن',
+    'Client Name' => 'اسم العميل',
+    'Confirm' => 'تأكيد',
+    'Existing Balance' => 'الرصيد الحالي',
+    'Phone No' => 'رقم الهاتف',
+    'Pick a Color' => 'قم باختيار اللون',
 ];

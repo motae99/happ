@@ -36,7 +36,7 @@ return [
     'Create Invoices' => 'انشاء فاتورة',
     'Date' => 'تاريخ',
     'Discount' => 'تخفيض',
-    'Due Date' => 'تاريخ ديو ههه',
+    'Due Date' => 'تاريخ التسليم',
     'Gross Sale' => 'اجمالي المبيعات',
     'Inventory' => 'المخزن',
     'Invoice' => 'فاتورة',
@@ -60,4 +60,6 @@ return [
     'Total' => 'الاجمالي',
     'Type' => 'نوع',
     'View' => 'انتقال',
+    'Total Paid' => 'اجمالي المدفوع',
+    'Remaining' => 'المتبقي',
 ];

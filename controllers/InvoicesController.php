@@ -761,7 +761,7 @@ class InvoicesController extends Controller
             line-height: 1;
             text-rendering: auto;
         } 
-        body { font-family: Alarabiya;}
+        body { font-family: Jannat;}
         .col-lg-8 { width: 55%;  float: left; }
         .w80 { height: 400px; }
         // .padding { padding-left: 2em !important; padding-right: 2em !important; padding-top: 0px !important; padding-right: 0px !important; }
@@ -1460,6 +1460,7 @@ class InvoicesController extends Controller
                                     $return_pro = new InvoiceProduct();
                                     $return_pro->invoice_id = $model->id ;
                                     $return_pro->product_id = $modelItem->product_id;
+                                    $return_pro->inventory_id = $modelItem->inventory_id;
                                     $return_pro->quantity = $q ;
                                     $return_pro->buying_rate = $modelItem->buying_rate;
                                     $return_pro->selling_rate = $modelItem->selling_rate;
@@ -1615,7 +1616,8 @@ class InvoicesController extends Controller
                                 $payable_account->balance = 0;
                                 $payable_account->group = "client payable";
                                 $payable_account->to_increase = "credit";
-                                $payable_account->color_class = $client->color_class;
+                                $payable_account->created_at = new \yii\db\Expression('NOW()');
+                                $payable_account->created_by = 1;
                                 $payable_account->save(false);
                                 $client->payable_id = $payable_account->id;
                                 $client->save(false);

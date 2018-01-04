@@ -5,8 +5,10 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
+    'language' => 'ar',
     'name' => 'Sajana Souq',
-    // 'language' => 'ar',
+    'timeZone' => 'Africa/Khartoum',
+    
     'basePath' => dirname(__DIR__),
     'bootstrap' => [
         'log',

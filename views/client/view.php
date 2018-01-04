@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="inner">
                           <h3><?= Yii::$app->formatter->asDecimal(round($model->recievable->balance, 2)) ?><sup style="font-size: 20px">$</sup></h3>
 
-                          <h4><?= Yii::t('app', 'Recivable') ?></h4>
+                          <h4><?= Yii::t('client', 'Recievable') ?></h4>
                         </div>
                         <div class="icon">
                           <i class="fa fa-arrow-circle-down"></i>
@@ -66,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="inner">
                           <h3><?=Yii::$app->formatter->asDecimal(round($model->payable->balance, 2)) ?><sup style="font-size: 20px">$</sup></h3>
 
-                          <h4><?= Yii::t('app', 'Payable') ?></h4>
+                          <h4><?= Yii::t('client', 'Payable') ?></h4>
                         </div>
                         <div class="icon">
                           <i class="fa fa-arrow-circle-up"></i>
@@ -81,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="inner">
                               <h3><?=Yii::$app->formatter->asDecimal(round($model->recievable->balance, 2)) ?><sup style="font-size: 20px">$</sup></h3>
 
-                              <h4><?= Yii::t('app', 'Recivable') ?></h4>
+                              <h4><?= Yii::t('client', 'Recievable') ?></h4>
                             </div>
                             <div class="icon">
                               <i class="fa fa-arrow-circle-down"></i>

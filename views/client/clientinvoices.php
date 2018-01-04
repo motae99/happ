@@ -9,6 +9,8 @@ use yii\data\ActiveDataProvider;
 ?>
 
 <?php 
+    $user = Yii::$app->user->identity;
+    
     $dataProvider =  new ActiveDataProvider([
             'query' => \app\models\Invoices::find(),
             'sort'=> ['defaultOrder' => ['created_at'=>SORT_DESC, ]],
@@ -60,7 +62,7 @@ use yii\data\ActiveDataProvider;
             'width'=>'20%',
             'format' => 'decimal',
             'pageSummary'=> true,
-        ],
+        ], 
         [  
             'class'=>'kartik\grid\FormulaColumn',
             'header'=>Yii::t('invo', 'Total Paid'),
@@ -236,11 +238,11 @@ use yii\data\ActiveDataProvider;
                     'SetCreator' => [
                         'System Name',
                     ],
-                    // 'SetProtection' => [
-                    //     [],
-                    //     'UserPassword',
-                    //     'MyPassword',
-                    // ],
+                    'SetProtection' => [
+                        [],
+                        // 'UserPassword',
+                        $user->password,
+                    ],
                     // 'WriteBarcode' => [
                     //     '978095422461',
                     // ],

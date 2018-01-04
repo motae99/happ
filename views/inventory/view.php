@@ -229,7 +229,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         'marginTop' => 20,
                         'marginBottom' => 20,
                       // 'cssFile' => '@web/css/ar/bootstrap-rtl.min.css',
-                      'cssInline' => 'body { direction: rtl; font-family: Alarabiya;} th { text-align: right; } td { text-align: right;}',
+                      'cssInline' => 'body { direction: rtl; font-family: Jannat;} th { text-align: right; } td { text-align: right;}',
                       'methods' => [
                         'SetHeader' => [
                             [
