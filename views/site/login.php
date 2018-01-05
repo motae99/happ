@@ -19,11 +19,11 @@ $fieldOptions2 = [
 ];
 ?>
 
-    <div class="">
-        <img src="<?= Yii::getAlias('@web')?>/data/mine.png"
+<div class="login-box">
+    <div class="login-logo">
+        <img src="<?= Yii::getAlias('@web')?>/data/mine.png" 
                                  alt="User Image"/>
     </div>
-<div class="login-box">
     <!-- /.login-logo -->
     <div class="login-box-body">
         <p class="login-box-msg"><!-- Sign in to start your session --></p>
