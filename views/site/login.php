@@ -20,7 +20,7 @@ $fieldOptions2 = [
 ?>
 
 <div class="login-box">
-    <div class="login-logo">
+    <div >
         <img src="<?= Yii::getAlias('@web')?>/data/mine.png"
                                  alt="User Image"/>
     </div>
