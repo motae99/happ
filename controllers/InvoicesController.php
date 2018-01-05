@@ -705,7 +705,7 @@ class InvoicesController extends Controller
     public function actionPrint($id)
     {   
         $model = $this->findModel($id);
-        
+        $user = Yii::$app->user->identity;
         $content = $this->renderPartial('invpdf'
                         ,[
                             'model' => $model,
@@ -805,7 +805,7 @@ class InvoicesController extends Controller
             // portrait orientation
             'orientation' => Pdf::ORIENT_PORTRAIT, 
             // stream to browser inline
-            'destination' => Pdf::DEST_BROWSER, 
+            'destination' => Pdf::DEST_DOWNLOAD, 
             // your html content input
             'content' => $content,  
             // format content from your own css file if needed or use the
@@ -824,8 +824,13 @@ class InvoicesController extends Controller
                 'SetFooter'=>[$arr],
                 // 'SetWatermarkText' => 'motae',
                 'SetWatermarkText' => [
-                    $status, 0.2, 
-                ]
+                    $status, 0.1, 
+                ],
+                'SetProtection' => [
+                    [],
+                    $user->password,
+                    'MyPassword',
+                ],
             ]
         ]);
         $mpdf = $pdf->api;

@@ -87,11 +87,12 @@ use kartik\form\ActiveForm;
                 </li>
                 
                 <!-- User Account: style can be found in dropdown.less -->
-
+        
+                <?php $user = Yii::$app->user->identity; ?>
                 <li class="dropdown user user-menu">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                         <img src="<?= Yii::getAlias('@web')?>/data/avatar.png" class="user-image" alt="User Image"/>
-                        <span class="hidden-xs">Mo Taha</span>
+                        <span class="hidden-xs"><?=  $user->username ;?></span>
                     </a>
                     <ul class="dropdown-menu">
                         <!-- User image -->
@@ -100,8 +101,8 @@ use kartik\form\ActiveForm;
                                  alt="User Image"/>
 
                             <p>
-                                Mo Taha - Infrastructure Engineer
-                                <small>Developed . 2017</small>
+                                <?=Yii::$app->mycomponent->name() ?>
+                                <small><?=Yii::$app->mycomponent->address() ?></small>
                             </p>
                         </li>
                         <!-- Menu Body -->

@@ -236,7 +236,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'config' => [
                     // 'mode' => 'c',
                     'format' => 'A4-L',
-                    'destination' => 'I',
+                    'destination' => 'D',
                     'marginTop' => 20,
                     'marginBottom' => 20,
                   // 'cssFile' => '@web/css/ar/bootstrap-rtl.min.css',
@@ -376,7 +376,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 'vAlign'=>'center',   
                 'format' => 'decimal',
                 'value' =>function ($model, $key, $index, $widget) { 
-                    return round($model->recievable->balance) ;                    
+                    if ($model->client_name == 'Cash') {
+                        return 0;
+                    }else{
+                        return round($model->recievable->balance) ;                    
+                    }
                 },
                 'pageSummary'=>true,
                 'footer'=>true

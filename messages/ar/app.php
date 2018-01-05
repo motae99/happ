@@ -18,6 +18,9 @@
  */
 return [
     '' => '',
+    'Invoices' => 'الفواتير',
+    'Clients' => 'العمﻻء',
+    'Its downloading, Wait for it.' => 'قيد التحميل الرجاء الانتظار',
     'Create Account Type' => '',
     'Create Invoice Product' => '',
     'Create Stock' => '',
