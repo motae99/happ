@@ -63,7 +63,7 @@ if (Yii::$app->controller->action->id === 'login') {
 
     <?php
         yii\bootstrap\Modal::begin([
-            //'headerOptions' => ['id' => 'modalHeader'],
+            // 'headerOptions' => ['id' => 'modalHeader'],
             'size' => 'modal-lg',
             'options' => [
                 'id' => 'modal',
