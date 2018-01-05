@@ -718,7 +718,7 @@ class InvoicesController extends Controller
         $arr = [
             'odd' => [
                 'L' => [
-                  'content' => 'SENTIMENT',
+                  'content' => 'motae99',
                   'font-size' => 10,
                   'font-style' => 'B',
                   'font-family' => 'serif',
@@ -744,7 +744,7 @@ class InvoicesController extends Controller
         ];
 
         $src = Yii::getAlias('@web').'/data/logo.png';
-        $image=Html::img($src,['alt'=>'No Image','width'=>90, 'height'=>70]);
+        $image=Html::img($src,['alt'=>'No Image','width'=>100, 'height'=>100]);
         $cssInline = '.fa {
             display: inline-block;
             font-family: FontAwesome;
