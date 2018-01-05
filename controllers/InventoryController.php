@@ -84,8 +84,8 @@ class InventoryController extends Controller
                 $stocking_out = new Stocking();
                 $stocking_out->inventory_id = $from_inventory->id;
                 $stocking_out->product_id = $product->id;
-                $stocking_out->buying_price = $avg_cost;
-                $stocking_out->selling_price = $avg_cost;
+                $stocking_out->buying_price = round($avg_cost, 4);
+                $stocking_out->selling_price = round($avg_cost, 4);
                 $stocking_out->quantity = $quantity;
                 $stocking_out->transaction = "transfered";
                 if ($stock->highest_rate > Yii::$app->mycomponent->rate() ) {
@@ -169,8 +169,8 @@ class InventoryController extends Controller
                 $stocking_in = new Stocking();
                 $stocking_in->inventory_id = $to_inventory->id;
                 $stocking_in->product_id = $product->id;
-                $stocking_in->buying_price = $avg_cost;
-                $stocking_in->selling_price = $avg_cost;
+                $stocking_in->buying_price = round($avg_cost, 4);
+                $stocking_in->selling_price = round($avg_cost, 4);
                 $stocking_in->quantity = $quantity;
                 $stocking_in->transaction = "in";
                 $stocking_in->rate = $stocking_out->rate;
