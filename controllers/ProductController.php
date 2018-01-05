@@ -18,17 +18,17 @@ use yii\db\Query;
 class ProductController extends Controller
 {
     
-    public function behaviors()
-    {
-        return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
-            ],
-        ];
-    }
+    // public function behaviors()
+    // {
+    //     return [
+    //         'verbs' => [
+    //             'class' => VerbFilter::className(),
+    //             'actions' => [
+    //                 'delete' => ['POST'],
+    //             ],
+    //         ],
+    //     ];
+    // }
 
     
     public function actionFetch($q = null, $id = null)
@@ -123,24 +123,24 @@ class ProductController extends Controller
 
     }
 
-    public function actionIndex()
-    {
-        $searchModel = new ProductSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+    // public function actionIndex()
+    // {
+    //     $searchModel = new ProductSearch();
+    //     $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
+    //     return $this->render('index', [
+    //         'searchModel' => $searchModel,
+    //         'dataProvider' => $dataProvider,
+    //     ]);
+    // }
 
     
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
+    // public function actionView($id)
+    // {
+    //     return $this->render('view', [
+    //         'model' => $this->findModel($id),
+    //     ]);
+    // }
 
     
     public function actionCreate()
@@ -165,31 +165,31 @@ class ProductController extends Controller
 
 
     
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
+    // public function actionUpdate($id)
+    // {
+    //     $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            //// Set flash Properties//
-                Yii::$app->getSession()->setFlash('success', ['type' => 'success']);
-            //// Set flash Properties//
+    //     if ($model->load(Yii::$app->request->post()) && $model->save()) {
+    //         //// Set flash Properties//
+    //             Yii::$app->getSession()->setFlash('success', ['type' => 'success']);
+    //         //// Set flash Properties//
 
-            return $this->redirect(['index']);
-        }
+    //         return $this->redirect(['index']);
+    //     }
 
-        return $this->renderAjax('update', [
-            'model' => $model,
-        ]);
-    }
+    //     return $this->renderAjax('update', [
+    //         'model' => $model,
+    //     ]);
+    // }
 
 
     
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
+    // public function actionDelete($id)
+    // {
+    //     $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
-    }
+    //     return $this->redirect(['index']);
+    // }
 
     
     protected function findModel($id)

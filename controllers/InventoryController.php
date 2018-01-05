@@ -127,8 +127,10 @@ class InventoryController extends Controller
                                 ->orWhere(['transaction' => 'returned'])
                                 ->max('rate');
 
-                if ($transfered_from != $stock->highest_rate) {
+                if ($transfered_from > $stock->highest_rate) {
                     $stock->highest_rate = $transfered_from;
+                }else{
+                    $stock->highest_rate = $stocking_out->rate;
                 }
                 $stock->quantity -= $quantity;
                 $stock->save(false);
@@ -488,13 +490,13 @@ class InventoryController extends Controller
     }
 
     
-    public function actionDelete($id)
-    {
-        $model = $this->findModel($id);
+    // public function actionDelete($id)
+    // {
+    //     $model = $this->findModel($id);
         
 
-        return $this->redirect(['index']);
-    }
+    //     return $this->redirect(['index']);
+    // }
 
     
     protected function findModel($id)

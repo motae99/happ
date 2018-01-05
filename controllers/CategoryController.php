@@ -33,28 +33,28 @@ class CategoryController extends Controller
      * Lists all Category models.
      * @return mixed
      */
-    public function actionIndex()
-    {
-        $searchModel = new CategorySearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+    // public function actionIndex()
+    // {
+    //     $searchModel = new CategorySearch();
+    //     $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
+    //     return $this->render('index', [
+    //         'searchModel' => $searchModel,
+    //         'dataProvider' => $dataProvider,
+    //     ]);
+    // }
 
     /**
      * Displays a single Category model.
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
-    {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
-    }
+    // public function actionView($id)
+    // {
+    //     return $this->render('view', [
+    //         'model' => $this->findModel($id),
+    //     ]);
+    // }
 
     /**
      * Creates a new Category model.
@@ -85,22 +85,22 @@ class CategoryController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
+    // public function actionUpdate($id)
+    // {
+    //     $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            //// Set flash Properties//
-                Yii::$app->getSession()->setFlash('success', ['type' => 'success']);
-            //// Set flash Properties//
+    //     if ($model->load(Yii::$app->request->post()) && $model->save()) {
+    //         //// Set flash Properties//
+    //             Yii::$app->getSession()->setFlash('success', ['type' => 'success']);
+    //         //// Set flash Properties//
 
-            return $this->redirect(['index']);
-        }
+    //         return $this->redirect(['index']);
+    //     }
 
-        return $this->renderAjax('update', [
-            'model' => $model,
-        ]);
-    }
+    //     return $this->renderAjax('update', [
+    //         'model' => $model,
+    //     ]);
+    // }
 
 
     /**
@@ -109,12 +109,12 @@ class CategoryController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
+    // public function actionDelete($id)
+    // {
+    //     $this->findModel($id)->delete();
 
-        return $this->redirect(['index']);
-    }
+    //     return $this->redirect(['index']);
+    // }
 
     /**
      * Finds the Category model based on its primary key value.
