@@ -17,10 +17,10 @@ class MyComponent extends Component
         return Yii::getAlias('@web').'/data/logo.png';
     }
     public function name(){
-        return'AYA أعمال عبدالله أحمد محمد علي التجارية';
+        return'أعمال عبدالله أحمد محمد علي التجارية';
     }
     public function phone(){
-        return '0912304191, 0122555012';
+        return '0912304191 0122555012';
     }
     public function address(){
         return 'الخرطوم, السجانة شارع النص شمال بنك الجزيرة السوداني الاردني';
