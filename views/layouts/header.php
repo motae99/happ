@@ -97,7 +97,7 @@ use kartik\form\ActiveForm;
                     <ul class="dropdown-menu">
                         <!-- User image -->
                         <li class="user-header">
-                            <img src="<?= Yii::getAlias('@web')?>/data/mine.png" class="img-circle"
+                            <img src="<?= Yii::getAlias('@web')?>/data/mine.png" class="img-thumbnail"
                                  alt="User Image"/>
 
                             <p>

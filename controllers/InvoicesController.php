@@ -145,7 +145,7 @@ class InvoicesController extends Controller
                                     ->orWhere(['transaction' => 'returned'])
                                     ->max('rate');
 
-                                if ($checkRate != $stock->highest_rate) {
+                                if ($checkRate > 0 && $checkRate != $stock->highest_rate) {
                                     $stock->highest_rate = $checkRate;
                                 }
                                 $stock->quantity -= $modelItem->quantity;
