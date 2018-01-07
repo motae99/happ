@@ -3,6 +3,7 @@ namespace api\common\controllers;
 use \Yii as Yii;
 // use api\models\User;
 use api\common\models\Client;
+use yii\data\ActiveDataProvider;
 
 
 class ClientController extends \api\components\ActiveController
@@ -28,5 +29,12 @@ class ClientController extends \api\components\ActiveController
         unset($actions['delete']);
         return $actions;
     }
+
+    // public function actionIndex(){
+    //     return new ActiveDataProvider([
+    //         'query' => Client::find()->with('recivable'), // and the where() part, etc.
+    //     ]);
+
+    // }
 
 }
