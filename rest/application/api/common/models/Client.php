@@ -21,7 +21,7 @@ class Client extends \api\components\db\ActiveRecord
             'client_name',
             'phone',
             'address',
-            // 'recivableBalance' => function($model) { return $model->recivable->balance; },
+            'recivableBalance' => function($model) { return $model->recivable->balance; },
             // 'recivableAccountNO' => function($model) { return $model->recivable->id; },
             // 'obening' => 
             // 'balance' => Yii::t('app', 'Existing Balance'),
@@ -33,16 +33,16 @@ class Client extends \api\components\db\ActiveRecord
     // public function extraFields() {
     //     return [
     //         'account' => function($model) { return $model->recivable; },
-    //         'aa' => function($model) { return $model->recivable; }
+    //         // 'aa' => function($model) { return $model->recivable; }
     //     ];
     // }
 
-    // public function getRecivable()
-    // {
-    //     $account = $this->hasOne(SystemAccount::className(), ['id' => 'account_id']);
-    //     return $account ; 
-    //     // return 1;
-    // }
+    public function getRecivable()
+    {
+        $account = $this->hasOne(SystemAccount::className(), ['id' => 'account_id']);
+        return $account ; 
+        // return 1;
+    }
 
 	public static function find() {
 		// return new ClientQuery(get_called_class());
