@@ -18,6 +18,9 @@
  */
 return [
     '' => '',
+    'username' => 'اسم المستخدم',
+    'password' => 'كلمة السر',
+    'Sign in' => 'تسجيل الدخول',
     'Invoices' => 'الفواتير',
     'Clients' => 'العمﻻء',
     'Its downloading, Wait for it.' => 'قيد التحميل الرجاء الانتظار',

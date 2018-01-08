@@ -14,20 +14,14 @@ class Client extends \api\components\db\ActiveRecord
 		return '{{client}}';
 	}
 
-	 public function fields()
+	public function fields()
     {
         return [
             'id',
             'client_name',
             'phone',
             'address',
-            'recivableBalance' => function($model) { return $model->recivable->balance; },
-            // 'recivableAccountNO' => function($model) { return $model->recivable->id; },
-            // 'obening' => 
-            // 'balance' => Yii::t('app', 'Existing Balance'),
-            // 'color_class' => Yii::t('app', 'Color'),
-            // 'balance' => Yii::t('app', 'balance'),
-            // 'clear' => Yii::t('app', 'Clear'),
+            'balance' => function($model) { return $model->recivable->balance; },
         ];
     }
     // public function extraFields() {
@@ -41,7 +35,6 @@ class Client extends \api\components\db\ActiveRecord
     {
         $account = $this->hasOne(SystemAccount::className(), ['id' => 'account_id']);
         return $account ; 
-        // return 1;
     }
 
 	public static function find() {

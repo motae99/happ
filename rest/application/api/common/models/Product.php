@@ -13,6 +13,27 @@ class Product extends \api\components\db\ActiveRecord
 		return '{{product}}';
 	}
 
+	public function fields()
+    {
+        return [
+            'id',
+            'category' => function($model) { return $model->category->name; },
+            'no',
+            'product_name',
+            'description',
+            'buying_price',
+            'selling_price',
+            'percentage',
+            'minimum',
+        ];
+    }
+
+    public function getCategory()
+    {
+        return $this->hasOne(Category::className(), ['id' => 'category_id']);
+         
+    }
+
 	public static function find() {
 		return new ProductQuery(get_called_class());
 	}

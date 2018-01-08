@@ -13,6 +13,20 @@ class Payments extends \api\components\db\ActiveRecord
 		return '{{payments}}';
 	}
 
+	public function fields()
+    {
+        return [
+            'invoice_id',
+            'amount',
+            'mode',
+            'bank_name',
+            'cheque_no',
+            'cheque_date',
+            'time'=> function($model) { return $model->created_at; },
+           
+        ];
+    }
+
 	public static function find() {
 		return new PaymentsQuery(get_called_class());
 	}
