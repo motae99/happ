@@ -126,37 +126,37 @@ $this->params['breadcrumbs'][] = $this->title;
                                        'mergeColumns'=>[[4,7]],
                                         'content'=>[             
                                             0=>Yii::t('inventory', 'total inventory items : '),
-                                            1=>GridView::F_COUNT,
+                                            // 1=>GridView::F_COUNT,
                                             2=>GridView::F_COUNT,
                                             3=>GridView::F_SUM,
                                             8=>GridView::F_SUM,
                                          ],
                                         'contentFormats'=>[      
-                                            1=>['format'=>'number'],
+                                            // 1=>['format'=>'number'],
                                             2=>['format'=>'number'],
                                             3=>['format'=>'number'],
                                             8=>['format'=>'number'],
                                         ],
                                         'contentOptions'=>[      
                                             0=>['style'=>'font-variant:small-caps'],
-                                            1=>['style'=>'text-align:center'],
+                                            // 1=>['style'=>'text-align:center'],
                                             2=>['style'=>'text-align:center'],
                                             3=>['style'=>'text-align:center'],
                                             8=>['style'=>'text-align:center'],
                                     ],
 
-                                        'options'=>['class'=>'success','style'=>'font-weight:bold;']
+                                        'options'=>['class'=>$model->inventory->color_class,'style'=>'font-weight:bold;']
                                     ];
                                },
                         ],
                         [
                             'class'=>'kartik\grid\DataColumn',
-                            'attribute'=> 'category',
                             'header'=> Yii::t('inventory', 'Category') ,
-                            'width'=>'15%',
+                            'width'=>'18%',
                             'headerOptions'=>['class'=>'kartik-sheet-style'],
+                            'mergeHeader'=>true,
                             'hAlign'=>'center',
-                            'vAlign'=>'center',
+                            'vAlign'=>'top', 
                             'format' => 'raw',
                             'value' =>function ($model, $key, $index, $widget) { 
                                 return $model->product->category->name;                    
@@ -167,37 +167,37 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'pluginOptions'=>['allowClear'=>true],
                             ],
                             'filterInputOptions'=>['placeholder'=>'Name'],
-                            'group'=>true, 
-                            'subGroupOf'=>0,
-                            'groupFooter'=>function ($model, $key, $index, $widget) { 
-                                return [
-                                   'mergeColumns'=>[[4, 7]], 
-                                    'content'=>[             
-                                        1=>Yii::t('inventory', 'total category items : '),
-                                        2=>GridView::F_COUNT,
-                                        3=>GridView::F_SUM,
-                                        8=>GridView::F_SUM,
-                                     ],
-                                    'contentFormats'=>[      
-                                        2=>['format'=>'number'],
-                                        3=>['format'=>'number'],
-                                        8=>['format'=>'number'],
-                                    ],
-                                    'contentOptions'=>[      
-                                        1=>['style'=>'font-variant:small-caps'],
-                                        2=>['style'=>'text-align:center'],
-                                        3=>['style'=>'text-align:center'],
-                                        8=>['style'=>'text-align:center'],
-                                    ],
-                                    'options'=>['class'=>'info','style'=>'font-weight:bold;']
-                                ];
-                            },   
+                            // 'group'=>true, 
+                            // 'subGroupOf'=>0,
+                            // 'groupFooter'=>function ($model, $key, $index, $widget) { 
+                            //     return [
+                            //        'mergeColumns'=>[[4, 7]], 
+                            //         'content'=>[             
+                            //             1=>Yii::t('inventory', 'total category items : '),
+                            //             2=>GridView::F_COUNT,
+                            //             3=>GridView::F_SUM,
+                            //             8=>GridView::F_SUM,
+                            //          ],
+                            //         'contentFormats'=>[      
+                            //             2=>['format'=>'number'],
+                            //             3=>['format'=>'number'],
+                            //             8=>['format'=>'number'],
+                            //         ],
+                            //         'contentOptions'=>[      
+                            //             1=>['style'=>'font-variant:small-caps'],
+                            //             2=>['style'=>'text-align:center'],
+                            //             3=>['style'=>'text-align:center'],
+                            //             8=>['style'=>'text-align:center'],
+                            //         ],
+                            //         'options'=>['class'=>'info','style'=>'font-weight:bold;']
+                            //     ];
+                            // },   
                         ],
                         [
                             'attribute'=>'product_name',
                             'header'=> Yii::t('inventory', 'Product'),
-                            'width'=>'15%',
-                            'headerOptions'=>['class'=>'kartik-sheet-style'],
+                            'width'=>'22%',
+                            // 'headerOptions'=>['class'=>'kartik-sheet-style'],
                             'hAlign'=>'center',
                             'vAlign'=>'center',
                             'footer'=>true 
@@ -205,21 +205,23 @@ $this->params['breadcrumbs'][] = $this->title;
                         [   
                             'attribute'=>'quantity',
                             'header'=> Yii::t('inventory', 'Quantity'),
-                            'width'=>'8%',
+                            'width'=>'5%',
                             'format'=>['decimal'],
                             'headerOptions'=>['class'=>'kartik-sheet-style'],
+                            // 'mergeHeader'=>true,
                             'hAlign'=>'center',
-                            'vAlign'=>'center',
+                            'vAlign'=>'top', 
                             'pageSummary'=>true,
                             'footer'=>true
                         ],
                         [
                             'class'=>'kartik\grid\DataColumn',
                             'header'=> Yii::t('inventory', 'Buying Price') ,
-                            'width'=>'11%',
+                            'width'=>'8%',
                             'headerOptions'=>['class'=>'kartik-sheet-style'],
+                            'mergeHeader'=>true,
                             'hAlign'=>'center',
-                            'vAlign'=>'center',   
+                            'vAlign'=>'top',   
                             'width'=>'8%',
                             'format'=>['decimal'],
                             'value' =>function ($model, $key, $index, $widget) { 
@@ -235,10 +237,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'class'=>'kartik\grid\DataColumn',
                             'header'=> Yii::t('inventory', 'Selling Price'),
-                            'width'=>'11%',
+                            'width'=>'8%',
                             'headerOptions'=>['class'=>'kartik-sheet-style'],
+                            'mergeHeader'=>true,
                             'hAlign'=>'center',
-                            'vAlign'=>'center',
+                            'vAlign'=>'top',
                             'format'=>['decimal'],
                             'value' =>function ($model, $key, $index, $widget) { 
                                 $current_rate = Yii::$app->mycomponent->rate();
@@ -260,11 +263,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         [
                             'class'=>'kartik\grid\DataColumn',
                             'attribute'=> Yii::t('inventory', 'Margin Profit'),
-                            'headerOptions'=>['class'=>'kartik-sheet-style'],
-                            'hAlign'=>'center',
-                            'vAlign'=>'center',
                             'width'=>'8%',
-                            
+                            'headerOptions'=>['class'=>'kartik-sheet-style'],
+                            'mergeHeader'=>true,
+                            'hAlign'=>'center',
+                            'vAlign'=>'top',
                             'format' => 'raw',
                             'value' =>function ($model, $key, $index, $widget) { 
                                 return $model->product->percentage."%";                    
@@ -290,6 +293,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 return $rate;                    
                             },
                             'headerOptions'=>['class'=>'kartik-sheet-style'],
+                            'width'=>'5%',
                             'mergeHeader'=>true,
                             'hAlign'=>'center',
                             'vAlign'=>'top',
@@ -299,7 +303,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'header'=> Yii::t('inventory', 'Total'),
                             'headerOptions'=>['class'=>'kartik-sheet-style'],
                             'format'=>['decimal'],
-                            'width'=>'8%',
+                            'width'=>'5%',
                             'mergeHeader'=>true,
                             'hAlign'=>'center',
                             'vAlign'=>'top',
@@ -326,7 +330,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
-                    // 'filterModel' => $searchModel,
+                    'filterModel' => $searchModel,
                     'columns' => $gridColumns,
                     'rowOptions' => function ($model) {
                         $min = \app\models\Minimal::find()->where(['stock_id' => $model->id])->one();

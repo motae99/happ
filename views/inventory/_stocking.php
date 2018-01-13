@@ -14,7 +14,6 @@ use yii\data\ActiveDataProvider;
             'query' => \app\models\Stocking::find(),
             'sort'=> ['defaultOrder' => ['created_at'=>SORT_DESC, ]],
             'pagination' => false,
-
         ]);
         $dataProvider->query->where(['inventory_id'=>$model->inventory_id, 'product_id'=>$model->product_id])->all();
         // $dataProvider->pagination = ['defaultPageSize' => 10];
@@ -167,6 +166,9 @@ use yii\data\ActiveDataProvider;
                 'value' =>function ($model, $key, $index, $widget) { 
                     if ($model->transaction == 'out' || $model->transaction == 'returned') {
                     	return  Html::a('<i class="fa fa-search"> </i>' , ['invoices/view', 'id' => $model->invoproduct->invoice_id]);
+                    }elseif ($model->transaction == 'transfered') {
+                         $ref = \app\models\Stocking::find()->where(['id' => $model->reference])->one();
+                        return  Html::a('<i class="fa fa-search"> </i>' , ['inventory/view', 'id' => $ref->inventory_id]);
                     }else{
                     	return Yii::t('inventory', 'No Reference');
                     }
@@ -233,7 +235,9 @@ use yii\data\ActiveDataProvider;
 	<br>
     <div class="small-box bg-green">
         <div class="inner">
-          <h3>00<sup style="font-size: 20px">%</sup></h3>
+        <?php $sold = \app\models\Stocking::find()->where(['inventory_id'=>$model->inventory_id, 'product_id'=>$model->product_id, 'transaction'=> 'out'])->sum('quantity'); ?>
+          <h3><?=$sold?><sup style="font-size: 20px">
+          </sup></h3>
 
           <p><?=Yii::t('inventory', 'Total Sold Value')?></p>
         </div>
@@ -244,7 +248,10 @@ use yii\data\ActiveDataProvider;
     </div>
     <div class="small-box bg-orange">
         <div class="inner">
-          <h3>00<sup style="font-size: 20px">%</sup></h3>
+        <?php $t = \app\models\Stocking::find()->where(['inventory_id'=>$model->inventory_id, 'product_id'=>$model->product_id, 'transaction'=> 'transfered'])->sum('quantity'); ?>
+
+          <h3><?=$t?><sup style="font-size: 20px">
+          </sup></h3>
 
           <p><?=Yii::t('inventory', 'Total Transfered Value')?></p>
         </div>
@@ -255,7 +262,10 @@ use yii\data\ActiveDataProvider;
     </div>
     <div class="small-box bg-red">
         <div class="inner">
-          <h3>00<sup style="font-size: 20px">%</sup></h3>
+        <?php $r = \app\models\Stocking::find()->where(['inventory_id'=>$model->inventory_id, 'product_id'=>$model->product_id, 'transaction'=> 'returned'])->sum('quantity'); ?>
+
+          <h3><?=$r?><sup style="font-size: 20px">
+          </sup></h3>
 
           <p><?=Yii::t('inventory', 'Total Returned Value')?></p>
         </div>
@@ -266,7 +276,9 @@ use yii\data\ActiveDataProvider;
     </div>
 	<div class="small-box bg-blue">
 	    <div class="inner">
-	      <h3>00<sup style="font-size: 20px">%</sup></h3>
+            <?php $in = \app\models\Stocking::find()->where(['inventory_id'=>$model->inventory_id, 'product_id'=>$model->product_id, 'transaction'=> 'in'])->sum('quantity'); ?>
+	      <h3><?=$in?><sup style="font-size: 20px">
+          </sup></h3>
 
 	      <p><?=Yii::t('inventory', 'Total Stock Value')?></p>
 	    </div>

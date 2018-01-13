@@ -33,16 +33,16 @@ class StockController extends Controller
      * Lists all Stock models.
      * @return mixed
      */
-    // public function actionIndex()
-    // {
-    //     $searchModel = new StockSearch();
-    //     $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+    public function actionIndex()
+    {
+        $searchModel = new StockSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-    //     return $this->render('index', [
-    //         'searchModel' => $searchModel,
-    //         'dataProvider' => $dataProvider,
-    //     ]);
-    // }
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
 
     // /**
     //  * Displays a single Stock model.

@@ -19,7 +19,8 @@ class StockSearch extends Stock
     {
         return [
             [['id', 'inventory_id', 'product_id', 'quantity'], 'integer'],
-            [['created_at'], 'safe'],
+            // [['product_name'], 'text'],
+            [['created_at', 'product_name'], 'safe'],
         ];
     }
 
@@ -47,6 +48,7 @@ class StockSearch extends Stock
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['inventory_id'=>SORT_DESC, ]],
         ]);
 
         $this->load($params);
@@ -63,8 +65,8 @@ class StockSearch extends Stock
             'inventory_id' => $this->inventory_id,
             'product_id' => $this->product_id,
             'quantity' => $this->quantity,
-            'created_at' => $this->created_at,
-        ]);
+        ])
+        ->andFilterWhere(['like', 'product_name', $this->product_name]);
 
         return $dataProvider;
     }

@@ -111,6 +111,7 @@ class InventoryController extends Controller
                     if ($s->quantity > $q) {
                         $s->quantity -= $q;
                         $s->save(false);
+                        $q -= $s->quantity;
                         break;
                     }
                     elseif ($s->quantity <= $q) {
@@ -127,7 +128,7 @@ class InventoryController extends Controller
                                 ->orWhere(['transaction' => 'returned'])
                                 ->max('rate');
 
-                if ($transfered_from > $stock->highest_rate) {
+                if (isset($transfered_from) && $transfered_from > $stock->highest_rate) {
                     $stock->highest_rate = $transfered_from;
                 }else{
                     $stock->highest_rate = $stocking_out->rate;
@@ -335,38 +336,18 @@ class InventoryController extends Controller
     public function actionIndex()
     {   
         $inventories = Inventory::find()->all();
-        // $searchModel = new StockSearch();
-        $dataProvider =  new ActiveDataProvider([
-            'query' => \app\models\Stock::find(),
-            'sort'=> ['defaultOrder' => ['inventory_id'=>SORT_DESC, ]],
-            // 'pagination' => false,
+        $searchModel = new StockSearch();
+        $dataProvider =  $searchModel->search(Yii::$app->request->queryParams);
+        // new ActiveDataProvider([
+        //     'query' => \app\models\Stock::find(),
+        //     'sort'=> ['defaultOrder' => ['inventory_id'=>SORT_DESC, ]],
+        //     // 'pagination' => false,
 
-        ]);
+        // ]);
         // $searchModel->search(Yii::$app->request->queryParams);
         
-        // $inventories = Inventory::find()->all();
-        // // foreach ($inventories as $inventory) {
-        // //     $inventory_account = $inventory->account;
-        // //     $inventory_account->balance = 0;
-        // //     $stocks = $inventory->stocks;
-
-        // //     $stock_value = 0;
-        // //     foreach ($stocks as $stock) {
-        // //         $product = $stock->product;
-        // //         $stock_value += $stock->quantity * $product->buying_price;
-        // //     }
-        // //         $inventory_account->balance += $stock_value;
-        // //         $inventory_account->save();
-
-        // // }
-        // $balance = InventoryAccount::find()->sum('balance');
-        // $sys = SystemAccount::find()->where(['group' => 'inventory'])->one();
-        // $sys->balance = $balance;
-        // $sys->save();
-
-
         return $this->render('index', [
-            // 'searchModel' => $searchModel,
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'inventories' => $inventories,
         ]);
