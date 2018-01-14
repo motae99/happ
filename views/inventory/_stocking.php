@@ -167,8 +167,8 @@ use yii\data\ActiveDataProvider;
                     if ($model->transaction == 'out' || $model->transaction == 'returned') {
                     	return  Html::a('<i class="fa fa-search"> </i>' , ['invoices/view', 'id' => $model->invoproduct->invoice_id]);
                     }elseif ($model->transaction == 'transfered') {
-                         $ref = \app\models\Stocking::find()->where(['id' => $model->reference])->one();
-                        return  Html::a('<i class="fa fa-search"> </i>' , ['inventory/view', 'id' => $ref->inventory_id]);
+                         // $ref = \app\models\Stocking::find()->where(['id' => $model->reference])->one();
+                        return  'No Reference'; //Html::a('<i class="fa fa-search"> </i>' , ['inventory/view', 'id' => $ref->inventory_id]);
                     }else{
                     	return Yii::t('inventory', 'No Reference');
                     }
