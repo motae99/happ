@@ -98,12 +98,12 @@ class InventoryController extends Controller
 
                 //// delete stock in ////
                 $stockings = Stocking::find()
-                                    ->where(['product_id' => $stock->product_id])
-                                    ->andWhere(['inventory_id' => $from_inventory->id])
-                                    ->andWhere(['transaction' => 'in'])
-                                    ->orWhere(['transaction' => 'returned'])
-                                    ->orderBy(['rate' => SORT_DESC])
-                                    ->all();
+                                ->where(['product_id' => $stock->product_id])
+                                ->andWhere(['inventory_id' => $from_inventory->id])
+                                ->andWhere(['transaction' => 'in'])
+                                ->orWhere(['transaction' => 'returned'])
+                                ->orderBy(['rate' => SORT_DESC])
+                                ->all();
 
                 $q = $quantity;
                 
@@ -133,7 +133,14 @@ class InventoryController extends Controller
                 }else{
                     $stock->highest_rate = $stocking_out->rate;
                 }
-                $stock->quantity -= $quantity;
+                $rem_from = Stocking::find()
+                            ->where(['product_id' => $stocking_out->product_id])
+                            ->andWhere(['inventory_id' => $stocking_out->inventory_id])
+                            ->andWhere(['transaction' => 'in'])
+                            ->orWhere(['transaction' => 'returned'])
+                            ->sum('quantity');
+
+                $stock->quantity = $rem_from;
                 $stock->save(false);
                 //// fix stock rate /////
 
@@ -211,8 +218,14 @@ class InventoryController extends Controller
                     }
                         $costCal = $line/$quan ;
                 //// calculate cost of goods sold ////
+                $rem_to = Stocking::find()
+                            ->where(['product_id' => $stocking_in->product_id])
+                            ->andWhere(['inventory_id' => $stocking_in->inventory_id])
+                            ->andWhere(['transaction' => 'in'])
+                            ->orWhere(['transaction' => 'returned'])
+                            ->sum('quantity');
 
-                $in_stock->quantity += $quantity;
+                $in_stock->quantity = $rem_to;
                 $in_stock->avg_cost = $costCal;
                 $in_stock->save(false);
                 //// fix stock rate /////

@@ -148,7 +148,15 @@ class InvoicesController extends Controller
                                 if (isset($checkRate) && $checkRate > 0 && $checkRate != $stock->highest_rate) {
                                     $stock->highest_rate = $checkRate;
                                 }
-                                $stock->quantity -= $modelItem->quantity;
+
+                                $rem = Stocking::find()
+                                    ->where(['product_id' => $stocking_out->product_id])
+                                    ->andWhere(['inventory_id' => $stocking_out->inventory_id])
+                                    ->andWhere(['transaction' => 'in'])
+                                    ->orWhere(['transaction' => 'returned'])
+                                    ->sum('quantity');
+
+                                $stock->quantity = $rem;
                                 $stock->save(false);
 
 
