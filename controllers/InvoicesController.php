@@ -144,18 +144,33 @@ class InvoicesController extends Controller
                                     ->andWhere(['transaction' => 'in'])
                                     ->orWhere(['transaction' => 'returned'])
                                     ->max('rate');
-
                                 if (isset($checkRate) && $checkRate > 0 && $checkRate != $stock->highest_rate) {
                                     $stock->highest_rate = $checkRate;
                                 }
 
-                                $rem = Stocking::find()
+                                $i = Stocking::find()
                                     ->where(['product_id' => $stocking_out->product_id])
                                     ->andWhere(['inventory_id' => $stocking_out->inventory_id])
                                     ->andWhere(['transaction' => 'in'])
-                                    ->orWhere(['transaction' => 'returned'])
                                     ->sum('quantity');
+                                if($i){
+                                    $in = $i; 
+                                }else{
+                                    $in = 0;
+                                }
+                                $r = Stocking::find()
+                                    ->where(['product_id' => $stocking_out->product_id])
+                                    ->andWhere(['inventory_id' => $stocking_out->inventory_id])
+                                    ->andWhere(['transaction' => 'returned'])
+                                    ->sum('quantity');
+                                   
+                                    if($r){
+                                        $returned = $r; 
+                                    }else{
+                                        $returned = 0;
+                                    }
 
+                                $rem = $returned+$in;
                                 $stock->quantity = $rem;
                                 $stock->save(false);
 
@@ -1416,7 +1431,30 @@ class InvoicesController extends Controller
                                     if ($checkRate != $stock->highest_rate) {
                                         $stock->highest_rate = $checkRate;
                                     }
-                                    $stock->quantity += $stocking_out->quantity;
+                                    $i = Stocking::find()
+                                        ->where(['product_id' => $stocking_out->product_id])
+                                        ->andWhere(['inventory_id' => $stocking_out->inventory_id])
+                                        ->andWhere(['transaction' => 'in'])
+                                        ->sum('quantity');
+                                    if($i){
+                                        $in = $i; 
+                                    }else{
+                                        $in = 0;
+                                    }
+                                    $r = Stocking::find()
+                                        ->where(['product_id' => $stocking_out->product_id])
+                                        ->andWhere(['inventory_id' => $stocking_out->inventory_id])
+                                        ->andWhere(['transaction' => 'returned'])
+                                        ->sum('quantity');
+                                       
+                                    if($r){
+                                        $returned = $r; 
+                                    }else{
+                                        $returned = 0;
+                                    }
+
+                                    $rem = $returned+$in;
+                                    $stock->quantity = $rem;
                                     $stock->avg_cost = $average;
                                     $stock->save(false); 
                                 //// put back to stock /////
@@ -1510,8 +1548,30 @@ class InvoicesController extends Controller
                                     }
                                         $average = $line/$q ;
                                 //// recalculate avg ///////
+                                    $i = Stocking::find()
+                                        ->where(['product_id' => $stocking_out->product_id])
+                                        ->andWhere(['inventory_id' => $stocking_out->inventory_id])
+                                        ->andWhere(['transaction' => 'in'])
+                                        ->sum('quantity');
+                                    if($i){
+                                        $in = $i; 
+                                    }else{
+                                        $in = 0;
+                                    }
+                                    $r = Stocking::find()
+                                        ->where(['product_id' => $stocking_out->product_id])
+                                        ->andWhere(['inventory_id' => $stocking_out->inventory_id])
+                                        ->andWhere(['transaction' => 'returned'])
+                                        ->sum('quantity');
+                                       
+                                    if($r){
+                                        $returned = $r; 
+                                    }else{
+                                        $returned = 0;
+                                    }
 
-                                    $stock->quantity += $q;
+                                    $rem = $returned+$in;
+                                    $stock->quantity = $rem;
                                     $stock->avg_cost = $average;
                                     $stock->save(false);
 
@@ -1559,9 +1619,18 @@ class InvoicesController extends Controller
                             $expensesTotal[$index]['amount'] +=  $ex['amount'];
                         }
                     }
-
-                    $model->amount = $original_amount - $model_amount_return ;
-                    $model->cost = $original_cost - $model_cost_return;
+                    $items = InvoiceProduct::find()
+                            ->where(['invoice_id' => $model->id])
+                            ->andWhere('returned = 0')
+                            ->all();
+                    $a = 0;
+                    $c = 0;
+                    foreach ($items as $item) {
+                        $a += $item->selling_rate*$item->quantity*$item->d_rate;
+                        $c += $item->buying_rate*$item->quantity*$item->d_rate;
+                    }
+                    $model->amount = $a ;
+                    $model->cost = $c;
                     $model->save(false);
                     
                     // $outstanding = $model->outstanding;

@@ -35,13 +35,24 @@ class StockController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new StockSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        // $searchModel = new StockSearch();
+        // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $stocks = Stock::find()->all();
+        $i = 0;
+        foreach ($stocks as $stock) {
+            $in = $stock->in($stock);
+            $returned = $stock->returned($stock);
+            $stock->quantity = $in+$returned;
+            if ($stock->save()) {
+                $i++;
+            }
+        }
+        echo $i;
 
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
+        // return $this->render('index', [
+        //     'searchModel' => $searchModel,
+        //     'dataProvider' => $dataProvider,
+        // ]);
     }
 
     // /**
