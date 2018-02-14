@@ -392,6 +392,27 @@ class InventoryController extends Controller
 
         // ]);
         // $searchModel->search(Yii::$app->request->queryParams);
+        if (Yii::$app->request->post('hasEditable')) {
+            // instantiate your book model for saving
+            $out = Json::encode(['output'=>'default output', 'message'=>'default message']);
+            $index = Yii::$app->request->post('editableKey');
+            $model = Stock::findOne($index);
+            $product = $model->product;
+            $posted = current($_POST['Stock']);
+            $post['Stock'] = $posted;
+            $newPrice = $posted['id'];
+            $current_rate = Yii::$app->mycomponent->rate();
+            if ($product) {
+                $product->selling_price = $newPrice/$current_rate;
+                $product->save(false);
+                $out = Json::encode(['output'=>$product->selling_price, 'message'=>'']);
+            }else{
+                $out = Json::encode(['output'=>'Error', 'message'=>'Couldnt find this product']);
+
+            }
+            echo $out;
+            return;
+          }
         
         return $this->render('index', [
             'searchModel' => $searchModel,

@@ -1347,7 +1347,6 @@ class InvoicesController extends Controller
     {
         $model = $this->findModel($id);
         $modelsItem = $model->invoiceProducts;
-
         $paid = False;
         $clientRedirct = False;
         $original_amount = $model->amount;
@@ -1619,16 +1618,23 @@ class InvoicesController extends Controller
                             $expensesTotal[$index]['amount'] +=  $ex['amount'];
                         }
                     }
-                    $items = InvoiceProduct::find()
-                            ->where(['invoice_id' => $model->id])
-                            ->andWhere('returned = 0')
-                            ->all();
+                    // $items = InvoiceProduct::find()
+                    //         ->where(['invoice_id' => $model->id])
+                    //         ->andWhere(['returned' => 1])
+                    //         ->all();
+                    $items = $model->invoiceProducts ;
+                    // var_dump($items);
+                    // die();
                     $a = 0;
                     $c = 0;
                     foreach ($items as $item) {
-                        $a += $item->selling_rate*$item->quantity*$item->d_rate;
-                        $c += $item->buying_rate*$item->quantity*$item->d_rate;
+                        $a += $item->selling_rate*$item->quantity;
+                        $c += $item->buying_rate*$item->quantity;
                     }
+                    // echo $a;
+                    // echo "<br>";
+                    // echo $c;
+                    // die();
                     $model->amount = $a ;
                     $model->cost = $c;
                     $model->save(false);

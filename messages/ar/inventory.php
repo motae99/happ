@@ -91,4 +91,5 @@ return [
     'update' => 'تعديل',
     'updated_at' => 'عدل بتاريخ',
     'updated_by' => 'عدل بواسطة',
+    'Update Price' => 'تعديل السعر',
 ];

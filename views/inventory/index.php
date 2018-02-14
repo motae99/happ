@@ -235,7 +235,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             },
                         ],
                         [
-                            'class'=>'kartik\grid\DataColumn',
+                            // 'class'=>'kartik\grid\DataColumn',
+                            'class'=>'kartik\grid\EditableColumn',
+                            'attribute'=> 'id',
                             'header'=> Yii::t('inventory', 'Selling Price'),
                             'width'=>'8%',
                             'headerOptions'=>['class'=>'kartik-sheet-style'],
@@ -259,6 +261,19 @@ $this->params['breadcrumbs'][] = $this->title;
                                 }
                                 
                             },
+                            'editableOptions'=> function ($model, $key, $index) {
+                                return [
+                                    'header'=>Yii::t('inventory', 'Update Price'),
+                                    'size'=>'md',
+                                    'pluginEvents' => [
+                                         "editableSuccess"=>"function(val) {
+                                           $.pjax.reload({container:'#Inventories', async:true}); 
+                                         }",
+                                    ],
+                                    
+                                ];
+                            }
+                           
                         ],
                         [
                             'class'=>'kartik\grid\DataColumn',

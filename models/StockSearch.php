@@ -42,7 +42,7 @@ class StockSearch extends Stock
      */
     public function search($params)
     {
-        $query = Stock::find();
+        $query = Stock::find()->indexBy('id');
 
         // add conditions that should always apply here
 
