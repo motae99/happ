@@ -3,19 +3,19 @@
     <section class="sidebar">
 
         <!-- Sidebar user panel -->
-        <!-- <div class="user-panel">
+        <div class="user-panel">
             <div class="pull-left image">
-                <img src="<?= $directoryAsset ?>/img/user2-160x160.jpg" class="img-circle" alt="User Image"/>
+                <img src="<?= Yii::getAlias('@web')?>/data/mine.png" class="img-circle" alt="User Image"/>
             </div>
             <div class="pull-left info">
-                <p>Alexander Pierce</p>
+                <p>Mo Taha</p>
 
                 <a href="#"><i class="fa fa-circle text-success"></i> Online</a>
             </div>
-        </div> -->
+        </div>
 
         <!-- search form -->
-        <!-- <form action="#" method="get" class="sidebar-form">
+        <form action="#" method="get" class="sidebar-form">
             <div class="input-group">
                 <input type="text" name="q" class="form-control" placeholder="Search..."/>
               <span class="input-group-btn">
@@ -23,29 +23,23 @@
                 </button>
               </span>
             </div>
-        </form> -->
+        </form>
         <!-- /.search form -->
 
         <?= dmstr\widgets\Menu::widget(
             [
                 'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
                 'items' => [
-                    ['label' => Yii::t('app', 'Inventories'), 'icon' => 'sitemap', 'url' => ['/inventory']],
-                    // ['label' => 'Categories', 'icon' => 'bank', 'url' => ['/category']],
-                    // ['label' => 'Products', 'icon' => 'eraser', 'url' => ['/product']],
-                    // ['label' => 'Stocking', 'icon' => 'clone', 'url' => ['/stocking']],
-                    ['label' => Yii::t('app', 'Invoices'), 'icon' => 'building', 'url' => ['/invoices']],
-                    ['label' => Yii::t('app', 'Clients'), 'icon' => 'users', 'url' => ['/client']],
-                    // ['label' => 'Stock', 'icon' => 'desktop', 'url' => ['/stock']],
-                    // ['label' => 'Invoices Products', 'icon' => 'building-o', 'url' => ['/invoice-product']],
-                    // ['label' => 'Payments', 'icon' => 'crosshairs', 'url' => ['/payments']],
-                    // ['label' => 'Entry', 'icon' => 'apple', 'url' => ['/entry']],
-                    // ['label' => 'Transactions', 'icon' => 'circle', 'url' => ['/transaction']],
-                    ['label' => Yii::t('app', 'System Accounts'), 'icon' => 'calculator', 'url' => ['/system-account']],
-
-                    // ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
-                    // ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],
-                    // ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
+                    ['label' => 'Menu Options', 'options' => ['class' => 'header']],
+                    ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
+                    ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],
+                    ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
+                    ['label' => Yii::t('app', 'Clinic'), 'icon' => 'sitemap', 'url' => ['/clinic']],
+                    ['label' => Yii::t('app', 'Specialization'), 'icon' => 'sitemap', 'url' => ['/specialization']],
+                    ['label' => Yii::t('app', 'Physicians'), 'icon' => 'sitemap', 'url' => ['/physician']],
+                    ['label' => Yii::t('app', 'Insurance'), 'icon' => 'sitemap', 'url' => ['/insurance']],
+                    ['label' => Yii::t('app', 'Patient'), 'icon' => 'sitemap', 'url' => ['/patient']],
+                   
                     // [
                     //     'label' => 'Same tools',
                     //     'icon' => 'share',
@@ -79,4 +73,3 @@
     </section>
 
 </aside>
-<div class="control-sidebar-bg"></div>

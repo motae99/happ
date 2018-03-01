@@ -28,18 +28,15 @@ if (Yii::$app->controller->action->id === 'login') {
     ?>
     <?php $this->beginPage() ?>
     <!DOCTYPE html>
-    <html lang="<?= Yii::$app->language ?>"> 
+    <html lang="<?= Yii::$app->language ?>">
     <head>
         <meta charset="<?= Yii::$app->charset ?>"/>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        
-        <?= $this->render('ar-layout-css'); ?>
-
         <?= Html::csrfMetaTags() ?>
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
     </head>
-    <body class="<?= \dmstr\helpers\AdminLteHelper::skinClass() ?> sidebar-mini sidebar-collapse">
+    <body class="hold-transition skin-blue sidebar-collapse">
     <?php $this->beginBody() ?>
     <div class="wrapper">
 
@@ -61,26 +58,8 @@ if (Yii::$app->controller->action->id === 'login') {
 
     </div>
 
-    <?php
-        yii\bootstrap\Modal::begin([
-            // 'headerOptions' => ['id' => 'modalHeader'],
-            'size' => 'modal-lg',
-            'options' => [
-                'id' => 'modal',
-                'tabindex' => false,
-            ]
-            // 'options' => ['class'=>'fade'],
-            //keeps from closing modal with esc key or by clicking out of the modal.
-            // user must click cancel or X to close
-            //'clientOptions' => ['backdrop' => 'static', 'keyboard' => FALSE]
-        ]);
-        echo "<div id='modalContent'></div>";
-        yii\bootstrap\Modal::end();
-    ?>
-
     <?php $this->endBody() ?>
     </body>
     </html>
     <?php $this->endPage() ?>
 <?php } ?>
- 
