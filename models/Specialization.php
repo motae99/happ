@@ -3,6 +3,9 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveRecord;
+use yii\behaviors\SluggableBehavior;
+use yii\behaviors\BlameableBehavior;
 
 /**
  * This is the model class for table "specialization".
@@ -27,13 +30,38 @@ class Specialization extends \yii\db\ActiveRecord
         return 'specialization';
     }
 
+    public function behaviors()
+    {
+         return [
+             // [
+             //     'class' => SluggableBehavior::className(),
+             //     'attribute' => 'message',
+             //     'immutable' => true,
+             //     'ensureUnique'=>true,
+             // ],
+             [
+                 'class' => BlameableBehavior::className(),
+                 'createdByAttribute' => 'created_by',
+                 'updatedByAttribute' => 'updated_by',
+             ],
+             'timestamp' => [
+                 'class' => 'yii\behaviors\TimestampBehavior',
+                 'attributes' => [
+                     ActiveRecord::EVENT_BEFORE_INSERT => ['created_at'],
+                     ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                 ],
+                 'value' => date('Y-m-d H:i:s'),
+             ],
+         ];
+    }
+
     /**
      * {@inheritdoc}
      */
     public function rules()
     {
         return [
-            [['clinic_id', 'specialty', 'created_at', 'created_by'], 'required'],
+            [['clinic_id', 'specialty'], 'required'],
             [['clinic_id', 'created_by', 'updated_by'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['specialty'], 'string', 'max' => 45],

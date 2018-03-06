@@ -54,9 +54,19 @@ class PhysicianController extends Controller
      * @throws NotFoundHttpException if the model cannot be found
      */
     public function actionView($id)
-    {
+    {   
+        $model = $this->findModel($id);
+        $available = new Availability;
+        if ($available->load(Yii::$app->request->post())) {
+            $available->physician_id = $model->id;
+            $available->status = 0;
+            $available->created_at = new \yii\db\Expression('NOW()');
+            $available->created_by = 1;
+            $available->save(false);
+        }
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'available' => $available,
         ]);
     }
 
@@ -69,33 +79,50 @@ class PhysicianController extends Controller
     {
         $model = new Physician();
         $availability = [new Availability];
-        $insurance = [[new InsuranceAcceptance]];
+        // $insurance = [[new InsuranceAcceptance]];
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
             $availability = Model::createMultiple(Availability::classname());
             Model::loadMultiple($availability, Yii::$app->request->post());
-            // validate person and Availabilitys models
-            $valid = $model->validate();
-            $valid = Model::validateMultiple($availability) && $valid;
-            if (isset($_POST['InsuranceAcceptance'][0][0])) {
-                foreach ($_POST['InsuranceAcceptance'] as $indexAvail => $insurances) {
-                    foreach ($insurances as $indexInsu => $insu) {
-                        $data['InsuranceAcceptance'] = $insu;
-                        $modelInsurance = new InsuranceAcceptance;
-                        $modelInsurance->load($data);
-                        $modelsInsurance[$indexAvail][$indexInsu] = $modelInsurance;
-                        $valid = $modelInsurance->validate();
-                    }
-                }
-            }
-            // return $this->redirect(['view', 'id' => $model->id]);
+            $model->created_at = new \yii\db\Expression('NOW()');
+            $model->created_by = 1;
+            $model->save();
+            // $valid = true;
+            // print_r($availability);
+            // die();
+            // $valid = $model->validate();
+            // $valid = Model::validateMultiple($availability) && $valid;
+            // if ($valid) {
+            //     $transaction = \Yii::$app->db->beginTransaction();
+            //     try {
+            //         if ($flag = true /*$model->save(false)*/) {
+            //             foreach ($availability as $ava) {
+            //                 var_dump($ava);
+            //                 die();
+            //                 $ava->physician_id = $model->id;
+            //                 $ava->physician_id = $model->id;
+            //                 if (! ($flag = $ava->save(false))) {
+            //                     $transaction->rollBack();
+            //                     break;
+            //                 }
+            //             }
+            //         }
+            //         if ($flag) {
+            //             $transaction->commit();
+                        return $this->redirect(['view', 'id' => $model->id]);
+            //         }
+            //     } catch (Exception $e) {
+            //         $transaction->rollBack();
+            //     }
+            // }
+            
         }
 
         return $this->render('_form', [
             'model' => $model,
             // 'availability' => $availability,
-            'availability' => (empty($availability)) ? [new Availability] : $availability,
-            'insurance' => (empty($insurance)) ? [[new Insurance]] : $insurance,
+            // 'availability' => (empty($availability)) ? [new Availability] : $availability,
+            // 'insurance' => (empty($insurance)) ? [[new Insurance]] : $insurance,
         ]);
     }
 
