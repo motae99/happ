@@ -35,7 +35,7 @@ class Medical extends \api\components\db\ActiveRecord
     public function extraFields() {
         return [
             'specialization' => function($model) { return $model->spec; },
-            // 'outstanding' => function($model) { return $model->outstanding; }
+            'doctors' => function($model) { return $model->doctor; }
             // 'items' => function($model) { return $model->item; }
         ];
     }
@@ -43,6 +43,11 @@ class Medical extends \api\components\db\ActiveRecord
     public function getSpec()
     {
         return $this->hasMany(Specialization::className(), ['clinic_id' => 'id']);
+    }
+
+    public function getDoctor()
+    {
+        return $this->hasMany(Availability::className(), ['clinic_id' => 'id']);
     }
 	
 	public static function find() {

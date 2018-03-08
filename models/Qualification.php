@@ -3,6 +3,9 @@
 namespace app\models;
 
 use Yii;
+use yii\db\ActiveRecord;
+use yii\behaviors\SluggableBehavior;
+use yii\behaviors\BlameableBehavior;
 
 /**
  * This is the model class for table "qualification".
@@ -30,10 +33,36 @@ class Qualification extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+
+    public function behaviors()
+    {
+         return [
+             // [
+             //     'class' => SluggableBehavior::className(),
+             //     'attribute' => 'message',
+             //     'immutable' => true,
+             //     'ensureUnique'=>true,
+             // ],
+             [
+                 'class' => BlameableBehavior::className(),
+                 'createdByAttribute' => 'created_by',
+                 'updatedByAttribute' => 'updated_by',
+             ],
+             'timestamp' => [
+                 'class' => 'yii\behaviors\TimestampBehavior',
+                 'attributes' => [
+                     ActiveRecord::EVENT_BEFORE_INSERT => ['created_at'],
+                     ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                 ],
+                 'value' => date('Y-m-d H:i:s'),
+             ],
+         ];
+    }
+
     public function rules()
     {
         return [
-            [['physician_id', 'data', 'created_at', 'created_by', 'updated_at', 'updated_by'], 'required'],
+            [['physician_id', 'data'], 'required'],
             [['physician_id', 'created_by', 'updated_by'], 'integer'],
             [['data'], 'string'],
             [['created_at', 'updated_at'], 'safe'],

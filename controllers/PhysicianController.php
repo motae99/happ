@@ -11,6 +11,7 @@ use app\models\PhysicianSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use app\models\Calender;
 
 /**
  * PhysicianController implements the CRUD actions for Physician model.
@@ -65,6 +66,53 @@ class PhysicianController extends Controller
             $available->save(false);
         }
         return $this->render('view', [
+            'model' => $model,
+            'available' => $available,
+        ]);
+    }
+
+    public function actionAvailability($id)
+    {   
+        $model = $this->findModel($id);
+        $available = new Availability;
+        if ($available->load(Yii::$app->request->post())) {
+            $current = strtotime(date('Y-m-d'));
+            $last = strtotime('next month');
+            $i = 1;
+            $dates = array();
+
+            while( $current <= $last) {
+
+                $day = date('Y-m-d', $current);
+
+                $dayofweek = date('w', strtotime($day));
+
+                if (in_array($dayofweek, $available->date)) 
+                 {
+                    $dates[$i]['day']  = $dayofweek;
+                    $dates[$i]['date'] = date('Y-m-d', $current);
+                    $i++;
+                 }
+
+                $current = strtotime('+1 day', $current);
+            }
+            $available->physician_id = $model->id;
+            $available->save(false);
+           
+            foreach ($dates as $date => $v) {
+                $cal = new Calender();
+                $cal->availability_id = $available->id;
+                $cal->day = $v['day'];
+                $cal->date = $v['date'];
+                $cal->start_time = $available->from_time;
+                $cal->end_time = $available->to_time;
+                $cal->save(false);
+            }
+
+            // return $this->redirect(['index']);
+
+        }
+        return $this->renderAjax('avail', [
             'model' => $model,
             'available' => $available,
         ]);

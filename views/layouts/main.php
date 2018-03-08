@@ -58,6 +58,23 @@ if (Yii::$app->controller->action->id === 'login') {
 
     </div>
 
+    <?php
+        yii\bootstrap\Modal::begin([
+            // 'headerOptions' => ['id' => 'modalHeader'],
+            'size' => 'modal-lg',
+            'options' => [
+                'id' => 'modal',
+                'tabindex' => false,
+            ]
+            // 'options' => ['class'=>'fade'],
+            //keeps from closing modal with esc key or by clicking out of the modal.
+            // user must click cancel or X to close
+            //'clientOptions' => ['backdrop' => 'static', 'keyboard' => FALSE]
+        ]);
+        echo "<div id='modalContent'></div>";
+        yii\bootstrap\Modal::end();
+    ?>
+    
     <?php $this->endBody() ?>
     </body>
     </html>

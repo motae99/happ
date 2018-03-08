@@ -5,6 +5,9 @@ use yii\widgets\ActiveForm;
 use yii\widgets\DetailView;
 use app\models\Clinic;
 use yii\helpers\ArrayHelper;
+use kartik\time\TimePicker;
+use yii\helpers\Url;
+
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Physician */
@@ -18,6 +21,8 @@ $this->params['breadcrumbs'][] = $this->title;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
+        <?= Html::button('<i class="fa fa-plus"></i>', ['value' => Url::to(['physician/availability', 'id'=>$model->id]), 'title' => Yii::t('app', 'Add'), 'class' => 'btn btn-flat bg-blue showModalButton']); ?>
+
         <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
@@ -28,34 +33,6 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 
-    <div class="availability-form">
-
-    <?php $form = ActiveForm::begin(); ?>
-
-    <?= $form->field($available, 'clinic_id')->dropDownList(
-                        ArrayHelper::map(Clinic::find()->all(), 'id', 'name'),
-                        [
-                            'prompt'=>Yii::t('app', 'Health Center'),
-                        ])->label(false);  
-    ?>
-
-    <?= $form->field($available, 'date')->dropDownList(['sat' => Yii::t('app', 'Saterday') ,'sun' => Yii::t('app', 'Sunday'), 'mon' => Yii::t('app', 'Monday'), 'tue' => Yii::t('app', 'Tuseday'), 'wen' => Yii::t('app', 'Wensday'), 'thu' => Yii::t('app', 'Thursday'), 'fri' => Yii::t('app', 'Friday')])->label(false); ?>
-
-    <?= $form->field($available, 'from_time')->textInput() ?>
-
-    <?= $form->field($available, 'to_time')->textInput() ?>
-
-    <?= $form->field($available, 'appointment_fee')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($available, 'revisiting_fee')->textInput(['maxlength' => true]) ?>
-
-    <?= $form->field($available, 'max')->textInput() ?>
-
-
-    <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
-    </div>
-
-    <?php ActiveForm::end(); ?>
+   
 
 </div>
