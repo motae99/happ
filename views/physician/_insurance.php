@@ -52,28 +52,28 @@ use wbraganca\dynamicform\DynamicFormWidget;
         </tr>
     </thead>
     <tbody class="container-insurances">
-    <?php foreach ($insurance as $index => $ins): ?>
+    <?php foreach ($insurance as $i => $ins): ?>
         <tr class="insurance-item">
             <td class="vcenter">
                 <?php
                     if (! $ins->isNewRecord) {
-                        echo Html::activeHiddenInput($ins, "[{$i}][{$index}]id");
+                        echo Html::activeHiddenInput($ins, "[{$i}]id");
                     }
                 ?>
-                <?php echo $form->field($ins, "[{$i}][{$index}]insurance_id")->label(false)->dropDownList(
+                <?php echo $form->field($ins, "[{$i}]insurance_id")->label(false)->dropDownList(
                         ArrayHelper::map(Insurance::find()->all(), 'id', 'name'),
                         [
                             // 'prompt'=>Yii::t('app', 'Insurance Provider'),
                         ]);  ?>
             </td>
             <td>
-                <?= $form->field($ins, "[{$i}][{$index}]patient_payment")->textInput(['maxlength' => true])->label(false) ?>
+                <?= $form->field($ins, "[{$i}]patient_payment")->textInput(['maxlength' => true])->label(false) ?>
             </td>
             <td>
-                <?= $form->field($ins, "[{$i}][{$index}]insurance_refund")->label(false)->textInput(['maxlength' => true]) ?>
+                <?= $form->field($ins, "[{$i}]insurance_refund")->label(false)->textInput(['maxlength' => true]) ?>
             </td>
             <td>
-                <?= $form->field($ins, "[{$i}][{$index}]contract_expiry")->label(false)->textInput(['maxlength' => true]) ?>
+                <?= $form->field($ins, "[{$i}]contract_expiry")->label(false)->textInput(['maxlength' => true]) ?>
             </td>
 
             <td class="text-center vcenter" style="width: 90px;">

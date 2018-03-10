@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\select2\Select2;
+use kartik\time\TimePicker; 
 
 
 /* @var $this yii\web\View */
@@ -13,14 +14,22 @@ use kartik\select2\Select2;
 <div class="clinic-form">
 
     <?php $form = ActiveForm::begin(); ?>
-
+<div class="row">
+    <div class="col-lg-6">
     <?= $form->field($model, 'type')->dropDownList(['مستشفى خاص' => Yii::t('app', 'مستشفى خاص'), 'مستشفى حكومي' => Yii::t('app', 'مستشفى حكومي'), 'مستوصف' => Yii::t('app', 'مستوصف'), 'عيادة' => Yii::t('app', 'عيادة'), 'مركز صحي' => Yii::t('app', 'مركز صحي')], ['prompt' => Yii::t('app', 'Select Type ')])->label(false); ?>
-   
+    </div>
+    <div class="col-lg-6">
     <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'Name')])->label(false) ?>
+    </div>
+
+</div>
+   
 
     <?= $form->field($model, 'state')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'State')])->label(false) ?>
 
     <?= $form->field($model, 'city')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'City')])->label(false) ?>
+    
+    <?= $form->field($model, 'manager')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'المدير الطبي')])->label(false) ?>
 
     <?= $form->field($model, 'address')->textarea(['rows' => 2, 'placeholder' => Yii::t('app', 'Address')])->label(false) ?>
 
@@ -41,8 +50,8 @@ use kartik\select2\Select2;
     ?>
 
     
-    <?= $form->field($model, 'start')->textInput(['placeholder'=> Yii::t('app', 'Start Time')])->label(false) ?>
-    <?= $form->field($model, 'end')->textInput(['placeholder'=> Yii::t('app', 'End Time')])->label(false) ?>
+    <?= $form->field($model, 'start')->widget(TimePicker::classname(), [])->label(false);?>
+    <?= $form->field($model, 'end')->widget(TimePicker::classname(), [])->label(false);?>
 
 
 

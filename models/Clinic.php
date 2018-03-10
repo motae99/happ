@@ -70,8 +70,8 @@ class Clinic extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'state', 'city', 'address', 'primary_contact', 'type', 'working_days'], 'required'],
-            [['address', 'longitude', 'latitude', 'type'], 'string'],
+            [['name', 'state', 'city', 'address', 'primary_contact', 'manager','type', 'working_days'], 'required'],
+            [['address', 'longitude', 'latitude', 'type', 'manager'], 'string'],
             [['primary_contact', 'secondary_contact', 'created_by', 'updated_by'], 'integer'],
             [['created_at', 'updated_at', 'start', 'end'], 'safe'],
             [['name', 'state', 'city'], 'string', 'max' => 45],
@@ -96,6 +96,7 @@ class Clinic extends \yii\db\ActiveRecord
             'longitude' => Yii::t('app', 'Longitude'),
             'latitude' => Yii::t('app', 'Latitude'),
             'type' => Yii::t('app', 'Type'),
+            'manager' => Yii::t('app', 'manager'),
             'working_days' => Yii::t('app', 'Working Days'),
             'start' => Yii::t('app', 'start time'),
             'end' => Yii::t('app', 'end time'),

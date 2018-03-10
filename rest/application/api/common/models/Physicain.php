@@ -26,7 +26,7 @@ class Physicain extends \api\components\db\ActiveRecord
     public function extraFields() {
         return [
             'work' => function($model) { return $model->avail; },
-            // 'outstanding' => function($model) { return $model->outstanding; }
+            'insurance' => function($model) { return $model->insurance; }
             // 'items' => function($model) { return $model->item; }
         ];
     }
@@ -35,6 +35,12 @@ class Physicain extends \api\components\db\ActiveRecord
     {
         return $this->hasMany(Availability::className(), ['physician_id' => 'id']);
          
+    }
+
+     public function getInsurance()
+    {
+        
+        return $this->hasMany(InsuranceAcceptance::className(), ['id' => 'insurance_id']);
     }
 
     public static function find() {

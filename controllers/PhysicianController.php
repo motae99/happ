@@ -58,6 +58,7 @@ class PhysicianController extends Controller
     {   
         $model = $this->findModel($id);
         $available = new Availability;
+
         if ($available->load(Yii::$app->request->post())) {
             $available->physician_id = $model->id;
             $available->status = 0;
@@ -75,6 +76,8 @@ class PhysicianController extends Controller
     {   
         $model = $this->findModel($id);
         $available = new Availability;
+        $insurance = [new InsuranceAcceptance];
+
         if ($available->load(Yii::$app->request->post())) {
             $current = strtotime(date('Y-m-d'));
             $last = strtotime('next month');
@@ -97,7 +100,40 @@ class PhysicianController extends Controller
                 $current = strtotime('+1 day', $current);
             }
             $available->physician_id = $model->id;
-            $available->save(false);
+            
+            $valid = true;
+            
+            $insurance = Model::createMultiple(InsuranceAcceptance::classname());
+            Model::loadMultiple($insurance, Yii::$app->request->post());
+             // $valid = $model->validate();
+             // $valid = Model::validateMultiple($availability) && $valid;
+             if ($valid) {
+                 $transaction = \Yii::$app->db->beginTransaction();
+                 try {
+                     if ($flag = $available->save(false) /*$model->save(false)*/) {
+                         foreach ($insurance as $ins) {
+                             // $insuranceAcceptance = $_POST['InsuranceAcceptance'];
+                             // var_dump($ins);
+                             // die();
+                             $ins->availability_id = $available->id;
+                             // $ins->insurance_id = $insuranceAcceptance['insurance_id'];
+                             // $ins->patient_payment = $insuranceAcceptance['patient_payment'];
+                             // $ins->insurance_refund = $insuranceAcceptance['insurance_refund'];
+                             // $ins->contract_expiry = $insuranceAcceptance['contract_expiry'];
+                             if (! ($flag = $ins->save(false))) {
+                                 $transaction->rollBack();
+                                 break;
+                             }
+                         }
+                     }
+                     if ($flag) {
+                         $transaction->commit();
+                        return $this->redirect(['view', 'id' => $model->id]);
+                     }
+                 } catch (Exception $e) {
+                     $transaction->rollBack();
+                 }
+             }
            
             foreach ($dates as $date => $v) {
                 $cal = new Calender();
@@ -115,6 +151,8 @@ class PhysicianController extends Controller
         return $this->renderAjax('avail', [
             'model' => $model,
             'available' => $available,
+            'insurance' => (empty($insurance)) ? [new InsuranceAcceptance] : $insurance,
+
         ]);
     }
 
@@ -132,8 +170,6 @@ class PhysicianController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $availability = Model::createMultiple(Availability::classname());
             Model::loadMultiple($availability, Yii::$app->request->post());
-            $model->created_at = new \yii\db\Expression('NOW()');
-            $model->created_by = 1;
             $model->save();
             // $valid = true;
             // print_r($availability);

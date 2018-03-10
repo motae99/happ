@@ -23,6 +23,9 @@ use app\models\Clinic;
             <?= $form->field($model, 'contact_no')->textInput() ?>
         </div>
         <div class="col-lg-12">
+            <?= $form->field($model, 'regestration_no')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'الرقم الطبي')])->label(false) ?>
+        </div>
+        <div class="col-lg-12">
             <?= $form->field($model, 'email')->textInput() ?>
         </div>
     </div>

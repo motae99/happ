@@ -64,8 +64,8 @@ class Physician extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'contact_no'], 'required'],
-            [['contact_no', 'created_by', 'updated_by'], 'integer'],
+            [['name', 'contact_no', 'regestration_no'], 'required'],
+            [['contact_no', 'created_by', 'updated_by', 'regestration_no'], 'integer'],
             [['email'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
             [['name'], 'string', 'max' => 100],
@@ -83,6 +83,7 @@ class Physician extends \yii\db\ActiveRecord
             'name' => Yii::t('app', 'Name'),
             'contact_no' => Yii::t('app', 'Contact No'),
             'email' => Yii::t('app', 'Email'),
+            'regestration_no' => Yii::t('app', 'regestration_no'),
             'created_at' => Yii::t('app', 'Created At'),
             'created_by' => Yii::t('app', 'Created By'),
             'updated_at' => Yii::t('app', 'Updated At'),

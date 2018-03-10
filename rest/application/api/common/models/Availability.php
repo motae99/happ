@@ -28,7 +28,7 @@ class Availability extends \api\components\db\ActiveRecord
     public function extraFields() {
         return [
             'clinic' => function($model) { return $model->clinic; },
-            // 'outstanding' => function($model) { return $model->outstanding; }
+            'insurance' => function($model) { return $model->insurance; }
             // 'items' => function($model) { return $model->item; }
         ];
     }
@@ -42,6 +42,12 @@ class Availability extends \api\components\db\ActiveRecord
     {
         
         return $this->hasOne(Physicain::className(), ['id' => 'physician_id']);
+    }
+
+    public function getInsurance()
+    {
+        
+        return $this->hasMany(InsuranceAcceptance::className(), ['id' => 'insurance_id']);
     }
 
 	public static function find() {
