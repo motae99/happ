@@ -1,7 +1,8 @@
 <?php
 
 namespace api\common\models;
-
+use Yii;
+ 
 class Medical extends \api\components\db\ActiveRecord
 {
 
@@ -23,7 +24,12 @@ class Medical extends \api\components\db\ActiveRecord
             'primary_contact',
             'secondary_contact',
             'type',
-            'working_days',
+            // 'special_services',
+            // 'app_services',
+            'info',
+            'email',
+            'rate',
+            'photo' => function($model) { return '/img/'.$model->photo;},
             'start_time'=> function($model) { return $model->start; },
             'end_time'=> function($model) { return $model->end; },
             // 'specialization' => function($model) { return $model->spec; },
@@ -49,6 +55,12 @@ class Medical extends \api\components\db\ActiveRecord
     {
         return $this->hasMany(Availability::className(), ['clinic_id' => 'id']);
     }
+
+    // public static function getPhoto($photo)
+    // {
+    //     $dispImg = is_file(Yii::getAlias('@webroot').'/img/'.$photo) ? true :false;
+    //     return Yii::getAlias('@web')."/img/".(($dispImg) ? $photo : "no-photo.png");
+    // }
 	
 	public static function find() {
 		return new MedicalQuery(get_called_class());

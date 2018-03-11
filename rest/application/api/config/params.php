@@ -1,4 +1,6 @@
 <?php
+Yii::setAlias('@anyname', realpath(dirname(__FILE__).'/../../'));
+
 return [
     'adminEmail' => 'motae99@gmail.com',
 	'formats' => [

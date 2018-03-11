@@ -43,6 +43,8 @@ class Calender extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'availability_id' => Yii::t('app', 'availability_id'),
+            'physician_id' => Yii::t('app', 'Availability ID'),
+            'clinic_id' => Yii::t('app', 'Insurance ID'),
             'day' => Yii::t('app', 'Day'),
             'date' => Yii::t('app', 'Date'),
             'start_time' => Yii::t('app', 'start Time'),

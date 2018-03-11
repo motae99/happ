@@ -33,6 +33,22 @@ class PhysicianController extends Controller
         ];
     }
 
+    public function actionClinic($q = null)
+    {
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = ['results' => ['id' => '', 'text' => '']];
+        if (!is_null($q) && !is_null($inventory_id)) {
+          $query = new Query;
+          $query->select('id, name AS text')
+              ->from('clinic')
+              ->where(['like', 'name', $q]);
+          $command = $query->createCommand();
+          $data = $command->queryAll();
+          $out['results'] = array_values($data);
+        }
+        return $out;
+
+    }
     /**
      * Lists all Physician models.
      * @return mixed
@@ -116,6 +132,8 @@ class PhysicianController extends Controller
                              // var_dump($ins);
                              // die();
                              $ins->availability_id = $available->id;
+                             $ins->physician_id = $available->physician_id;
+                             $ins->clinic_id = $available->clinic_id;
                              // $ins->insurance_id = $insuranceAcceptance['insurance_id'];
                              // $ins->patient_payment = $insuranceAcceptance['patient_payment'];
                              // $ins->insurance_refund = $insuranceAcceptance['insurance_refund'];
@@ -138,6 +156,8 @@ class PhysicianController extends Controller
             foreach ($dates as $date => $v) {
                 $cal = new Calender();
                 $cal->availability_id = $available->id;
+                $cal->physician_id = $available->physician_id;
+                $cal->clinic_id = $available->clinic_id;
                 $cal->day = $v['day'];
                 $cal->date = $v['date'];
                 $cal->start_time = $available->from_time;

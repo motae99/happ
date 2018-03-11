@@ -2,6 +2,9 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\ArrayHelper;
+use app\models\Clinic;
+
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Specialization */
@@ -12,7 +15,12 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'clinic_id')->textInput() ?>
+    <?= $form->field($model, 'clinic_id')->dropDownList(
+                        ArrayHelper::map(Clinic::find()->all(), 'id', 'name'),
+                        [
+                            'prompt'=>Yii::t('app', 'Health Center'),
+                        ])->label(false);  
+    ?>
 
     <?= $form->field($model, 'specialty')->textInput(['maxlength' => true]) ?>
 

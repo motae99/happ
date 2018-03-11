@@ -45,4 +45,6 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
 
+    <?php Html::img($model->getPhoto($model->photo.$model->id),['alt'=>'No Image', 'class'=>'img-circle']); ?>
+
 </div>

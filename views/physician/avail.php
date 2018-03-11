@@ -6,6 +6,7 @@ use app\models\Clinic;
 use yii\helpers\ArrayHelper;
 use kartik\time\TimePicker;
 use yii\helpers\Url;
+use yii\web\JsExpression;
 use kartik\select2\Select2;
 use app\models\Insurance;
 use wbraganca\dynamicform\DynamicFormWidget;
@@ -17,6 +18,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
 ?>
 
+<?php $fetch = Url::to(['physician/clinic']);?>
 <div class="availability-form">
     <?php $form = ActiveForm::begin([   
             'id' => 'available-create-form',
@@ -25,11 +27,35 @@ use wbraganca\dynamicform\DynamicFormWidget;
             
         ]); ?>
 
-    <?= $form->field($available, 'clinic_id')->dropDownList(
-                        ArrayHelper::map(Clinic::find()->all(), 'id', 'name'),
-                        [
-                            'prompt'=>Yii::t('app', 'Health Center'),
-                        ])->label(false);  
+    <?= $form->field($available, 'clinic_id')->widget(Select2::classname(), 
+                    [
+                        'options' => [
+                            'placeholder' => Yii::t('app', 'المؤسسة الطبية والصحية'),
+                        ],
+                        'pluginOptions' => [
+                          'minimumInputLength' => 2,
+                          'ajax' => [
+                              'url' => $fetch,
+                              'dataType' => 'json',
+                              'data' => new JsExpression('function(params) {
+                                    // var index  = this.attr("id").replace(/[^0-9.]/g, "");  
+                                    // var inventory = $("#invoiceproduct-" + index + "-inventory_id").val(); 
+                                    return {q:params.term, inventory_id:inventory }; 
+                                }'),
+                          ],
+                          'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                          'templateResult' => new JsExpression('function(name) { return name.text; }'),
+                          'templateSelection' => new JsExpression('function (name) { return name.text; }'),
+                          'allowClear' => true,
+                        ],
+                        ])->label(false);
+      
+                        // ])->label(false);
+                        // ->dropDownList(
+                        //     ArrayHelper::map(Clinic::find()->all(), 'id', 'name'),
+                        //     [
+                        //         'prompt'=>Yii::t('app', 'Health Center'),
+                        //     ])->label(false);  
     ?>
 
 

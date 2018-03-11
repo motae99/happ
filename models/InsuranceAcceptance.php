@@ -63,7 +63,7 @@ class InsuranceAcceptance extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['insurance_id', 'patient_payment', 'insurance_refund', 'contract_expiry' ], 'required'],
+            [['insurance_id', 'patient_payment', 'clinic_id', 'physician_id','insurance_refund', 'contract_expiry' ], 'required'],
             [['availability_id', 'insurance_id', 'created_by', 'updated_by'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['availability_id'], 'exist', 'skipOnError' => true, 'targetClass' => Availability::className(), 'targetAttribute' => ['availability_id' => 'id']],
@@ -79,7 +79,8 @@ class InsuranceAcceptance extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'availability_id' => Yii::t('app', 'Availability ID'),
-            'insurance_id' => Yii::t('app', 'Insurance ID'),
+            'physician_id' => Yii::t('app', 'Availability ID'),
+            'clinic_id' => Yii::t('app', 'Insurance ID'),
             'patient_payment' => Yii::t('app', 'patient_payment'),
             'insurance_refund' => Yii::t('app', 'insurance_refund'),
             'contract_expiry' => Yii::t('app', 'contract_expiry'),

@@ -8,6 +8,8 @@ use app\models\ClinicSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
+
 
 /**
  * ClinicController implements the CRUD actions for Clinic model.
@@ -80,8 +82,9 @@ class ClinicController extends Controller
                 # code...
             }
             $model->working_days = $days;
-            $model->created_at = new \yii\db\Expression('NOW()');
-            $model->created_by = 1;
+            $model->photo = UploadedFile::getInstance($model,'photo');
+            $model->photo->saveAs(Yii::$app->basePath.'/web/img/' .$model->photo.$model->id);
+
             $model->save();
             // echo $model->working_days;
             return $this->redirect(['view', 'id' => $model->id]);

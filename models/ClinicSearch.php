@@ -73,8 +73,8 @@ class ClinicSearch extends Clinic
             ->andFilterWhere(['like', 'city', $this->city])
             ->andFilterWhere(['like', 'address', $this->address])
             ->andFilterWhere(['like', 'longitude', $this->longitude])
-            ->andFilterWhere(['like', 'latitude', $this->latitude])
-            ->andFilterWhere(['like', 'type', $this->is_clinic]);
+            ->andFilterWhere(['like', 'latitude', $this->latitude]);
+            // ->andFilterWhere(['like', 'type', $this->is_clinic]);
 
         return $dataProvider;
     }

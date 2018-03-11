@@ -37,11 +37,11 @@ class Physicain extends \api\components\db\ActiveRecord
          
     }
 
-     public function getInsurance()
-    {
+    // public function getInsurance()
+    // {
         
-        return $this->hasMany(InsuranceAcceptance::className(), ['id' => 'insurance_id']);
-    }
+    //     return $this->hasMany(InsuranceAcceptance::className(), ['id' => 'id']);
+    // }
 
     public static function find() {
         return new PhysicainQuery(get_called_class());

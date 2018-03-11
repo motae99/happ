@@ -70,10 +70,10 @@ class Clinic extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name', 'state', 'city', 'address', 'primary_contact', 'manager','type', 'working_days'], 'required'],
+            [['name', 'state', 'city', 'address', 'primary_contact', 'photo','type', 'working_days'], 'required'],
             [['address', 'longitude', 'latitude', 'type', 'manager'], 'string'],
-            [['primary_contact', 'secondary_contact', 'created_by', 'updated_by'], 'integer'],
-            [['created_at', 'updated_at', 'start', 'end'], 'safe'],
+            [['primary_contact', 'secondary_contact', 'created_by', 'updated_by', 'fax'], 'integer'],
+            [['created_at', 'updated_at', 'start', 'end', 'info', 'email', 'fax'], 'safe'],
             [['name', 'state', 'city'], 'string', 'max' => 45],
             [['primary_contact'], 'unique'],
             [['secondary_contact'], 'unique'],
@@ -100,6 +100,13 @@ class Clinic extends \yii\db\ActiveRecord
             'working_days' => Yii::t('app', 'Working Days'),
             'start' => Yii::t('app', 'start time'),
             'end' => Yii::t('app', 'end time'),
+            'photo' => Yii::t('app', 'photo'),
+            'special_services' => Yii::t('app', 'special_services'),
+            'app_services' => Yii::t('app', 'app_services'),
+            'fax' => Yii::t('app', 'fax'),
+            'info' => Yii::t('app', 'info'),
+            'email' => Yii::t('app', 'Email'),
+            'rate' => Yii::t('app', 'rate'),
             'created_at' => Yii::t('app', 'Created At'),
             'created_by' => Yii::t('app', 'Created By'),
             'updated_at' => Yii::t('app', 'Updated At'),
@@ -121,6 +128,12 @@ class Clinic extends \yii\db\ActiveRecord
     public function getSpecializations()
     {
         return $this->hasMany(Specialization::className(), ['clinic_id' => 'id']);
+    }
+
+    public static function getPhoto($photo)
+    {
+        $dispImg = is_file(Yii::getAlias('@webroot').'/img/'.$photo) ? true :false;
+        return Yii::getAlias('@web')."/img/".(($dispImg) ? $photo : "no-photo.png");
     }
 
     /**

@@ -36,3 +36,6 @@ $this->params['breadcrumbs'][] = $this->title;
    
 
 </div>
+<div>
+<?php  //echo $this->render('avail', ['model' => $model, 'available' => $available]) ?>
+</div>
