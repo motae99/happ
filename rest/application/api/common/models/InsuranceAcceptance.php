@@ -10,7 +10,7 @@ class InsuranceAcceptance extends \api\components\db\ActiveRecord
 	 */
 	public static function tableName()
 	{
-		return '{{insuranceAcceptance}}';
+		return '{{insurance_acceptance}}';
 	}
 	// public function fields()
  //    {

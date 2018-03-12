@@ -13,14 +13,23 @@ return [
 				'POST /oauth2/<action:\w+>' => 'oauth2/default/<action>',
 				[
 					'class' => 'yii\rest\UrlRule',
-					'controller' => ['v1/medical', 'v1/physicain'],
+					'controller' => ['v1/medical', 'v1/physicain', 'v1/register'],
 					// 'extraPatterns' => [
 					// 	'GET accept/<id>' => 'accept',
 					// 	'GET reject/<id>' => 'reject',
 					// 	'GET only/<id>' => 'only',
 					// 	'GET oname/<id>' => 'oname',
 					// ],
-				],		
+				],	
+				[
+					'class' => 'yii\rest\UrlRule',
+					'controller' => ['v1/appointment'],
+					'extraPatterns' => [
+						'GET booking' => 'booking',
+						'GET all' => 'all',
+						'POST reserve' => 'reserve',
+					],
+				],	
 			]
 		],
 		// 'apns' => [

@@ -24,7 +24,7 @@ class Medical extends \api\components\db\ActiveRecord
             'primary_contact',
             'secondary_contact',
             'type',
-            // 'special_services',
+            'special_services',
             // 'app_services',
             'info',
             'email',
@@ -32,9 +32,8 @@ class Medical extends \api\components\db\ActiveRecord
             'photo' => function($model) { return '/img/'.$model->photo;},
             'start_time'=> function($model) { return $model->start; },
             'end_time'=> function($model) { return $model->end; },
-            // 'specialization' => function($model) { return $model->spec; },
-            // 'client_name'=> function($model) { return $model->client->client_name; },
-            // 'total' => function($model) { return $model->amount; },
+            'longitude',
+            'latitude',
            
         ];
     }
