@@ -20,7 +20,7 @@ class AppointmentController extends \api\components\ActiveController
     {
         return [
             [
-                'allow' => false,
+                'allow' => true,
                 'roles' => ['?'],
             ],
             [
@@ -33,7 +33,7 @@ class AppointmentController extends \api\components\ActiveController
                     'reserve',
                     'all'
                 ],
-                'roles' => ['@'],
+                'roles' => ['?'],
             ],
             // [
             //     'allow' => true,
