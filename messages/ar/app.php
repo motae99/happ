@@ -148,7 +148,7 @@ return [
     'Reference' => 'اشارة',
     'Reference Type' => 'نوع الاشاره',
     'Reset' => 'الغاء',
-    'Save' => 'حفض',
+    'Save' => 'حفظ',
     'Search' => 'بحث',
     'Select Language' => 'اختار لغه',
     'Selling Price' => 'سعر البيع',
