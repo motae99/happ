@@ -61,8 +61,8 @@ class Specialization extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['clinic_id', 'specialty'], 'required'],
-            [['clinic_id', 'created_by', 'updated_by'], 'integer'],
+            [['clinic_id', 'specialty', 'physician_id'], 'required'],
+            [['clinic_id', 'created_by', 'updated_by', 'physician_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['specialty'], 'string', 'max' => 45],
             [['clinic_id'], 'exist', 'skipOnError' => true, 'targetClass' => Clinic::className(), 'targetAttribute' => ['clinic_id' => 'id']],
@@ -77,6 +77,7 @@ class Specialization extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'clinic_id' => Yii::t('app', 'Clinic ID'),
+            'physician_id' => Yii::t('app', 'Physician'),
             'specialty' => Yii::t('app', 'Specialty'),
             'created_at' => Yii::t('app', 'Created At'),
             'created_by' => Yii::t('app', 'Created By'),

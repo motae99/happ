@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use app\models\Clinic;
 use yii\helpers\ArrayHelper;
+use kartik\date\DatePicker;
 use kartik\time\TimePicker;
 use yii\helpers\Url;
 use yii\web\JsExpression;
@@ -27,35 +28,36 @@ use wbraganca\dynamicform\DynamicFormWidget;
             
         ]); ?>
 
-    <?= $form->field($available, 'clinic_id')->widget(Select2::classname(), 
+    <?= $form->field($available, 'clinic_id')
+                ->dropDownList(
+                    ArrayHelper::map(Clinic::find()->all(), 'id', 'name'),
                     [
-                        'options' => [
-                            'placeholder' => Yii::t('app', 'المؤسسة الطبية والصحية'),
-                        ],
-                        'pluginOptions' => [
-                          'minimumInputLength' => 2,
-                          'ajax' => [
-                              'url' => $fetch,
-                              'dataType' => 'json',
-                              'data' => new JsExpression('function(params) {
-                                    // var index  = this.attr("id").replace(/[^0-9.]/g, "");  
-                                    // var inventory = $("#invoiceproduct-" + index + "-inventory_id").val(); 
-                                    return {q:params.term, inventory_id:inventory }; 
-                                }'),
-                          ],
-                          'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-                          'templateResult' => new JsExpression('function(name) { return name.text; }'),
-                          'templateSelection' => new JsExpression('function (name) { return name.text; }'),
-                          'allowClear' => true,
-                        ],
-                        ])->label(false);
+                        'prompt'=>Yii::t('app', 'Health Center'),
+                    ])->label(false);  
+                // ->widget(Select2::classname(), 
+                //     [
+                //         'options' => [
+                //             'placeholder' => Yii::t('app', 'المؤسسة الطبية والصحية'),
+                //         ],
+                //         'pluginOptions' => [
+                //           'minimumInputLength' => 2,
+                //           'ajax' => [
+                //               'url' => $fetch,
+                //               'dataType' => 'json',
+                //               'data' => new JsExpression('function(params) {
+                //                     // var index  = this.attr("id").replace(/[^0-9.]/g, "");  
+                //                     // var inventory = $("#invoiceproduct-" + index + "-inventory_id").val(); 
+                //                     return {q:params.term, inventory_id:inventory }; 
+                //                 }'),
+                //           ],
+                //           'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                //           'templateResult' => new JsExpression('function(name) { return name.text; }'),
+                //           'templateSelection' => new JsExpression('function (name) { return name.text; }'),
+                //           'allowClear' => true,
+                //         ],
+                //         ])
+                // ->label(false);
       
-                        // ])->label(false);
-                        // ->dropDownList(
-                        //     ArrayHelper::map(Clinic::find()->all(), 'id', 'name'),
-                        //     [
-                        //         'prompt'=>Yii::t('app', 'Health Center'),
-                        //     ])->label(false);  
     ?>
 
 
@@ -145,7 +147,16 @@ use wbraganca\dynamicform\DynamicFormWidget;
                     <?= $form->field($ins, "[{$i}]insurance_refund")->label(false)->textInput(['maxlength' => true]) ?>
                 </td>
                 <td>
-                    <?= $form->field($ins, "[{$i}]contract_expiry")->label(false)->textInput(['maxlength' => true]) ?>
+                    <?= $form->field($ins, "[{$i}]contract_expiry")->widget(DatePicker::classname(), 
+                        [
+                            'type' => DatePicker::TYPE_INPUT,
+                            'options' => ['placeholder' => Yii::t('invo', 'Cheque Date')],
+                            'pluginOptions' => [
+                                'format' => 'yyyy-mm-dd',
+                                'todayHighlight' => true
+                            ]    
+                        ])
+                    ->label(false); ?>
                 </td>
 
                 <td class="text-center vcenter" style="width: 90px;">

@@ -99,7 +99,26 @@ class PhysicianController extends Controller
             $last = strtotime('next month');
             $i = 1;
             $dates = array();
-
+            $days = "";
+            foreach ($available->date as $working) {
+                if ($working == 6) {
+                    $days .= "السبت | " ;
+                }elseif ($working == 0) {
+                    $days .= "الأحد | " ;
+                }elseif ($working == 1) {
+                    $days .= "الأثنين | " ;
+                }elseif ($working == 2) {
+                    $days .= "الثﻻثاء | " ;
+                }elseif ($working == 3) {
+                    $days .= "الأربعاء | " ;
+                }elseif ($working == 4) {
+                    $days .= "الخميس | " ;
+                }elseif ($working == 5) {
+                    $days .= "الجمعه | " ;
+                }
+                
+            }
+            
             while( $current <= $last) {
 
                 $day = date('Y-m-d', $current);
@@ -116,33 +135,43 @@ class PhysicianController extends Controller
                 $current = strtotime('+1 day', $current);
             }
             $available->physician_id = $model->id;
-            
-            $valid = true;
+            $available->date = $days;
             
             $insurance = Model::createMultiple(InsuranceAcceptance::classname());
             Model::loadMultiple($insurance, Yii::$app->request->post());
-             // $valid = $model->validate();
-             // $valid = Model::validateMultiple($availability) && $valid;
+            $valid = $available->validate();
+            // $valid = Model::validateMultiple($insurance) && $valid;
              if ($valid) {
                  $transaction = \Yii::$app->db->beginTransaction();
                  try {
-                     if ($flag = $available->save(false) /*$model->save(false)*/) {
+                     if ($flag = $available->save(false) ) {
                          foreach ($insurance as $ins) {
-                             // $insuranceAcceptance = $_POST['InsuranceAcceptance'];
-                             // var_dump($ins);
-                             // die();
                              $ins->availability_id = $available->id;
                              $ins->physician_id = $available->physician_id;
                              $ins->clinic_id = $available->clinic_id;
-                             // $ins->insurance_id = $insuranceAcceptance['insurance_id'];
-                             // $ins->patient_payment = $insuranceAcceptance['patient_payment'];
-                             // $ins->insurance_refund = $insuranceAcceptance['insurance_refund'];
-                             // $ins->contract_expiry = $insuranceAcceptance['contract_expiry'];
                              if (! ($flag = $ins->save(false))) {
                                  $transaction->rollBack();
                                  break;
                              }
                          }
+
+                        foreach ($dates as $date => $v) {
+                            $cal = new Calender();
+                            $cal->availability_id = $available->id;
+                            $cal->physician_id = $available->physician_id;
+                            $cal->clinic_id = $available->clinic_id;
+                            $cal->day = $v['day'];
+                            $cal->date = $v['date'];
+                            $cal->start_time = $available->from_time;
+                            $cal->end_time = $available->to_time;
+                            // print_r($cal);
+                            // die();
+                            if (! ($flag = $cal->save(false))) {
+                                 $transaction->rollBack();
+                                 break;
+                             }
+
+                        }
                      }
                      if ($flag) {
                          $transaction->commit();
@@ -153,19 +182,9 @@ class PhysicianController extends Controller
                  }
              }
            
-            foreach ($dates as $date => $v) {
-                $cal = new Calender();
-                $cal->availability_id = $available->id;
-                $cal->physician_id = $available->physician_id;
-                $cal->clinic_id = $available->clinic_id;
-                $cal->day = $v['day'];
-                $cal->date = $v['date'];
-                $cal->start_time = $available->from_time;
-                $cal->end_time = $available->to_time;
-                $cal->save(false);
-            }
+            
 
-            // return $this->redirect(['index']);
+            return $this->redirect(['index']);
 
         }
         return $this->renderAjax('avail', [

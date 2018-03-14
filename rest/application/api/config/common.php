@@ -17,7 +17,7 @@ $config =  [
 			'class' => 'filsh\yii2\oauth2server\Module',
 			'options' => [
 				'token_param_name' => 'access_token',
-				'access_lifetime' => 3600 * 8400
+				'access_lifetime' => 7 * 86400
 			],
 			'storageMap' => [
 				'user_credentials' => 'api\models\User'

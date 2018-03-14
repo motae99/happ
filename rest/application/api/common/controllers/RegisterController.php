@@ -37,9 +37,9 @@ class RegisterController extends \api\components\ActiveController
         
         $model = new Register();
         $body = json_decode(Yii::$app->getRequest()->getRawBody(), true);
-        if ($body['phone_no'] && $body['password']) {
+        if ($body['username'] && $body['password']) {
             $user = new User();
-            $user->email = $body['phone_no'];
+            $user->email = $body['username'];
             $user->password = $body['password'];
             $user->generateAuthKey();
             if ($user->save()) {

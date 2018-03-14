@@ -25,9 +25,9 @@ return [
 					'class' => 'yii\rest\UrlRule',
 					'controller' => ['v1/appointment'],
 					'extraPatterns' => [
-						'GET booking' => 'booking',
+						'POST booking' => 'booking',
 						'GET all' => 'all',
-						'POST reserve' => 'reserve',
+						'GET reserve' => 'reserve',
 					],
 				],	
 			]
