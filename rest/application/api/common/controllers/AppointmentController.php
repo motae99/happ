@@ -8,7 +8,8 @@ use api\common\models\Specialization;
 use api\common\models\InsuranceAcceptance;
 use api\common\models\Availability;
 use api\common\models\Calender;
-
+use api\common\models\Patient;
+use api\common\models\Appointment;
 use yii\db\Expression;
 
 
@@ -75,6 +76,23 @@ class AppointmentController extends \api\components\ActiveController
             $insured = false;
         }
         if ($clinic_id && $doctor_id && $name && $phone_no) {
+            $existed = Patient::find()->where(['contact_no' => $phone_no])->one();
+            if ($existed) {
+                $patient = $existed;
+            }else{
+                $patient = new Patient();
+                $patient->name = $name;
+                $patient->contact_no = $phone_no;
+                if ($insured) {
+                    $patient->has_insurance = 1;
+                    $patient->insurance_id = $insurance_id;
+                    $patient->insurance_no = $insurance_no;
+                    $patient->save(false);
+                }else{
+                    $patient->has_insurance = 0;
+                    $patient->save(false);
+                }
+            }
             $cal = Calender::find()
                 ->where(['clinic_id' => $clinic_id])
                 ->andWhere(['physician_id' => $doctor_id])
@@ -83,6 +101,13 @@ class AppointmentController extends \api\components\ActiveController
                 ->one();
 
             if ($cal) {
+                $already = Appointment::find()
+                            ->where(['calender_id' => $cal])
+                            ->andWhere(['patient_id' => $patient->id])
+                            ->one();
+                if ($already) {
+                     return  array('success' => 0 , 'message' => 'already booked'); 
+                }
                 $availability = Availability::find($cal->availability_id)->one();
                 
                 if ($availability && $insured) {
@@ -93,19 +118,47 @@ class AppointmentController extends \api\components\ActiveController
               // return  array('insurance_available' => $insurance_available); 
                     if ($insurance_available) {
                       // book an appointment with insurance discount 
-                      return  array('book' => 'book an appointment with insurance discount'); 
+                        $app = new Appointment();
+                        $app->user_id= 1;
+                        $app->patient_id= $patient->id;
+                        $app->clinic_id= $clinic_id;
+                        $app->physician_id= $doctor_id;
+                        $app->availability_id = $availability->id;
+                        $app->calender_id= $cal->id;
+                        $app->fee = $availability->appointment_fee;
+                        $app->insured = 'yes';
+                        $app->insured_fee = $insurance_available->patient_payment;
+                        // $app->created_at = new \yii\db\Expression('NOW()');
+                        $app->status = 'booked';
+                        $app->stat = 'schadueled';
+                        $app->save(false);
+
+                      return  array('success' => 1 , 'data' => $app); 
                     }else{
                         // message your insurance is not available
-                      return  array('message' => 'message your insurance is not available'); 
+                      return  array('success' => 0 , 'message' => 'message your insurance is not supported'); 
                     }
 
                 }else{
-                   // book an appointment with no insurance  
-                      return  array('book' => 'book an appointment with no insurance'); 
+                   // book an appointment with no insurance
+                    $app = new Appointment();
+                    $app->user_id= 1;
+                    $app->patient_id= $patient->id;
+                    $app->clinic_id= $clinic_id;
+                    $app->physician_id= $doctor_id;
+                    $app->availability_id = $availability->id;
+                    $app->calender_id= $cal->id;
+                    $app->fee = $availability->appointment_fee;
+                    $app->insured = 'no';
+                    $app->created_at = new \yii\db\Expression('NOW()');
+                    $app->status = 'booked';
+                    $app->stat = 'schadueled';
+                    $app->save(false); 
+                    return  array('success' => 1 , 'data' => $app);
                 }
             }else{
                 // no appointment available to book  
-                return  array('message' => 'no appointment available to book'); 
+                return  array('success' => 0 , 'message' => 'no appointment available to book'); 
             }
         }
         
@@ -113,6 +166,12 @@ class AppointmentController extends \api\components\ActiveController
 
         // $model->name = $body['name'];
         // $model = new Task();
+
+    }
+
+    public function actionReserve(){
+        $reserve = Appointment::find()->where(['user_id' => 1])->all();
+        return  array('reservations' => $reserve);
 
     }
 
@@ -192,24 +251,5 @@ class AppointmentController extends \api\components\ActiveController
 
 
 
-     public function actionReserve()
-    {
-       //  $task = Task::findOne($id);
-       //  $user =  Yii::$app->user->identity;
-       //  $note = new Note();
-       //  $body = json_decode(Yii::$app->getRequest()->getRawBody(), true);
-       //  $note->load($body, '');
-       //  $note->user_id = $user->id;
-       //  $note->task_id = $task->id;
-       //  $note->note = $body['note'];
-       //  $note->created_at = new Expression('NOW()');
-       //  if($note->save()){
-       //      $gcm = Yii::$app->gcm;
-       //      $gcm->send($user->google_token, $note);
-       //     return array('success' => 1); 
-       // }else{
-       //      return array('success' => 0);
-       //  }
-        
-    }
+   
 }

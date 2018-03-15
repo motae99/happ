@@ -10,7 +10,7 @@ class Register extends \api\components\db\ActiveRecord
      */
     public static function tableName()
     {
-        return '{{users}}';
+        return '{{appointment}}';
     }
 
 
