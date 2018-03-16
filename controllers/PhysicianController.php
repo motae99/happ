@@ -162,8 +162,8 @@ class PhysicianController extends Controller
                             $cal->clinic_id = $available->clinic_id;
                             $cal->day = $v['day'];
                             $cal->date = $v['date'];
-                            $cal->start_time = $available->from_time;
-                            $cal->end_time = $available->to_time;
+                            $cal->start_time = date("H:i", strtotime($available->from_time));
+                            $cal->end_time = date("H:i", strtotime($available->to_time));
                             // print_r($cal);
                             // die();
                             if (! ($flag = $cal->save(false))) {

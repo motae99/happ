@@ -38,10 +38,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'longitude:ntext',
             'latitude:ntext',
             'type',
-            'created_at',
-            'created_by',
-            'updated_at',
-            'updated_by',
+            'start',
+            'end',
+            // 'application_service',
         ],
     ]) ?>
 
