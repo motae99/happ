@@ -87,7 +87,8 @@ class ClinicController extends Controller
             $model->photo = UploadedFile::getInstance($model,'photo');
             $model->photo->saveAs(Yii::$app->basePath.'/web/img/' .$model->photo.$model->id);
             $model->start = date("H:i", strtotime($start));
-            $model->end = date("H:i", strtotime($end));
+            $model->special_services = $_POST['Clinic']['special_services'];
+            $model->app_service = $_POST['Clinic']['app_service'];
             $model->save(false);
             // echo $model->working_days;
             return $this->redirect(['view', 'id' => $model->id]);

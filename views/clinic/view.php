@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="clinic-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
-
+    
     <p>
         
     </p>

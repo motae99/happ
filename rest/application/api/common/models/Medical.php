@@ -30,6 +30,7 @@ class Medical extends \api\components\db\ActiveRecord
             'info',
             'email',
             'rate',
+            'app_service',
             'photo' => function($model) { return '/img/clinics/'.$model->photo;},
             'start_time'=> function($model) { return $model->start; },
             'end_time'=> function($model) { return $model->end; },

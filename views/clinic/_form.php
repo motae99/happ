@@ -96,7 +96,9 @@ $(document).ready(function(){
 
     <?= $form->field($model, 'special_services')->textarea(['rows' => 6, 'placeholder'=> Yii::t('app', 'الخدمات الخاصه')])->label(false) ?>
     <?= $form->field($model, 'info')->textarea(['rows' => 6, 'placeholder'=> Yii::t('app', 'المعلومات العامه')])->label(false) ?>
-    <?= $form->field($model, 'app_service')->textInput(['placeholder'=> Yii::t('app', 'خدمة الحجز عبر التطبيق')])->label(false) ?>
+    <?= $form->field($model, 'app_service')->dropDownList(['yes' => Yii::t('app', 'متوفرة'), 'no' => Yii::t('app', 'جاري التعاقد')], ['prompt' => Yii::t('app', 'حدمة الحجز ')])->label(false) ?>
+    <?= $form->field($model, 'longitude')->textInput(['placeholder'=> Yii::t('app', 'خط الطول')])->label(false) ?>
+    <?= $form->field($model, 'latitude')->textInput(['placeholder'=> Yii::t('app', 'خط العرض')])->label(false) ?>
     <?= $form->field($model,'photo')->fileInput(['data-filename-placement' => "inside", 'title' => Yii::t('app', 'الصورة'), 'onchange'=>'uploadImage(this)', 'data-target'=>'#stu-photo-prev'])->label(false) ?>
     <div class="hint col-xs-12 col-sm-12" style="color:red;padding-top:1px"><b> </b>&nbsp;<?php echo Yii::t('app', ' jpg jpeg png فقط صور على الامتدادات'); ?>
     </div>

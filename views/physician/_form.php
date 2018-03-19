@@ -55,25 +55,25 @@ $(document).ready(function(){
     <?php $form =  ActiveForm::begin(['id' => 'dynamic-form']);?>
     <div class="row">
         <div class="col-lg-8">
-            <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+            <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'الأسم')])->label(false) ?>
         </div>
         <div class="col-lg-4">
-            <?= $form->field($model, 'contact_no')->textInput() ?>
+            <?= $form->field($model, 'contact_no')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'رقم الهاتف')])->label(false) ?>
         </div>
         <div class="col-lg-12">
-            <?= $form->field($model, 'email')->textInput() ?>
+            <?= $form->field($model, 'email')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'البريد الالكتروني')])->label(false) ?>
         </div>
         <div class="col-lg-12">
             <?= $form->field($model, 'regestration_no')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'الرقم الطبي')])->label(false) ?>
         </div>
         <div class="col-lg-12">
-            <?= $form->field($model, 'specialization_id')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'الرقم الطبي')])->label(false) ?>
+            <?= $form->field($model, 'specialization_id')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'التخصص')])->label(false) ?>
         </div>
         <div class="col-lg-12">
-            <?= $form->field($model, 'university')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'الرقم الطبي')])->label(false) ?>
+            <?= $form->field($model, 'university')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'جامعة التخرج')])->label(false) ?>
         </div>
         <div class="col-lg-12">
-            <?= $form->field($model, 'extra_info')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'الرقم الطبي')])->label(false) ?>
+            <?= $form->field($model, 'extra_info')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'معلومات اضافية')])->label(false) ?>
         </div>
         <div>
             <?= $form->field($model,'photo')->fileInput(['data-filename-placement' => "inside", 'title' => Yii::t('app', 'الصورة'), 'onchange'=>'uploadImage(this)', 'data-target'=>'#stu-photo-prev'])->label(false) ?>
