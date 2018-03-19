@@ -67,7 +67,7 @@ class Physician extends \yii\db\ActiveRecord
             [['name', 'contact_no', 'regestration_no'], 'required'],
             [['contact_no', 'created_by', 'updated_by', 'regestration_no'], 'integer'],
             [['email'], 'string'],
-            [['created_at', 'updated_at'], 'safe'],
+            [['created_at', 'updated_at', 'specialization_id', 'extra_info', 'university', 'photo'], 'safe'],
             [['name'], 'string', 'max' => 100],
             [['contact_no'], 'unique'],
         ];
@@ -84,6 +84,10 @@ class Physician extends \yii\db\ActiveRecord
             'contact_no' => Yii::t('app', 'Contact No'),
             'email' => Yii::t('app', 'Email'),
             'regestration_no' => Yii::t('app', 'regestration_no'),
+            'specialization_id' => Yii::t('app', 'specialization_id'),
+            'university' => Yii::t('app', 'university'),
+            'extra_info' => Yii::t('app', 'extra_info'),
+            'photo' => Yii::t('app', 'photo'),
             'created_at' => Yii::t('app', 'Created At'),
             'created_by' => Yii::t('app', 'Created By'),
             'updated_at' => Yii::t('app', 'Updated At'),
@@ -98,6 +102,23 @@ class Physician extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Availability::className(), ['physician_id' => 'id']);
     }
+
+    public function getSpec()
+    {
+        return $this->hasMany(Specialization::className(), ['physician_id' => 'id']);
+    }
+
+    public function getCal()
+    {
+        return $this->hasMany(Calender::className(), ['physician_id' => 'id']);
+    }
+
+    public function getAppo()
+    {
+        return $this->hasMany(Appointment::className(), ['physician_id' => 'id']);
+    }
+
+
 
     /**
      * @return \yii\db\ActiveQuery

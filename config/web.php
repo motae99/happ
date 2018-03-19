@@ -101,7 +101,7 @@ $config = [
         'assetManager' => [
             'bundles' => [
                 'dmstr\web\AdminLteAsset' => [
-                    'skin' => 'skin-blue',
+                    'skin' => 'skin-red',
                 ],
                 'wbraganca\dynamicform\DynamicFormAsset' => [
                     'sourcePath' => '@app/web/js',

@@ -18,8 +18,10 @@ use wbraganca\dynamicform\DynamicFormWidget;
 /* @var $model app\models\Physician */
 
 ?>
+<!-- <div class="col-lg-12" -->
 
 <?php $fetch = Url::to(['physician/clinic']);?>
+
 <div class="availability-form">
     <?php $form = ActiveForm::begin([   
             'id' => 'available-create-form',
@@ -27,61 +29,90 @@ use wbraganca\dynamicform\DynamicFormWidget;
             'action' => Url::to(['physician/availability', 'id'=> $model->id]),
             
         ]); ?>
-
-    <?= $form->field($available, 'clinic_id')
-                ->dropDownList(
-                    ArrayHelper::map(Clinic::find()->all(), 'id', 'name'),
-                    [
-                        'prompt'=>Yii::t('app', 'Health Center'),
-                    ])->label(false);  
-                // ->widget(Select2::classname(), 
+    <div class="row">
+    <div class="col-lg-6">
+        <?= $form->field($available, 'clinic_id')
+                // ->dropDownList(
+                //     ArrayHelper::map(Clinic::find()->all(), 'id', 'name'),
                 //     [
-                //         'options' => [
-                //             'placeholder' => Yii::t('app', 'المؤسسة الطبية والصحية'),
-                //         ],
-                //         'pluginOptions' => [
-                //           'minimumInputLength' => 2,
-                //           'ajax' => [
-                //               'url' => $fetch,
-                //               'dataType' => 'json',
-                //               'data' => new JsExpression('function(params) {
-                //                     // var index  = this.attr("id").replace(/[^0-9.]/g, "");  
-                //                     // var inventory = $("#invoiceproduct-" + index + "-inventory_id").val(); 
-                //                     return {q:params.term, inventory_id:inventory }; 
-                //                 }'),
-                //           ],
-                //           'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
-                //           'templateResult' => new JsExpression('function(name) { return name.text; }'),
-                //           'templateSelection' => new JsExpression('function (name) { return name.text; }'),
-                //           'allowClear' => true,
-                //         ],
-                //         ])
-                // ->label(false);
+                //         'prompt'=>Yii::t('app', 'Health Center'),
+                //     ])->label(false);  
+                ->widget(Select2::classname(), 
+                    [
+                        'options' => [
+                            'placeholder' => Yii::t('app', 'المؤسسة الطبية والصحية'),
+                        ],
+                        'pluginOptions' => [
+                          'minimumInputLength' => 2,
+                          'ajax' => [
+                              'url' => $fetch,
+                              'dataType' => 'json',
+                              'data' => new JsExpression('function(params) {
+                                    return {q:params.term }; 
+                                }'),
+                          ],
+                          'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                          'templateResult' => new JsExpression('function(name) { return name.text; }'),
+                          'templateSelection' => new JsExpression('function (name) { return name.text; }'),
+                          'allowClear' => true,
+                        ],
+                        ])
+                ->label(false);
       
-    ?>
-
-
-    <?= $form->field($available, "date")->widget(Select2::classname(), 
-        [
-            'data' =>[6 => Yii::t('app', 'Saterday') , 0 => Yii::t('app', 'Sunday'), 1 => Yii::t('app', 'Monday'), 2 => Yii::t('app', 'Tuseday'), 3 => Yii::t('app', 'Wensday'), 4 => Yii::t('app', 'Thursday'), 5 => Yii::t('app', 'Friday')],
-            // 'language' => 'de',
-            'options' => ['multiple' => true, 'placeholder' => 'Select working Days ...'],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-
-        ])->label(false);
         ?>
 
-    <?= $form->field($available, 'from_time')->widget(TimePicker::classname(), []);?>
+    </div>
+    <div class="col-lg-2">
+        <?= $form->field($available, 'appointment_fee')->textInput(['maxlength' => true])->label(false); ?>
+    </div>
+    <div class="col-lg-2">
+        <?= $form->field($available, 'revisiting_fee')->textInput(['maxlength' => true])->label(false); ?>
+    </div>
+    <div class="col-lg-2">
+        <?= $form->field($available, 'max')->textInput()->label(false); ?>
+    </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4">
+            <?= $form->field($available, "date")->widget(Select2::classname(), 
+                [
+                    'data' =>[6 => Yii::t('app', 'Saterday') , 0 => Yii::t('app', 'Sunday'), 1 => Yii::t('app', 'Monday'), 2 => Yii::t('app', 'Tuseday'), 3 => Yii::t('app', 'Wensday'), 4 => Yii::t('app', 'Thursday'), 5 => Yii::t('app', 'Friday')],
+                    // 'language' => 'de',
+                    'options' => ['multiple' => true, 'placeholder' => 'Select working Days ...'],
+                    'pluginOptions' => [
+                        'allowClear' => true
+                    ],
+
+                ])->label(false);
+            ?>
+        </div>
     
-    <?= $form->field($available, 'to_time')->widget(TimePicker::classname(), []);?>
+        <div class="col-lg-4">
+            <?= $form->field($available, 'from_time') ->textInput(
+                                [   
+                                    'class' => 'design',
+                                    'disabled' => True,
+                                    'value'=> $start
+                                ])
+                            ->label(false);
+            ?>
 
-    <?= $form->field($available, 'appointment_fee')->textInput(['maxlength' => true]) ?>
+        </div>
+        <div class="col-lg-4">
+            <?= $form->field($available, 'to_time') ->textInput(
+                                [   
+                                    'class' => 'design',
+                                    'disabled' => True,
+                                    'value'=> $end
+                                ])
+                            ->label(false);
+            ?>
+        </div>
 
-    <?= $form->field($available, 'revisiting_fee')->textInput(['maxlength' => true]) ?>
+    </div>
 
-    <?= $form->field($available, 'max')->textInput() ?>
+    
 
     <?php DynamicFormWidget::begin([
 
@@ -150,7 +181,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
                     <?= $form->field($ins, "[{$i}]contract_expiry")->widget(DatePicker::classname(), 
                         [
                             'type' => DatePicker::TYPE_INPUT,
-                            'options' => ['placeholder' => Yii::t('invo', 'Cheque Date')],
+                            'options' => ['placeholder' => Yii::t('app', 'Cheque Date')],
                             'pluginOptions' => [
                                 'format' => 'yyyy-mm-dd',
                                 'todayHighlight' => true
@@ -188,3 +219,4 @@ use wbraganca\dynamicform\DynamicFormWidget;
     <?php ActiveForm::end(); ?>
 
 </div>
+<!-- </div> -->

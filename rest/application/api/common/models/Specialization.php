@@ -22,6 +22,13 @@ class Specialization extends \api\components\db\ActiveRecord
         ];
     }
 
+     public function extraFields() {
+        return [
+            'medical' => function($model) { return $model->clinic; },
+            'doctors' => function($model) { return $model->doctor; }
+            // 'items' => function($model) { return $model->item; }
+        ];
+    }
 	
 	public static function find() {
 		return new SpecializationQuery(get_called_class());
@@ -29,12 +36,12 @@ class Specialization extends \api\components\db\ActiveRecord
 
 	public function getDoctor()
     {
-        return $this->hasMany(Physician::className(), ['physician_id' => 'id']);
+        return $this->hasOne(Physician::className(), ['physician_id' => 'id']);
     }
 
     public function getClinic()
     {
-        return $this->hasMany(Medical::className(), ['clinic_id' => 'id']);
+        return $this->hasOne(Medical::className(), ['clinic_id' => 'id']);
     }
 }
 

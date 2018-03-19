@@ -11,6 +11,44 @@ use app\models\Clinic;
 /* @var $model app\models\Physician */
 /* @var $form yii\widgets\ActiveForm */
 ?>
+<style>
+.stu-photo-form .file-input-wrapper {
+    float: none;
+    margin-top: 2%;
+    width: auto;
+}
+</style>
+<script>
+// *** Upload Image Preview ***
+    var imageTypes = ['jpeg', 'jpg', 'png', 'gif']; //Validate the images to show
+        function showImage(src, target)
+        {
+            var fr = new FileReader();
+            fr.onload = function(e)
+            {
+                target.src = this.result;
+            };
+            fr.readAsDataURL(src.files[0]);
+        }
+        var uploadImage = function(obj)
+        {
+            var val = obj.value;
+            var lastInd = val.lastIndexOf('.');
+            var ext = val.slice(lastInd + 1, val.length);
+            if (imageTypes.indexOf(ext) !== -1)
+            {
+                var id = $(obj).data('target');                    
+                var src = obj;
+                var target = $(id)[0];                    
+                showImage(src, target);
+            }
+        }
+
+// *** file upload input style ***
+$(document).ready(function(){
+     $('#<?php echo Html::getInputId($model, "photo"); ?>').bootstrapFileInput();
+});
+</script>
 
 <div class="physician-form">
 
@@ -23,10 +61,24 @@ use app\models\Clinic;
             <?= $form->field($model, 'contact_no')->textInput() ?>
         </div>
         <div class="col-lg-12">
+            <?= $form->field($model, 'email')->textInput() ?>
+        </div>
+        <div class="col-lg-12">
             <?= $form->field($model, 'regestration_no')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'الرقم الطبي')])->label(false) ?>
         </div>
         <div class="col-lg-12">
-            <?= $form->field($model, 'email')->textInput() ?>
+            <?= $form->field($model, 'specialization_id')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'الرقم الطبي')])->label(false) ?>
+        </div>
+        <div class="col-lg-12">
+            <?= $form->field($model, 'university')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'الرقم الطبي')])->label(false) ?>
+        </div>
+        <div class="col-lg-12">
+            <?= $form->field($model, 'extra_info')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'الرقم الطبي')])->label(false) ?>
+        </div>
+        <div>
+            <?= $form->field($model,'photo')->fileInput(['data-filename-placement' => "inside", 'title' => Yii::t('app', 'الصورة'), 'onchange'=>'uploadImage(this)', 'data-target'=>'#stu-photo-prev'])->label(false) ?>
+        </div>
+        <div class="hint col-xs-12 col-sm-12" style="color:red;padding-top:1px"><b> </b>&nbsp;<?php echo Yii::t('app', ' jpg jpeg png فقط صور على الامتدادات'); ?>
         </div>
     </div>
 

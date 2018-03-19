@@ -9,28 +9,6 @@ body {
 .table td {
     text-align: right !important;
 }*/
-body {
-    font-family: serif;
-}
-
-h1 {
-    font-family: serif;
-}
-h2 {
-    font-family: serif;
-}
-h3 {
-    font-family: serif;
-}
-h4 {
-    font-family: serif;
-}
-h5 {
-    font-family: serif;
-}
-h6 {
-    font-family: serif;
-}
 
 .breadcrumb {
     padding: 8px 15px;

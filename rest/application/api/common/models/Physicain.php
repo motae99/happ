@@ -19,7 +19,11 @@ class Physicain extends \api\components\db\ActiveRecord
             'id',
             'name',
             'contact_no',
-            'email',
+            'التخصص'=> function($model) { return $model->specialization_id; },
+            'regestration_no',
+            'university',
+            'extra_info',
+            'photo'=> function($model) { return '/img/doctors/'.$model->photo;},
         ];
     }
 

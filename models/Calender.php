@@ -44,7 +44,7 @@ class Calender extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'availability_id' => Yii::t('app', 'availability_id'),
             'physician_id' => Yii::t('app', 'Availability ID'),
-            'clinic_id' => Yii::t('app', 'Insurance ID'),
+            'clinic_id' => Yii::t('app', 'Clinic ID'),
             'day' => Yii::t('app', 'Day'),
             'date' => Yii::t('app', 'Date'),
             'start_time' => Yii::t('app', 'start Time'),
@@ -53,7 +53,15 @@ class Calender extends \yii\db\ActiveRecord
         ];
     }
 
-    
+    public function getClinic()
+    {
+        return $this->hasOne(Clinic::className(), ['id' => 'clinic_id']);
+    }
+
+    public function getDoctor()
+    {
+        return $this->hasOne(Physician::className(), ['id' => 'physician_id']);
+    }
 
     /**
      * {@inheritdoc}

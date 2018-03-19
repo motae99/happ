@@ -11,6 +11,8 @@ use app\models\PhysicianSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
+use yii\db\Query;
 use app\models\Calender;
 
 /**
@@ -37,7 +39,7 @@ class PhysicianController extends Controller
     {
         \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
         $out = ['results' => ['id' => '', 'text' => '']];
-        if (!is_null($q) && !is_null($inventory_id)) {
+        if (!is_null($q)) {
           $query = new Query;
           $query->select('id, name AS text')
               ->from('clinic')
@@ -49,6 +51,72 @@ class PhysicianController extends Controller
         return $out;
 
     }
+
+    public function actionModify($id)
+    {
+        $model = Calender::findOne($id);
+
+        if ($model->load(Yii::$app->request->post()) ) {
+            $model->start_time = date("H:i", strtotime($_POST['Calender']['start_time']));
+            $model->end_time = date("H:i", strtotime($_POST['Calender']['end_time']));
+            $model->date = date("Y-m-d", strtotime($_POST['Calender']['date']));
+            $model->status = $_POST['Calender']['status'];
+            $model->save();
+           
+            return $this->redirect(['view', 'id' => $model->doctor->id]);
+        }
+
+        return $this->renderAjax('cal', [
+            'model' => $model,
+        ]);
+    }
+
+     public function actionTable($start=NULL,$end=NULL,$_=NULL, $id){
+        $doctor = $this->findModel($id);
+        \Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        
+        $events = array();
+        $timeTable = $doctor->cal;
+        // $n = 9;
+        foreach ($timeTable as $value) {
+            $Event = new \yii2fullcalendar\models\Event();
+            $Event->id = $value->id;
+            $Event->start = $value->date." ".$value->start_time;
+            $Event->end = $value->date." ".$value->end_time;
+            $Event->title = $value->clinic->name;
+            if($value->status == 'canceled'){
+                $Event->className = 'bg-red';
+            }else{
+              $Event->className = $value->clinic->color;
+            }
+
+            // $Event->className = $Event->className.' fa fa-times-circle';
+            // $Event->className = $Event->className.' fa fa-check-circle';
+            // $Event->className = $Event->className.' fa fa-times-circle';
+            // $Event->amount = $value->amount;
+            // $Event->url = Url::toRoute(['invoices/view', 'id'=>$value->invoice_id]);
+            // $status = $value->status;
+            // // $Event->stat = $status;
+
+            // //." ".$value->start_time
+            
+            // if ($value->type == 'promise') {
+            //     $Event->className = $Event->className.' fa fa-dollar';
+            //     $Event->start = $value->due_date;
+            //     $Event->end = $value->due_date;
+            // }else{
+            //     $Event->className = $Event->className.' fa fa-money';
+            //     $Event->start = $value->cheque_date;
+            //     $Event->end = $value->cheque_date; 
+            // }
+            
+            $events[] = $Event;
+            // $n++;
+        }
+        // var_dump($events);
+        return $events;
+    }
+
     /**
      * Lists all Physician models.
      * @return mixed
@@ -88,7 +156,7 @@ class PhysicianController extends Controller
         ]);
     }
 
-    public function actionAvailability($id)
+    public function actionAvailability($id, $start=NULL,$end=NULL)
     {   
         $model = $this->findModel($id);
         $available = new Availability;
@@ -189,6 +257,8 @@ class PhysicianController extends Controller
         }
         return $this->renderAjax('avail', [
             'model' => $model,
+            'start' => $start,
+            'end' => $end,
             'available' => $available,
             'insurance' => (empty($insurance)) ? [new InsuranceAcceptance] : $insurance,
 
@@ -203,42 +273,13 @@ class PhysicianController extends Controller
     public function actionCreate()
     {
         $model = new Physician();
-        $availability = [new Availability];
-        // $insurance = [[new InsuranceAcceptance]];
+       
 
         if ($model->load(Yii::$app->request->post())) {
-            $availability = Model::createMultiple(Availability::classname());
-            Model::loadMultiple($availability, Yii::$app->request->post());
+            $model->photo = UploadedFile::getInstance($model,'photo');
+            $model->photo->saveAs(Yii::$app->basePath.'/web/img/' .$model->photo.$model->id);
             $model->save();
-            // $valid = true;
-            // print_r($availability);
-            // die();
-            // $valid = $model->validate();
-            // $valid = Model::validateMultiple($availability) && $valid;
-            // if ($valid) {
-            //     $transaction = \Yii::$app->db->beginTransaction();
-            //     try {
-            //         if ($flag = true /*$model->save(false)*/) {
-            //             foreach ($availability as $ava) {
-            //                 var_dump($ava);
-            //                 die();
-            //                 $ava->physician_id = $model->id;
-            //                 $ava->physician_id = $model->id;
-            //                 if (! ($flag = $ava->save(false))) {
-            //                     $transaction->rollBack();
-            //                     break;
-            //                 }
-            //             }
-            //         }
-            //         if ($flag) {
-            //             $transaction->commit();
-                        return $this->redirect(['view', 'id' => $model->id]);
-            //         }
-            //     } catch (Exception $e) {
-            //         $transaction->rollBack();
-            //     }
-            // }
-            
+            return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('_form', [
