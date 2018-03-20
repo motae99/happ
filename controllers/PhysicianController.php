@@ -169,19 +169,19 @@ class PhysicianController extends Controller
             $dates = array();
             $days = "";
             foreach ($available->date as $working) {
-                if ($working == 6) {
+                if ($working == 'sat') {
                     $days .= "السبت | " ;
-                }elseif ($working == 0) {
+                }elseif ($working == 'sun') {
                     $days .= "الأحد | " ;
-                }elseif ($working == 1) {
+                }elseif ($working == 'mon') {
                     $days .= "الأثنين | " ;
-                }elseif ($working == 2) {
+                }elseif ($working == 'tue') {
                     $days .= "الثﻻثاء | " ;
-                }elseif ($working == 3) {
+                }elseif ($working == 'wen') {
                     $days .= "الأربعاء | " ;
-                }elseif ($working == 4) {
+                }elseif ($working == 'the') {
                     $days .= "الخميس | " ;
-                }elseif ($working == 5) {
+                }elseif ($working == 'fri') {
                     $days .= "الجمعه | " ;
                 }
                 

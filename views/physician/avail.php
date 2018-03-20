@@ -63,13 +63,13 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
     </div>
     <div class="col-lg-2">
-        <?= $form->field($available, 'appointment_fee')->textInput(['maxlength' => true])->label(false); ?>
+        <?= $form->field($available, 'appointment_fee')->textInput(['maxlength' => true, 'placeholder' => 'رسوم الحجز'])->label(false); ?>
     </div>
     <div class="col-lg-2">
-        <?= $form->field($available, 'revisiting_fee')->textInput(['maxlength' => true])->label(false); ?>
+        <?= $form->field($available, 'revisiting_fee')->textInput(['maxlength' => true, 'placeholder' => 'رسوم المتابعة'])->label(false); ?>
     </div>
     <div class="col-lg-2">
-        <?= $form->field($available, 'max')->textInput()->label(false); ?>
+        <?= $form->field($available, 'max')->textInput(['placeholder' => 'عدد المقابﻻت'])->label(false); ?>
     </div>
     </div>
 
@@ -77,9 +77,9 @@ use wbraganca\dynamicform\DynamicFormWidget;
         <div class="col-lg-4">
             <?= $form->field($available, "date")->widget(Select2::classname(), 
                 [
-                    'data' =>[6 => Yii::t('app', 'Saterday') , 0 => Yii::t('app', 'Sunday'), 1 => Yii::t('app', 'Monday'), 2 => Yii::t('app', 'Tuseday'), 3 => Yii::t('app', 'Wensday'), 4 => Yii::t('app', 'Thursday'), 5 => Yii::t('app', 'Friday')],
-                    // 'language' => 'de',
-                    'options' => ['multiple' => true, 'placeholder' => 'Select working Days ...'],
+                    'data' =>['sat' => Yii::t('app', 'السبت') , 'sun' => Yii::t('app', 'الأحد'), 'mon' => Yii::t('app', 'الأثنثن'), 'tue' => Yii::t('app', 'الثﻻثاء'), 'wen' => Yii::t('app', 'الأربعاء'), 'the' => Yii::t('app', 'الخميس'), 'fri' => Yii::t('app', 'الجمعة')],
+                    'language' => 'ar',
+                    'options' => ['multiple' => true, 'placeholder' => 'أيام العمل ...'],
                     'pluginOptions' => [
                         'allowClear' => true
                     ],
@@ -92,7 +92,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
             <?= $form->field($available, 'from_time') ->textInput(
                                 [   
                                     'class' => 'design',
-                                    'disabled' => True,
+                                    'readonly' => True,
                                     'value'=> $start
                                 ])
                             ->label(false);
@@ -103,7 +103,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
             <?= $form->field($available, 'to_time') ->textInput(
                                 [   
                                     'class' => 'design',
-                                    'disabled' => True,
+                                    'readonly' => True,
                                     'value'=> $end
                                 ])
                             ->label(false);
@@ -180,8 +180,8 @@ use wbraganca\dynamicform\DynamicFormWidget;
                 <td>
                     <?= $form->field($ins, "[{$i}]contract_expiry")->widget(DatePicker::classname(), 
                         [
-                            'type' => DatePicker::TYPE_INPUT,
-                            'options' => ['placeholder' => Yii::t('app', 'Cheque Date')],
+                            // 'type' => DatePicker::TYPE_INPUT,
+                            'options' => ['placeholder' => Yii::t('app', 'تاريخ نهاية العقد')],
                             'pluginOptions' => [
                                 'format' => 'yyyy-mm-dd',
                                 'todayHighlight' => true

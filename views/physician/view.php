@@ -113,5 +113,5 @@ EOF;
     <?php Pjax::end();  ?>
 </div>
 <div>
-<?php  //echo $this->render('avail', ['model' => $model, 'available' => $available]) ?>
+<?php  echo $this->render('table', ['model' => $model]) ?>
 </div>

@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 use kartik\select2\Select2;
 use yii\helpers\ArrayHelper;
 use yii\web\JsExpression;
+use kartik\date\DatePicker;
 use wbraganca\dynamicform\DynamicFormWidget;
 use app\models\Clinic;
 /* @var $this yii\web\View */
@@ -78,8 +79,7 @@ $(document).ready(function(){
         <div>
             <?= $form->field($model,'photo')->fileInput(['data-filename-placement' => "inside", 'title' => Yii::t('app', 'الصورة'), 'onchange'=>'uploadImage(this)', 'data-target'=>'#stu-photo-prev'])->label(false) ?>
         </div>
-        <div class="hint col-xs-12 col-sm-12" style="color:red;padding-top:1px"><b> </b>&nbsp;<?php echo Yii::t('app', ' jpg jpeg png فقط صور على الامتدادات'); ?>
-        </div>
+        
     </div>
 
     

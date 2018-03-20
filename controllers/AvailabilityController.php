@@ -62,53 +62,53 @@ class AvailabilityController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
-        $model = new Availability();
+    // public function actionCreate()
+    // {
+    //     $model = new Availability();
 
-        if ($model->load(Yii::$app->request->post())) {
+    //     if ($model->load(Yii::$app->request->post())) {
 
-            $current = strtotime(date('Y-m-d'));
-            $last = strtotime('next month')
-            $i = 1;
-            $dates = array();
+    //         $current = strtotime(date('Y-m-d'));
+    //         $last = strtotime('next month')
+    //         $i = 1;
+    //         $dates = array();
 
-            while( $current <= $last) {
+    //         while( $current <= $last) {
 
-                $day = date('Y-m-d', $current);
-                $dayofweek = date('w', strtotime($day));
-                if (in_array($dayofweek, $days)) 
-                 {
-                    $dates[$i]['day']  = $dayofweek;
-                    $dates[$i]['date'] = date('Y-m-d', $current);
-                    $dates[$i]['start_time'] = $time[$dayofweek]['start'];
-                    $dates[$i]['end_time'] = $time[$dayofweek]['end'];    
-                    $i++;
-                 }
+    //             $day = date('Y-m-d', $current);
+    //             $dayofweek = date('w', strtotime($day));
+    //             if (in_array($dayofweek, $days)) 
+    //              {
+    //                 $dates[$i]['day']  = $dayofweek;
+    //                 $dates[$i]['date'] = date('Y-m-d', $current);
+    //                 $dates[$i]['start_time'] = $time[$dayofweek]['start'];
+    //                 $dates[$i]['end_time'] = $time[$dayofweek]['end'];    
+    //                 $i++;
+    //              }
 
-                $current = strtotime('+1 day', $current);
-            }
+    //             $current = strtotime('+1 day', $current);
+    //         }
 
             
-            foreach ($dates as $date => $v) {
-                // $cal = new Calender();
-                // $cal->sub_id = $v['sub_id'];
-                // $cal->day = $v['day'];
-                // $cal->date = $v['date'];
-                // $cal->start_time = $v['start_time'];
-                // $cal->end_time = $v['end_time'];
-                // $cal->save(false);
-            }
+    //         foreach ($dates as $date => $v) {
+    //             // $cal = new Calender();
+    //             // $cal->sub_id = $v['sub_id'];
+    //             // $cal->day = $v['day'];
+    //             // $cal->date = $v['date'];
+    //             // $cal->start_time = $v['start_time'];
+    //             // $cal->end_time = $v['end_time'];
+    //             // $cal->save(false);
+    //         }
 
 
-            $model->save();
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
+    //         $model->save();
+    //         return $this->redirect(['view', 'id' => $model->id]);
+    //     }
 
-        return $this->renderAjax('create', [
-            'model' => $model,
-        ]);
-    }
+    //     return $this->renderAjax('create', [
+    //         'model' => $model,
+    //     ]);
+    // }
 
     /**
      * Updates an existing Availability model.
