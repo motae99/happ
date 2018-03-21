@@ -27,6 +27,7 @@ if (Yii::$app->controller->action->id === 'login') {
     $directoryAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte/dist');
     ?>
     <?php $this->beginPage() ?>
+    <?php Yii::$app->language = 'ar' ?>
     <!DOCTYPE html>
     <html lang="<?= Yii::$app->language ?>"> 
     <head>

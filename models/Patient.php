@@ -93,6 +93,11 @@ class Patient extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getProvider()
+    {
+        return $this->hasOne(Insurance::className(), ['id' => 'insurance_id']);
+    }
+
     /**
      * {@inheritdoc}
      * @return PatientQuery the active query used by this AR class.
