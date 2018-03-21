@@ -64,7 +64,30 @@ class Appointment extends \yii\db\ActiveRecord
             'status' => Yii::t('app', 'Status'),
             'stat' => Yii::t('app', 'Stat'),
             'created_at' => Yii::t('app', 'Created At'),
+            'created_by' => Yii::t('app', 'Created At'),
+            'confirmed_at' => Yii::t('app', 'Created At'),
+            'confirmed_by' => Yii::t('app', 'Created At'),
+            'canceled_at' => Yii::t('app', 'Created At'),
+            'canceled_by' => Yii::t('app', 'Created At'),
         ];
+    }
+
+    public function getDoctor()
+    {
+        return $this->hasOne(Physician::className(), ['id' => 'physician_id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getClinic()
+    {
+        return $this->hasOne(Clinic::className(), ['id' => 'clinic_id']);
+    }
+
+    public function getPatient()
+    {
+        return $this->hasOne(Patient::className(), ['id' => 'patient_id']);
     }
 
     /**
