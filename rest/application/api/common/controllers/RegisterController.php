@@ -35,7 +35,7 @@ class RegisterController extends \api\components\ActiveController
     public function actionCreate(){
         // $user =  Yii::$app->user->identity;
         
-        $model = new Register();
+        // $model = new Register();
         $body = json_decode(Yii::$app->getRequest()->getRawBody(), true);
         if ($body['username'] && $body['password']) {
             $user = new User();
@@ -48,7 +48,7 @@ class RegisterController extends \api\components\ActiveController
                 return array('success' => 0);
             }
         }else{
-            return array('success' => 0, 'massege' => 'phone_no & password are required');
+            return array('success' => 0, 'massege' => 'username & password are required');
   
         }
         // if (isset($body['value']) && $body['value'] > 0 && is_integer($body['value'])) {
