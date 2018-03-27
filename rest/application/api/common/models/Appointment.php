@@ -24,6 +24,7 @@ class Appointment extends \api\components\db\ActiveRecord
             'date' => function($model) { return $model->calender->date; },
             'from_time' => function($model) { return $model->calender->start_time; },
             'to_time' => function($model) { return $model->calender->end_time; },
+            'queue' => function($model) { return $model->queue($model); },
             'status',
             'stat',
             'fee',
@@ -50,6 +51,15 @@ class Appointment extends \api\components\db\ActiveRecord
     public function getCalender()
     {
         return $this->hasOne(Calender::className(), ['id' => 'calender_id']);
+    }
+
+    public function Queue($model)
+    {
+        $count = Appointment::find()
+            ->where(['calender_id' => $model->calender_id])
+            ->andWhere(['<', 'confirmed_at', $model->confirmed_at])
+            ->count();
+        return $count;
     }
 
     public function getDoctor()

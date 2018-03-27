@@ -13,7 +13,7 @@ class MedicalController extends \api\components\ActiveController
     {
         return [
             [
-                'allow' => true,
+                'allow' => false,
                 'roles' => ['?'],
             ],
             // [

@@ -69,13 +69,14 @@ class Availability extends \yii\db\ActiveRecord
          ];
     }
 
+    public $duration ;
     public function rules()
     {
         return [
-            [[ 'clinic_id', 'date', 'from_time', 'to_time', 'appointment_fee', 'revisiting_fee', 'max'], 'required'],
+            [[ 'clinic_id', 'date', 'from_time', 'to_time', 'appointment_fee', 'revisiting_fee', 'max', 'duration'], 'required'],
             [['physician_id', 'clinic_id', 'max', 'created_by', 'updated_by'], 'integer'],
             [['date', 'from_time', 'to_time', 'created_at', 'updated_at'], 'safe'],
-            [['appointment_fee', 'revisiting_fee'], 'number'],
+            [['appointment_fee', 'revisiting_fee', 'duration'], 'number'],
             [['status'], 'string'],
             [['physician_id'], 'exist', 'skipOnError' => true, 'targetClass' => Physician::className(), 'targetAttribute' => ['physician_id' => 'id']],
             [['clinic_id'], 'exist', 'skipOnError' => true, 'targetClass' => Clinic::className(), 'targetAttribute' => ['clinic_id' => 'id']],
@@ -97,6 +98,7 @@ class Availability extends \yii\db\ActiveRecord
             'appointment_fee' => Yii::t('app', 'Appointment Fee'),
             'revisiting_fee' => Yii::t('app', 'Revisiting Fee'),
             'max' => Yii::t('app', 'Max'),
+            'duration' => Yii::t('app', 'duration'),
             'status' => Yii::t('app', 'Status'),
             'created_at' => Yii::t('app', 'Created At'),
             'created_by' => Yii::t('app', 'Created By'),

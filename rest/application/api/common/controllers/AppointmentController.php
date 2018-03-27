@@ -21,7 +21,7 @@ class AppointmentController extends \api\components\ActiveController
     {
         return [
             [
-                'allow' => true,
+                'allow' => false,
                 'roles' => ['?'],
             ],
             [
@@ -34,7 +34,7 @@ class AppointmentController extends \api\components\ActiveController
                     'reserve',
                     'all'
                 ],
-                'roles' => ['?'],
+                'roles' => ['@'],
             ],
             // [
             //     'allow' => true,
@@ -108,7 +108,8 @@ class AppointmentController extends \api\components\ActiveController
                 if ($already) {
                      return  array('success' => 0 , 'message' => 'already booked'); 
                 }
-                $availability = Availability::find($cal->availability_id)->one();
+                $availability = Availability::findOne($cal->availability_id);
+            // return  array('data' => $availability); 
                 
                 if ($availability && $insured) {
                     $insurance_available = InsuranceAcceptance::find()
@@ -128,7 +129,7 @@ class AppointmentController extends \api\components\ActiveController
                         $app->fee = $availability->appointment_fee;
                         $app->insured = 'yes';
                         $app->insured_fee = $insurance_available->patient_payment;
-                        // $app->created_at = new \yii\db\Expression('NOW()');
+                        $app->created_at = new Expression('NOW()');
                         $app->status = 'booked';
                         $app->stat = 'schadueled';
                         $app->save(false);
@@ -139,7 +140,7 @@ class AppointmentController extends \api\components\ActiveController
                       return  array('success' => 0 , 'message' => 'message your insurance is not supported'); 
                     }
 
-                }else{
+                }elseif($availability){
                    // book an appointment with no insurance
                     $app = new Appointment();
                     $app->user_id= 1;

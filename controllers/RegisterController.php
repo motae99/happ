@@ -56,6 +56,22 @@ class RegisterController extends Controller
         $model->save(false);
         return $this->redirect(['index']);
     }
+
+    public function actionProccess($id)
+    {   
+        $model = Appointment::findOne($id);
+        $model->stat = 'processing';
+        $model->save(false);
+        return $this->redirect(['index']);
+    }
+
+    public function actionFinish($id)
+    {   
+        $model = Appointment::findOne($id);
+        $model->stat = 'done';
+        $model->save(false);
+        return $this->redirect(['index']);
+    }
     /**
      * Displays a single Drugs model.
      * @param integer $id

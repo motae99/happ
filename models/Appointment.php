@@ -77,6 +77,12 @@ class Appointment extends \yii\db\ActiveRecord
         return $this->hasOne(Physician::className(), ['id' => 'physician_id']);
     }
 
+     public function insu($av)
+    {   
+        $accept = InsuranceAcceptance::find()->where(['availability_id' => $av])->one();
+        return $accept;
+    }
+
     /**
      * @return \yii\db\ActiveQuery
      */

@@ -74,10 +74,10 @@ use wbraganca\dynamicform\DynamicFormWidget;
     </div>
 
     <div class="row">
-        <div class="col-lg-4">
+        <div class="col-lg-3">
             <?= $form->field($available, "date")->widget(Select2::classname(), 
                 [
-                    'data' =>['sat' => Yii::t('app', 'السبت') , 'sun' => Yii::t('app', 'الأحد'), 'mon' => Yii::t('app', 'الأثنثن'), 'tue' => Yii::t('app', 'الثﻻثاء'), 'wen' => Yii::t('app', 'الأربعاء'), 'the' => Yii::t('app', 'الخميس'), 'fri' => Yii::t('app', 'الجمعة')],
+                    'data' =>[6 => Yii::t('app', 'السبت') , 0 => Yii::t('app', 'الأحد'), 1 => Yii::t('app', 'الأثنثن'), 2 => Yii::t('app', 'الثﻻثاء'), 3 => Yii::t('app', 'الأربعاء'), 4 => Yii::t('app', 'الخميس'), 5 => Yii::t('app', 'الجمعة')],
                     'language' => 'ar',
                     'options' => ['multiple' => true, 'placeholder' => 'أيام العمل ...'],
                     'pluginOptions' => [
@@ -88,7 +88,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
             ?>
         </div>
     
-        <div class="col-lg-4">
+        <div class="col-lg-3">
             <?= $form->field($available, 'from_time') ->textInput(
                                 [   
                                     'class' => 'design',
@@ -99,12 +99,20 @@ use wbraganca\dynamicform\DynamicFormWidget;
             ?>
 
         </div>
-        <div class="col-lg-4">
+        <div class="col-lg-3">
             <?= $form->field($available, 'to_time') ->textInput(
                                 [   
                                     'class' => 'design',
                                     'readonly' => True,
                                     'value'=> $end
+                                ])
+                            ->label(false);
+            ?>
+        </div>
+        <div class="col-lg-3">
+            <?= $form->field($available, 'duration') ->textInput(
+                                [   
+                                    'placeholder' => 'فترة المقابلة',
                                 ])
                             ->label(false);
             ?>

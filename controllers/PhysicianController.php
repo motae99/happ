@@ -14,6 +14,7 @@ use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use yii\db\Query;
 use app\models\Calender;
+use app\models\Schedule;
 
 /**
  * PhysicianController implements the CRUD actions for Physician model.
@@ -156,7 +157,7 @@ class PhysicianController extends Controller
         ]);
     }
 
-    public function actionAvailability($id, $start=NULL,$end=NULL)
+    public function actionAdd($id)
     {   
         $model = $this->findModel($id);
         $available = new Availability;
@@ -169,19 +170,19 @@ class PhysicianController extends Controller
             $dates = array();
             $days = "";
             foreach ($available->date as $working) {
-                if ($working == 'sat') {
+                if ($working == 6) {
                     $days .= "السبت | " ;
-                }elseif ($working == 'sun') {
+                }elseif ($working == 0) {
                     $days .= "الأحد | " ;
-                }elseif ($working == 'mon') {
+                }elseif ($working == 1) {
                     $days .= "الأثنين | " ;
-                }elseif ($working == 'tue') {
+                }elseif ($working == 2) {
                     $days .= "الثﻻثاء | " ;
-                }elseif ($working == 'wen') {
+                }elseif ($working == 3) {
                     $days .= "الأربعاء | " ;
-                }elseif ($working == 'the') {
+                }elseif ($working == 4) {
                     $days .= "الخميس | " ;
-                }elseif ($working == 'fri') {
+                }elseif ($working == 5) {
                     $days .= "الجمعه | " ;
                 }
                 
@@ -201,7 +202,9 @@ class PhysicianController extends Controller
                  }
 
                 $current = strtotime('+1 day', $current);
+                // echo date('w', strtotime("2018-03-25"));
             }
+                
             $available->physician_id = $model->id;
             $available->date = $days;
             
@@ -240,6 +243,137 @@ class PhysicianController extends Controller
                              }
 
                         }
+                     }
+                     if ($flag) {
+                         $transaction->commit();
+                        return $this->redirect(['view', 'id' => $model->id]);
+                     }
+                 } catch (Exception $e) {
+                     $transaction->rollBack();
+                 }
+             }
+           
+            
+
+            return $this->redirect(['index']);
+
+        }
+        return $this->renderAjax('avail', [
+            'model' => $model,
+            'start' => $start,
+            'end' => $end,
+            'available' => $available,
+            'insurance' => (empty($insurance)) ? [new InsuranceAcceptance] : $insurance,
+
+        ]);
+    }
+
+    public function actionAvailability($id, $start=NULL,$end=NULL)
+    {   
+        $model = $this->findModel($id);
+        $available = new Availability;
+        $insurance = [new InsuranceAcceptance];
+
+        if ($available->load(Yii::$app->request->post())) {
+            $current = strtotime(date('Y-m-d'));
+            $last = strtotime('next month');
+            $i = 1;
+            $dates = array();
+            $days = "";
+            foreach ($available->date as $working) {
+                if ($working == 6) {
+                    $days .= "السبت | " ;
+                }elseif ($working == 0) {
+                    $days .= "الأحد | " ;
+                }elseif ($working == 1) {
+                    $days .= "الأثنين | " ;
+                }elseif ($working == 2) {
+                    $days .= "الثﻻثاء | " ;
+                }elseif ($working == 3) {
+                    $days .= "الأربعاء | " ;
+                }elseif ($working == 4) {
+                    $days .= "الخميس | " ;
+                }elseif ($working == 5) {
+                    $days .= "الجمعه | " ;
+                }
+                
+            }
+            
+            while( $current <= $last) {
+
+                $day = date('Y-m-d', $current);
+
+                $dayofweek = date('w', strtotime($day));
+
+                if (in_array($dayofweek, $available->date)) 
+                 {
+                    $dates[$i]['day']  = $dayofweek;
+                    $dates[$i]['date'] = date('Y-m-d', $current);
+                    $i++;
+                 }
+
+                $current = strtotime('+1 day', $current);
+            }
+            $available->physician_id = $model->id;
+            $available->date = $days;
+            $duration = $available->duration;
+            
+            $insurance = Model::createMultiple(InsuranceAcceptance::classname());
+            Model::loadMultiple($insurance, Yii::$app->request->post());
+            $valid = $available->validate();
+            // $valid = Model::validateMultiple($insurance) && $valid;
+             if ($valid) {
+                 $transaction = \Yii::$app->db->beginTransaction();
+                 try {
+                     if ($flag = $available->save(false) ) {
+                         foreach ($insurance as $ins) {
+                             $ins->availability_id = $available->id;
+                             $ins->physician_id = $available->physician_id;
+                             $ins->clinic_id = $available->clinic_id;
+                             if (! ($flag = $ins->save(false))) {
+                                 $transaction->rollBack();
+                                 break;
+                             }
+                         }
+
+                        foreach ($dates as $date => $v) {
+                            $cal = new Calender();
+                            $cal->availability_id = $available->id;
+                            $cal->physician_id = $available->physician_id;
+                            $cal->clinic_id = $available->clinic_id;
+                            $cal->day = $v['day'];
+                            $cal->date = $v['date'];
+                            $cal->start_time = date("H:i", strtotime($available->from_time));
+                            $cal->end_time = date("H:i", strtotime($available->to_time));
+                            // print_r($cal);
+                            // die();
+                            if (! ($flag = $cal->save(false))) {
+                                 $transaction->rollBack();
+                                 break;
+                            }else{
+                              
+                              $start = strtotime($cal->start_time);
+                              $end = strtotime($cal->end_time);
+                              $i=1; 
+                              while ($start <= $end && $i <= $available->max ) {
+                                $schedule = new Schedule();
+                                $schedule->calender_id = $cal->id;
+                                $schedule->schedule_time = date("H:i",strtotime('+'.$duration.' minutes',$start));
+                                $schedule->queue = $i;
+                                $schedule->status = 'available';
+                                $schedule->save(false);
+                                $start = strtotime($schedule->schedule_time);
+                                $i++;
+                               
+                              }
+
+                             
+                            }
+
+                        }
+
+
+
                      }
                      if ($flag) {
                          $transaction->commit();
