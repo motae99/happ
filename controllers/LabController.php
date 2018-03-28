@@ -7,6 +7,7 @@ use app\models\Lab;
 use app\models\LabSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
 use yii\filters\VerbFilter;
 
 /**
@@ -66,7 +67,23 @@ class LabController extends Controller
     {
         $model = new Lab();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post())) {
+            $working_days = $_POST['Lab']['working_days'];
+            $start = $_POST['Lab']['from_hour'];
+            $end = $_POST['Lab']['to_hour'];
+                $days = "";
+            foreach ($working_days as $d) {
+                // echo $d."<br>";
+                $days .= $d." | ";
+                # code...
+            }
+            $model->working_days = $days;
+            $model->photo = UploadedFile::getInstance($model,'photo');
+            $model->photo->saveAs(Yii::$app->basePath.'/web/img/' .$model->photo.$model->id);
+            $model->from_hour = date("H:i", strtotime($start));
+            $model->to_hour = date("H:i", strtotime($end));
+            $model->save(false);
+            // echo $model->working_days;
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

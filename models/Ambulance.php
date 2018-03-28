@@ -29,7 +29,7 @@ class Ambulance extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
+            [['name', 'working_hourse', 'address'], 'required'],
             [['address', 'rate', 'working_hourse'], 'string'],
             [['name'], 'string', 'max' => 45],
         ];

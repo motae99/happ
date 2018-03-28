@@ -12,16 +12,14 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'placeholder'=> "أسم الشركة"])->label(false) ?>
 
-    <?= $form->field($model, 'address')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'address')->textarea(['rows' => 2, 'placeholder'=> "العنوان"])->label(false) ?>
 
-    <?= $form->field($model, 'rate')->textarea(['rows' => 6]) ?>
-
-    <?= $form->field($model, 'working_hourse')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'working_hourse')->textarea(['rows' => 1, 'placeholder'=> "ساعات العمل"])->label(false) ?>
 
     <div class="form-group">
-        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-success']) ?>
+        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-block btn-success']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

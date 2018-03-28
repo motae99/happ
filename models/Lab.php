@@ -3,7 +3,9 @@
 namespace app\models;
 
 use Yii;
-
+use yii\db\ActiveRecord;
+use yii\behaviors\SluggableBehavior;
+use yii\behaviors\BlameableBehavior;
 /**
  * This is the model class for table "lab".
  *
@@ -39,13 +41,38 @@ class Lab extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+    public function behaviors()
+    {
+         return [
+             // [
+             //     'class' => SluggableBehavior::className(),
+             //     'attribute' => 'message',
+             //     'immutable' => true,
+             //     'ensureUnique'=>true,
+             // ],
+             [
+                 'class' => BlameableBehavior::className(),
+                 'createdByAttribute' => 'created_by',
+                 'updatedByAttribute' => 'updated_by',
+             ],
+             'timestamp' => [
+                 'class' => 'yii\behaviors\TimestampBehavior',
+                 'attributes' => [
+                     ActiveRecord::EVENT_BEFORE_INSERT => ['created_at'],
+                     ActiveRecord::EVENT_BEFORE_UPDATE => ['updated_at'],
+                 ],
+                 'value' => date('Y-m-d H:i:s'),
+             ],
+         ];
+    }
+
     public function rules()
     {
         return [
-            [['name', 'state', 'city', 'address', 'working_days', 'from_hour', 'to_hour', 'logitude', 'latitude', 'phone', 'rate', 'created_at', 'created_by'], 'required'],
-            [['address', 'working_days', 'logitude', 'latitude', 'photo'], 'string'],
-            [['from_hour', 'created_at', 'updated_at'], 'safe'],
-            [['to_hour', 'phone', 'secondary_phone', 'rate', 'created_by', 'updated_by'], 'integer'],
+            [['name', 'state', 'city', 'address', 'working_days', 'from_hour', 'to_hour', 'logitude', 'latitude', 'phone'], 'required'],
+            [['address', 'logitude', 'latitude', 'photo'], 'string'],
+            [['from_hour', 'to_hour','created_at', 'updated_at'], 'safe'],
+            [['phone', 'secondary_phone', 'rate'], 'integer'],
             [['name', 'state', 'city'], 'string', 'max' => 45],
         ];
     }
