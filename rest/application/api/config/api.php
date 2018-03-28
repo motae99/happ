@@ -13,7 +13,7 @@ return [
 				'POST /oauth2/<action:\w+>' => 'oauth2/default/<action>',
 				[
 					'class' => 'yii\rest\UrlRule',
-					'controller' => ['v1/medical', 'v1/physicain', 'v1/register'],
+					'controller' => ['v1/medical', 'v1/lab', 'v1/ambulance', 'v1/pharmacy', 'v1/insurance','v1/physicain', 'v1/register'],
 					// 'extraPatterns' => [
 					// 	'GET accept/<id>' => 'accept',
 					// 	'GET reject/<id>' => 'reject',
