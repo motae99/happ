@@ -155,10 +155,9 @@ use wbraganca\dynamicform\DynamicFormWidget;
     <table class="table table-bordered">
         <thead>
             <tr>
-                <th>Insurances</th>
-                <th>patient_payment</th>
-                <th>insurance_refund</th>
-                <th>contract_expiry</th>            
+                <th>مقدم الخدمة</th>
+                <th>رسوم المريض</th>
+                <th>مستحق الطبيب</th>
                 <th class="text-center">
                     <button type="button" class="add-item btn btn-success btn-xs"><span class="glyphicon glyphicon-plus"></span></button>
                 </th>
@@ -185,19 +184,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
                 <td>
                     <?= $form->field($ins, "[{$i}]insurance_refund")->label(false)->textInput(['maxlength' => true]) ?>
                 </td>
-                <td>
-                    <?= $form->field($ins, "[{$i}]contract_expiry")->widget(DatePicker::classname(), 
-                        [
-                            // 'type' => DatePicker::TYPE_INPUT,
-                            'options' => ['placeholder' => Yii::t('app', 'تاريخ نهاية العقد')],
-                            'pluginOptions' => [
-                                'format' => 'yyyy-mm-dd',
-                                'todayHighlight' => true
-                            ]    
-                        ])
-                    ->label(false); ?>
-                </td>
-
+               
                 <td class="text-center vcenter" style="width: 90px;">
 
                     <button type="button" class="remove-item btn btn-danger btn-xs"><span class="glyphicon glyphicon-minus"></span></button>
