@@ -18,6 +18,9 @@ $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Physicians'), 'url' 
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
+<div>
+  <h1></h1>
+</div>
 
 <?php 
 $AEurl = Url::to(["availability", "id" => $model->id]);

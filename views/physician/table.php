@@ -365,11 +365,11 @@ use yii\data\ActiveDataProvider;
             'floatHeader' => true,
            // 'floatHeaderOptions' => ['scrollingTop' => $scrollingTop],
             'showPageSummary' => true,
-            'panel' => [
-                'type' => GridView::TYPE_INFO,
-                'heading' => '<i class="fa  fa-hospital-o"></i><strong>       Stock</strong>',
+            // 'panel' => [
+            //     'type' => GridView::TYPE_INFO,
+            //     'heading' => '<i class="fa  fa-hospital-o"></i><strong>       Stock</strong>',
 
-            ],
+            // ],
             
         ]); ?>
 
