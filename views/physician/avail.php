@@ -18,7 +18,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 /* @var $model app\models\Physician */
 
 ?>
-<!-- <div class="col-lg-12" -->
+<!-- <div class=" eArLangCss col-lg-12" -->
 
 <?php $fetch = Url::to(['physician/clinic']);?>
 
@@ -29,8 +29,9 @@ use wbraganca\dynamicform\DynamicFormWidget;
             'action' => Url::to(['physician/availability', 'id'=> $model->id]),
             
         ]); ?>
+<div class="col-lg-12">
     <div class="row">
-    <div class="col-lg-6">
+    <div class=" eArLangCss col-lg-6">
         <?= $form->field($available, 'clinic_id')
                 // ->dropDownList(
                 //     ArrayHelper::map(Clinic::find()->all(), 'id', 'name'),
@@ -62,19 +63,19 @@ use wbraganca\dynamicform\DynamicFormWidget;
         ?>
 
     </div>
-    <div class="col-lg-2">
+    <div class=" eArLangCss col-lg-2">
         <?= $form->field($available, 'appointment_fee')->textInput(['maxlength' => true, 'placeholder' => 'رسوم الحجز'])->label(false); ?>
     </div>
-    <div class="col-lg-2">
+    <div class=" eArLangCss col-lg-2">
         <?= $form->field($available, 'revisiting_fee')->textInput(['maxlength' => true, 'placeholder' => 'رسوم المتابعة'])->label(false); ?>
     </div>
-    <div class="col-lg-2">
+    <div class=" eArLangCss col-lg-2">
         <?= $form->field($available, 'max')->textInput(['placeholder' => 'عدد المقابﻻت'])->label(false); ?>
     </div>
     </div>
 
     <div class="row">
-        <div class="col-lg-3">
+        <div class=" eArLangCss col-lg-3">
             <?= $form->field($available, "date")->widget(Select2::classname(), 
                 [
                     'data' =>[6 => Yii::t('app', 'السبت') , 0 => Yii::t('app', 'الأحد'), 1 => Yii::t('app', 'الأثنثن'), 2 => Yii::t('app', 'الثﻻثاء'), 3 => Yii::t('app', 'الأربعاء'), 4 => Yii::t('app', 'الخميس'), 5 => Yii::t('app', 'الجمعة')],
@@ -88,7 +89,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
             ?>
         </div>
     
-        <div class="col-lg-3">
+        <div class=" eArLangCss col-lg-3">
             <?= $form->field($available, 'from_time') ->textInput(
                                 [   
                                     'class' => 'design',
@@ -99,7 +100,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
             ?>
 
         </div>
-        <div class="col-lg-3">
+        <div class=" eArLangCss col-lg-3">
             <?= $form->field($available, 'to_time') ->textInput(
                                 [   
                                     'class' => 'design',
@@ -109,7 +110,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
                             ->label(false);
             ?>
         </div>
-        <div class="col-lg-3">
+        <div class=" eArLangCss col-lg-3">
             <?= $form->field($available, 'duration') ->textInput(
                                 [   
                                     'placeholder' => 'فترة المقابلة',
@@ -214,4 +215,4 @@ use wbraganca\dynamicform\DynamicFormWidget;
     <?php ActiveForm::end(); ?>
 
 </div>
-<!-- </div> -->
+</div>
