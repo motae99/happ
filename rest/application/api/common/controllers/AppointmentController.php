@@ -21,7 +21,7 @@ class AppointmentController extends \api\components\ActiveController
     {
         return [
             [
-                'allow' => false,
+                'allow' => true,
                 'roles' => ['?'],
             ],
             [

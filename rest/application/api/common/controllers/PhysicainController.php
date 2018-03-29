@@ -15,7 +15,7 @@ class PhysicainController extends \api\components\ActiveController
         return [
             [
                 'allow' => true,
-                'roles' => ['@'],
+                'roles' => ['?'],
             ],
            
         ];
