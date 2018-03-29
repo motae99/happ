@@ -3,6 +3,11 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use kartik\grid\GridView;
 use yii\data\ActiveDataProvider;
+
+
+$this->title = Yii::t('app', 'Register');
+$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 
   <?php 

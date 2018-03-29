@@ -63,7 +63,7 @@ class InsuranceAcceptance extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['insurance_id', 'patient_payment', 'clinic_id', 'physician_id','insurance_refund', 'contract_expiry' ], 'required'],
+            [['insurance_id', 'patient_payment', 'clinic_id', 'physician_id','insurance_refund' ], 'required'],
             [['availability_id', 'insurance_id', 'created_by', 'updated_by'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
             [['availability_id'], 'exist', 'skipOnError' => true, 'targetClass' => Availability::className(), 'targetAttribute' => ['availability_id' => 'id']],

@@ -60,9 +60,9 @@ $(document).ready(function(){
     
     <?= $form->field($model, 'address')->textarea(['rows' => 2, 'placeholder' => Yii::t('app', 'العنوان')])->label(false) ?>
 
-    <?= $form->field($model, 'phone')->textInput([ 'placeholder' => Yii::t('app', 'تلفون ')])->label(false) ?>
+    <?= $form->field($model, 'phone')->textInput(['type' => 'number', 'max' => 9999999999, 'placeholder' => Yii::t('app', 'تلفون ')])->label(false) ?>
 
-    <?= $form->field($model, 'secondary_phone')->textInput([ 'placeholder' => Yii::t('app', 'تلفون ')])->label(false) ?>
+    <?= $form->field($model, 'secondary_phone')->textInput(['type' => 'number', 'max' => 9999999999, 'placeholder' => Yii::t('app', 'تلفون ')])->label(false) ?>
 
 
      <?= $form->field($model, "working_days")->widget(Select2::classname(), 

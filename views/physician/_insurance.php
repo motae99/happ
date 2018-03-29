@@ -45,7 +45,6 @@ use wbraganca\dynamicform\DynamicFormWidget;
             <th>Insurances</th>
             <th>patient_payment</th>
             <th>insurance_refund</th>
-            <th>contract_expiry</th>            
             <th class="text-center">
                 <button type="button" class="add-insurance btn btn-success btn-xs"><span class="glyphicon glyphicon-plus"></span></button>
             </th>
@@ -71,9 +70,6 @@ use wbraganca\dynamicform\DynamicFormWidget;
             </td>
             <td>
                 <?= $form->field($ins, "[{$i}]insurance_refund")->label(false)->textInput(['maxlength' => true]) ?>
-            </td>
-            <td>
-                <?= $form->field($ins, "[{$i}]contract_expiry")->label(false)->textInput(['maxlength' => true]) ?>
             </td>
 
             <td class="text-center vcenter" style="width: 90px;">

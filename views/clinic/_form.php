@@ -53,7 +53,7 @@ $(document).ready(function(){
     <?php $form = ActiveForm::begin(); ?>
 <div class="row">
     <div class="col-lg-6">
-    <?= $form->field($model, 'type')->dropDownList(['مستشفى خاص' => Yii::t('app', 'مستشفى خاص'), 'مستشفى حكومي' => Yii::t('app', 'مستشفى حكومي'), 'مستوصف' => Yii::t('app', 'مستوصف'), 'عيادة' => Yii::t('app', 'عيادة'), 'مركز صحي' => Yii::t('app', 'مركز صحي'), 'مستشفىات دولية العﻻج' => Yii::t('app', 'مستشفىات دولية العﻻج'), 'العﻻج الطبيعي' => Yii::t('app', 'العﻻج الطبيعي'), 'مجمعات طبية' => Yii::t('app', 'مجمعات طبية'), 'الأسنان' => Yii::t('app', 'الأسنان'), 'البصريات' => Yii::t('app', 'البصريات')], ['prompt' => Yii::t('app', 'اختار نوع المؤسسه ')])->label(false); ?>
+    <?= $form->field($model, 'type')->dropDownList(['مستشفى خاص' => Yii::t('app', 'مستشفى خاص'), 'مستشفى حكومي' => Yii::t('app', 'مستشفى حكومي'), 'مستوصف' => Yii::t('app', 'مستوصف'), 'عيادة' => Yii::t('app', 'عيادة'), 'مركز صحي' => Yii::t('app', 'مركز صحي'), 'مستشفىات دولية العﻻج' => Yii::t('app', 'مستشفىات دولية العﻻج'), 'العﻻج الطبيعي' => Yii::t('app', 'العﻻج الطبيعي'), 'مجمعات طبية' => Yii::t('app', 'مجمعات طبية'), 'الأسنان' => Yii::t('app', 'الأسنان'), 'البصريات' => Yii::t('app', 'البصريات'), 'مؤسسة طبية عسكرية' => Yii::t('app', 'مؤسسة طبية عسكرية')], ['prompt' => Yii::t('app', 'اختار نوع المؤسسه '), 'مؤسسات صحية عسكرية' => Yii::t('app', 'مؤسسات صحية عسكرية'),])->label(false); ?>
     </div>
     <div class="col-lg-6">
     <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'الأسم')])->label(false) ?>
@@ -70,17 +70,18 @@ $(document).ready(function(){
 
     <?= $form->field($model, 'manager')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'المدير الطبي')])->label(false) ?>
 
-    <?= $form->field($model, 'primary_contact')->textInput([ 'placeholder' => Yii::t('app', 'تلفون المؤسسه')])->label(false) ?>
-
-    <?= $form->field($model, 'secondary_contact')->textInput(['placeholder'=> Yii::t('app', 'تلفون اضافي')])->label(false) ?>
+    <?= $form->field($model, 'primary_contact')->textInput(['type' => 'number', 'max' => 9999999999,'placeholder' => Yii::t('app', 'تلفون المؤسسه')])->label(false) ?>
     
-    <?= $form->field($model, 'fax')->textInput(['placeholder'=> Yii::t('app', 'رقم الفاكس')])->label(false) ?>
+    <?= $form->field($model, 'secondary_contact')->textInput(['type' => 'number', 'max' => 9999999999,'placeholder' => Yii::t('app', 'تلفون المؤسسه')])->label(false) ?>
+
+    
+    <?= $form->field($model, 'fax')->textInput(['type' => 'number', 'max' => 9999999999, 'placeholder'=> Yii::t('app', 'رقم الفاكس')])->label(false) ?>
     
     <?= $form->field($model, 'email')->textInput(['placeholder'=> Yii::t('app', 'الموقع الالكتروني')])->label(false) ?>
 
     <?= $form->field($model, "working_days")->widget(Select2::classname(), 
         [
-            'data' =>['sat' => Yii::t('app', 'Saterday') ,'sun' => Yii::t('app', 'Sunday'), 'mon' => Yii::t('app', 'Monday'), 'tue' => Yii::t('app', 'Tuseday'), 'wen' => Yii::t('app', 'Wensday'), 'thu' => Yii::t('app', 'Thursday'), 'fri' => Yii::t('app', 'Friday')],
+            'data' =>['السبت' => Yii::t('app', 'السبت') ,'الأحد' => Yii::t('app', 'الأحد'), 'الأثنين' => Yii::t('app', 'الأثنين'), 'الثﻻثاء' => Yii::t('app', 'الثﻻثاء'), 'الأربعاء' => Yii::t('app', 'الأربعاء'), 'الخميس' => Yii::t('app', 'الخميس'), 'الجمعة' => Yii::t('app', 'الجمعة')],
             // 'language' => 'de',
             'options' => ['multiple' => true, 'placeholder' => 'أختار ايام العمل ...'],
             'pluginOptions' => [

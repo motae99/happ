@@ -80,16 +80,21 @@ class ClinicController extends Controller
                 $days = "";
             foreach ($working_days as $d) {
                 // echo $d."<br>";
-                $days .= $d." | ";
+                $days .= $d." ";
                 # code...
             }
             $model->working_days = $days;
             $model->photo = UploadedFile::getInstance($model,'photo');
+            $model->primary_contact = $_POST['Clinic']['primary_contact'];
+            $model->secondary_contact = $_POST['Clinic']['secondary_contact'];
             $model->photo->saveAs(Yii::$app->basePath.'/web/img/' .$model->photo.$model->id);
             $model->start = date("H:i", strtotime($start));
+            $model->end = date("H:i", strtotime($end));
             $model->special_services = $_POST['Clinic']['special_services'];
             $model->app_service = $_POST['Clinic']['app_service'];
-            $model->save(false);
+            // print_r($model);
+            // die();
+            $model->save();
             // echo $model->working_days;
             return $this->redirect(['view', 'id' => $model->id]);
         }

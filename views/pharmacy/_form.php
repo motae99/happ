@@ -23,7 +23,7 @@ use kartik\time\TimePicker;
 
     <?= $form->field($model, 'address')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'phone')->textInput() ?>
+    <?= $form->field($model, 'phone')->textInput(['type' => 'number', 'max' => 9999999999,]) ?>
 
     <?= $form->field($model, 'owner_name')->textInput(['placeholder' => 'أسم صاحب الرخصة'])->label(false) ?>
 

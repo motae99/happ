@@ -59,7 +59,7 @@ $(document).ready(function(){
             <?= $form->field($model, 'name')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'الأسم')])->label(false) ?>
         </div>
         <div class="col-lg-4">
-            <?= $form->field($model, 'contact_no')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'رقم الهاتف')])->label(false) ?>
+            <?= $form->field($model, 'contact_no')->textInput(['type' => 'number', 'max' => 9999999999, 'placeholder' => Yii::t('app', 'رقم الهاتف')])->label(false) ?>
         </div>
         <div class="col-lg-12">
             <?= $form->field($model, 'email')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'البريد الالكتروني')])->label(false) ?>

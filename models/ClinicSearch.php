@@ -18,8 +18,8 @@ class ClinicSearch extends Clinic
     public function rules()
     {
         return [
-            [['id', 'primary_contact', 'secondary_contact', 'created_by', 'updated_by'], 'integer'],
-            [['name', 'state', 'city', 'address', 'longitude', 'latitude', 'type', 'created_at', 'updated_at'], 'safe'],
+            [['id', 'primary_contact', 'secondary_contact'], 'integer'],
+            [['name', 'state', 'city', 'address', 'working_days','longitude', 'latitude', 'type', 'created_at', 'updated_at'], 'safe'],
         ];
     }
 
@@ -47,7 +47,10 @@ class ClinicSearch extends Clinic
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> ['defaultOrder' => ['city'=>SORT_DESC,'type'=>SORT_DESC]],
         ]);
+
+
 
         $this->load($params);
 
@@ -60,7 +63,7 @@ class ClinicSearch extends Clinic
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'primary_contact' => $this->primary_contact,
+            // 'primary_contact' => $this->primary_contact,
             'secondary_contact' => $this->secondary_contact,
             'created_at' => $this->created_at,
             'created_by' => $this->created_by,
@@ -69,12 +72,14 @@ class ClinicSearch extends Clinic
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'primary_contact', $this->primary_contact])
             ->andFilterWhere(['like', 'state', $this->state])
             ->andFilterWhere(['like', 'city', $this->city])
             ->andFilterWhere(['like', 'address', $this->address])
+            ->andFilterWhere(['like', 'working_days', $this->working_days])
             ->andFilterWhere(['like', 'longitude', $this->longitude])
-            ->andFilterWhere(['like', 'latitude', $this->latitude]);
-            // ->andFilterWhere(['like', 'type', $this->is_clinic]);
+            ->andFilterWhere(['like', 'latitude', $this->latitude])
+            ->andFilterWhere(['like', 'type', $this->type]);
 
         return $dataProvider;
     }

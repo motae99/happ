@@ -75,8 +75,8 @@ class Clinic extends \yii\db\ActiveRecord
             [['primary_contact', 'secondary_contact', 'created_by', 'updated_by', 'fax'], 'integer'],
             [['created_at', 'updated_at', 'start', 'end', 'info', 'email', 'fax', 'color'], 'safe'],
             [['name', 'state', 'city'], 'string', 'max' => 45],
-            [['primary_contact'], 'unique'],
-            [['secondary_contact'], 'unique'],
+            // [['primary_contact'], 'unique'],
+            // [['secondary_contact'], 'unique'],
         ];
     }
 
