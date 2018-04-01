@@ -88,7 +88,7 @@ class AppointmentController extends \api\components\ActiveController
                 $patient->contact_no = $phone_no;
                 //fix later
                 // $patient->created_at = new Expression('NOW()');
-                $patient->created_by = $user_id;
+                $patient->created_by = $user->id;
 
                 if ($insured) {
                     $patient->has_insurance = 1;
