@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Clinic;
+use app\models\Specialization;
 use app\models\ClinicSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -43,6 +44,23 @@ class ClinicController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionSpecial($id)
+    {
+        $model = $this->findModel($id);
+        $special = new Specialization();
+
+        if ($special->load(Yii::$app->request->post())) {
+            $special->clinic_id = $id;
+            $special->save();
+            return $this->redirect(['view', 'id' => $id]);
+        }
+
+        return $this->renderAjax('special', [
+            'special' => $special,
+            'model' => $model
         ]);
     }
 

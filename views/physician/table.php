@@ -362,7 +362,7 @@ use yii\data\ActiveDataProvider;
             'responsive' => true,
             'responsiveWrap' => true,
             'hover' => true,
-            'floatHeader' => true,
+            // 'floatHeader' => true,
            // 'floatHeaderOptions' => ['scrollingTop' => $scrollingTop],
             'showPageSummary' => true,
             // 'panel' => [

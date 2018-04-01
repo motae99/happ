@@ -94,6 +94,11 @@ class Specialization extends \yii\db\ActiveRecord
         return $this->hasOne(Clinic::className(), ['id' => 'clinic_id']);
     }
 
+     public function getDoctor()
+    {
+        return $this->hasOne(Physician::className(), ['id' => 'physician_id']);
+    }
+
     /**
      * {@inheritdoc}
      * @return SpecializationQuery the active query used by this AR class.

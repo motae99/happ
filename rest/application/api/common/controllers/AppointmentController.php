@@ -22,17 +22,19 @@ class AppointmentController extends \api\components\ActiveController
         return [
             [
                 'allow' => true,
+                'actions' => [
+                    'index',
+                    'update',
+                    'all'
+                ],
                 'roles' => ['?'],
             ],
             [
                 'allow' => true,
                 'actions' => [
                     'view',
-                    'index',
-                    'update',
                     'booking',
                     'reserve',
-                    'all'
                 ],
                 'roles' => ['@'],
             ],
@@ -54,6 +56,7 @@ class AppointmentController extends \api\components\ActiveController
     }
 
     public function actionBooking(){
+        $user =  Yii::$app->user->identity;
         $body = json_decode(Yii::$app->getRequest()->getRawBody(), true);
         // $model->load($body, '');
         // print_r($body);
@@ -83,6 +86,7 @@ class AppointmentController extends \api\components\ActiveController
                 $patient = new Patient();
                 $patient->name = $name;
                 $patient->contact_no = $phone_no;
+                $patient->created_at = new Expression('NOW()');
                 if ($insured) {
                     $patient->has_insurance = 1;
                     $patient->insurance_id = $insurance_id;
@@ -120,7 +124,7 @@ class AppointmentController extends \api\components\ActiveController
                     if ($insurance_available) {
                       // book an appointment with insurance discount 
                         $app = new Appointment();
-                        $app->user_id= 1;
+                        $app->user_id= $user->id;
                         $app->patient_id= $patient->id;
                         $app->clinic_id= $clinic_id;
                         $app->physician_id= $doctor_id;
@@ -143,7 +147,7 @@ class AppointmentController extends \api\components\ActiveController
                 }elseif($availability){
                    // book an appointment with no insurance
                     $app = new Appointment();
-                    $app->user_id= 1;
+                    $app->user_id= $user->id;
                     $app->patient_id= $patient->id;
                     $app->clinic_id= $clinic_id;
                     $app->physician_id= $doctor_id;
@@ -171,7 +175,8 @@ class AppointmentController extends \api\components\ActiveController
     }
 
     public function actionReserve(){
-        $reserve = Appointment::find()->where(['user_id' => 1])->all();
+        $user =  Yii::$app->user->identity;
+        $reserve = Appointment::find()->where(['user_id' => $user->id])->all();
         return  array('reservations' => $reserve);
 
     }
