@@ -34,11 +34,11 @@
                     // ['label' => 'Gii', 'icon' => 'file-code-o', 'url' => ['/gii']],
                     // ['label' => 'Debug', 'icon' => 'dashboard', 'url' => ['/debug']],
                     // ['label' => 'Login', 'url' => ['site/login'], 'visible' => Yii::$app->user->isGuest],
-                    // ['label' => Yii::t('app', 'Clinic'), 'icon' => 'sitemap', 'url' => ['/clinic']],
+                    ['label' => Yii::t('app', 'المؤسسات'), 'class' => 'fa fa-hospital-o', 'url' => ['/clinic']],
                     // ['label' => Yii::t('app', 'Specialization'), 'icon' => 'sitemap', 'url' => ['/specialization']],
-                    // ['label' => Yii::t('app', 'Physicians'), 'icon' => 'sitemap', 'url' => ['/physician']],
-                    // ['label' => Yii::t('app', 'Insurance'), 'icon' => 'sitemap', 'url' => ['/insurance']],
-                    // ['label' => Yii::t('app', 'Patient'), 'icon' => 'sitemap', 'url' => ['/patient']],
+                    ['label' => Yii::t('app', 'الأطباء'), 'icon' => 'sitemap', 'url' => ['/physician']],
+                    ['label' => Yii::t('app', 'شركات التأمين'), 'icon' => 'sitemap', 'url' => ['/insurance']],
+                    ['label' => Yii::t('app', 'الحجوزات'), 'icon' => 'sitemap', 'url' => ['/register']],
                    
                     // [
                     //     'label' => 'Same tools',

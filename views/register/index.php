@@ -333,13 +333,13 @@ $this->params['breadcrumbs'][] = $this->title;
       'responsive' => true,
       'responsiveWrap' => true,
       'hover' => true,
-      'floatHeader' => true,
+      // 'floatHeader' => true,
      // 'floatHeaderOptions' => ['scrollingTop' => $scrollingTop],
       'showPageSummary' => true,
-      // 'panel' => [
-      //     'type' => GridView::TYPE_INFO,
-      //     'heading' => '<i class="fa  fa-hospital-o"></i><strong>       Stock</strong>',
+      'panel' => [
+          'type' => GridView::TYPE_INFO,
+          'heading' => '<i class="fa  fa-hospital-o"></i><strong>       الحجوزات</strong>',
 
-      // ],
+      ],
       
   ]); ?>
