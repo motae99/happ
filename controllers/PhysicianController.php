@@ -215,6 +215,7 @@ class PhysicianController extends Controller
              if ($valid) {
                  $transaction = \Yii::$app->db->beginTransaction();
                  try {
+
                      if ($flag = $available->save(false) ) {
                          foreach ($insurance as $ins) {
                              $ins->availability_id = $available->id;
@@ -317,6 +318,10 @@ class PhysicianController extends Controller
             $available->physician_id = $model->id;
             $available->date = $days;
             $duration = $available->duration;
+            $available->from_time = date("H:i", strtotime($available->from_time));
+            $available->to_time = date("H:i", strtotime($available->to_time));
+            // print_r($available);
+            // die();
             
             $insurance = Model::createMultiple(InsuranceAcceptance::classname());
             Model::loadMultiple($insurance, Yii::$app->request->post());
