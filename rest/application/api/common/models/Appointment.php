@@ -34,19 +34,18 @@ class Appointment extends \api\components\db\ActiveRecord
             // 'physician_id',
         ];
     }
-    // $app->user_id= 1;
-    // $app->patient_id= $patient->id;
-    // $app->clinic_id= $clinic_id;
-    // $app->physician_id= $doctor_id;
-    // $app->availability_id = $availability->id;
-    // $app->calender_id= $cal->id;
-    // $app->fee = $availability->appointment_fee;
-    // $app->insured = 'yes';
-    // $app->insured_fee = $insurance_available->patient_payment;
-    // // $app->created_at = new \yii\db\Expression('NOW()');
-    // $app->status = 'booked';
-    // $app->stat = 'schadueled';
-    // $app->save(false);
+
+    public function extraFields() {
+        return [
+            'schedule' => function($model) { return $model->schedule; },
+        ];
+    }
+
+    public function getScheduale()
+    {
+        return $this->hasMany(Schedule::className(), ['id' => 'calender_id']);
+    }
+
 
     public function getCalender()
     {

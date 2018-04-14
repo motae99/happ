@@ -65,7 +65,7 @@ $(document).ready(function(){
     <?= $form->field($model, 'secondary_phone')->textInput(['type' => 'number', 'max' => 9999999999, 'placeholder' => Yii::t('app', 'تلفون ')])->label(false) ?>
 
 
-     <?= $form->field($model, "working_days")->widget(Select2::classname(), 
+    <?= $form->field($model, "working_days")->widget(Select2::classname(), 
         [
             'data' =>['sat' => Yii::t('app', 'Saterday') ,'sun' => Yii::t('app', 'Sunday'), 'mon' => Yii::t('app', 'Monday'), 'tue' => Yii::t('app', 'Tuseday'), 'wen' => Yii::t('app', 'Wensday'), 'thu' => Yii::t('app', 'Thursday'), 'fri' => Yii::t('app', 'Friday')],
             // 'language' => 'de',

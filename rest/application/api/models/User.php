@@ -198,7 +198,7 @@ class User extends ActiveRecord implements \yii\web\IdentityInterface, \OAuth2\S
     {
         $this->password_reset_token = null;
     }
-
+ 
 	public function checkUserCredentials($username, $password)
 	{
 		$user = static::findByEmail($username);

@@ -72,6 +72,7 @@ class ClinicController extends Controller
      */
     public function actionView($id)
     {
+        // $user =  Yii::$app->user->identity;
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);

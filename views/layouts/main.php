@@ -40,20 +40,9 @@ if (Yii::$app->controller->action->id === 'login') {
         <title><?= Html::encode($this->title) ?></title>
         <?php $this->head() ?>
     </head>
-    <body class="<?= \dmstr\helpers\AdminLteHelper::skinClass() ?> sidebar-mini sidebar-collapse">
+    <body class="<?= \dmstr\helpers\AdminLteHelper::skinClass() ?> sidebar-collapse sidebar-mini">
     <?php $this->beginBody() ?>
-    <!DOCTYPE html>
-    <html lang="<?= Yii::$app->language ?>">
-    <head>
-        <meta charset="<?= Yii::$app->charset ?>"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <?= $this->render('ar-layout-css'); ?>
-        <?= Html::csrfMetaTags() ?>
-        <title><?= Html::encode($this->title) ?></title>
-        <?php $this->head() ?>
-    </head>
-    <body "<?= \dmstr\helpers\AdminLteHelper::skinClass() ?> sidebar-mini sidebar-collapse">
-    <?php $this->beginBody() ?>
+    
     <div class="wrapper">
 
         <?= $this->render(

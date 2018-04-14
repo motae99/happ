@@ -36,7 +36,7 @@ class AppointmentController extends \api\components\ActiveController
                     'booking',
                     'reserve',
                 ],
-                'roles' => ['@'],
+                'roles' => ['?'],
             ],
             // [
             //     'allow' => true,

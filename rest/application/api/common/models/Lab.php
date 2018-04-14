@@ -13,24 +13,40 @@ class Lab extends \api\components\db\ActiveRecord
         return '{{lab}}';
     }
 
-    // public function fields()
-    // {
-    //     return [
-    //         'id',
-    //         'name',
-    //     ];
-    // }
+     public function fields()
+    {
+        return [
+            'id',
+            'name',
+            'city',
+            'address',
+            'working_days',
+            'from_hour',
+            'to_hour',
+            // 'app_service',
+            'phone',
+            'secondary_phone',
+            'rate',
+            // 'photo' => function($model) { return '/img/clinics/'.$model->photo;},
+            // 'start_time'=> function($model) { return $model->start; },
+            // 'end_time'=> function($model) { return $model->end; },
+            'logitude',
+            'latitude',
+           
+        ];
+    }
 
-    // public function extraFields() {
-    //     return [
-    //         'services' => function($model) { return $model->acceptance; },
-    //     ];
-    // }
+     public function extraFields() {
+        return [
+            'insurance' => function($model) { return $model->insurance; },
+        ];
+    }
 
-    // public function getAcceptance()
-    // {
-    //     return $this->hasOne(LabAcceptance::className(), ['Lab_id' => 'id']);
-    // }
+
+    public function getInsurance()
+    {
+        return $this->hasMany(Labinsurance::className(), ['lab_id' => 'id']);
+    }
 
 
     public static function find() {

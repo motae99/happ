@@ -4,9 +4,11 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Pharmacy;
+use app\models\Drugs;
 use app\models\PharmacySearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use app\models\PharInsu;
 use yii\filters\VerbFilter;
 
 /**
@@ -27,6 +29,43 @@ class PharmacyController extends Controller
                 ],
             ],
         ];
+    }
+
+    public function actionInsu($id)
+    {
+        $model = $this->findModel($id);
+        $insu = new PharInsu();
+
+        if ($insu->load(Yii::$app->request->post())) {
+            $insu->phar_id = $model->id;
+            $insu->save();
+            return $this->redirect(['view', 'id' => $id]);
+        }
+
+        return $this->renderAjax('insu', [
+            'insu' => $insu,
+            'model' => $model
+        ]);
+    }
+
+    public function actionDrug($id)
+    {
+        $model = $this->findModel($id);
+        $drug = new Drugs();
+        $user =  Yii::$app->user->identity;
+
+        if ($drug->load(Yii::$app->request->post())) {
+            $drug->phar_id = $model->id;
+            $drug->created_at = new \yii\db\Expression('NOW()');
+            $drug->created_by = $user->id;
+            $drug->save();
+            return $this->redirect(['view', 'id' => $id]);
+        }
+
+        return $this->renderAjax('drug', [
+            'drug' => $drug,
+            'model' => $model
+        ]);
     }
 
     /**
@@ -70,7 +109,7 @@ class PharmacyController extends Controller
             $working_days = $_POST['Pharmacy']['working_days'];
             $days = "";
             foreach ($working_days as $d) {
-                $days .= $d." | ";
+                $days .= $d." , ";
             }
             $model->working_days = $days;
             $model->save(false);

@@ -9,6 +9,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
 use yii\filters\VerbFilter;
+use app\models\LabInsu;
+
 
 /**
  * LabController implements the CRUD actions for Lab model.
@@ -34,6 +36,24 @@ class LabController extends Controller
      * Lists all Lab models.
      * @return mixed
      */
+
+    public function actionInsu($id)
+    {
+        $model = $this->findModel($id);
+        $insu = new LabInsu();
+
+        if ($insu->load(Yii::$app->request->post())) {
+            $insu->lab_id = $model->id;
+            $insu->save();
+            return $this->redirect(['view', 'id' => $id]);
+        }
+
+        return $this->renderAjax('insu', [
+            'insu' => $insu,
+            'model' => $model
+        ]);
+    }
+
     public function actionIndex()
     {
         $searchModel = new LabSearch();

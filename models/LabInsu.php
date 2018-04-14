@@ -11,19 +11,19 @@ use yii\behaviors\BlameableBehavior;
  * This is the model class for table "phar_insu".
  *
  * @property int $id
- * @property int $phar_id
+ * @property int $lab_id
  * @property int $insurance_id
  *
  * @property Invoice[] $invoices
  */
-class PharInsu extends \yii\db\ActiveRecord
+class LabInsu extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'phar_insu';
+        return 'lab_insur';
     }
 
     /**
@@ -32,8 +32,8 @@ class PharInsu extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['phar_id', 'insurance_id', 'discount'], 'required'],
-            [['phar_id', 'insurance_id'], 'integer'],
+            [['lab_id', 'insurance_id', 'discount'], 'required'],
+            [['lab_id', 'insurance_id'], 'integer'],
             [['discount'], 'safe'],
         ];
     }
@@ -45,7 +45,7 @@ class PharInsu extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'phar_id' => Yii::t('app', 'Phar ID'),
+            'lab_id' => Yii::t('app', 'Phar ID'),
             'insurance_id' => Yii::t('app', 'Insurance ID'),
             'discount' => Yii::t('app', 'Discount'),
         ];
@@ -65,6 +65,6 @@ class PharInsu extends \yii\db\ActiveRecord
      */
     public static function find()
     {
-        return new PharInsuQuery(get_called_class());
+        return new LabInsuQuery(get_called_class());
     }
 }

@@ -1,28 +1,22 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Lab */
+/* @var $model app\models\Pharmacy */
 
 $this->title = $model->name;
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Labs'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Pharmacies'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="lab-view">
+<div class="pharmacy-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a(Yii::t('app', 'Update'), ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
-                'method' => 'post',
-            ],
-        ]) ?>
+        
     </p>
 
     <?= DetailView::widget([
@@ -41,12 +35,12 @@ $this->params['breadcrumbs'][] = $this->title;
             'phone',
             'secondary_phone',
             'rate',
-            'photo:ntext',
-            'created_at',
-            'created_by',
-            'updated_at',
-            'updated_by',
-        ],
-    ]) ?>
+
+            ],
+        ]) 
+    ?>
 
 </div>
+
+    <?= Html::button('<i class="fa fa-plus"></i>', ['value' => Url::to(['insu', 'id' => $model->id]), 'title' => Yii::t('app', 'اضف تأمين'), 'class' => 'btn btn-flat bg-blue showModalButton']); ?>
+

@@ -31,9 +31,10 @@ class Drugs extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['product_name'], 'required'],
-            [['description', 'no'], 'string'],
+            [['product_name', 'quantity', 'price'], 'required'],
+            [['description', 'no', 'quantity', 'price'], 'string'],
             [['product_name'], 'string', 'max' => 45],
+            [['created_at', 'created_by', 'updated_at', 'updated_by', 'phar_id'], 'safe'],
         ];
     }
 
@@ -44,9 +45,15 @@ class Drugs extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
+            'phar_id' => Yii::t('app', 'phar_id'),
             'product_name' => Yii::t('app', 'Product Name'),
             'description' => Yii::t('app', 'Description'),
-            'no' => Yii::t('app', 'No'),
+            'quantity' => Yii::t('app', 'quantity'),
+            'price' => Yii::t('app', 'price'),
+            'created_at' => Yii::t('app', 'created_at'),
+            'created_by' => Yii::t('app', 'created_by'),
+            'updated_by' => Yii::t('app', 'updated_by'),
+            'updated_at' => Yii::t('app', 'updated_at'),
         ];
     }
 

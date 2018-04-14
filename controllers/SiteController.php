@@ -100,7 +100,15 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            // $user =  Yii::$app->user->identity;
+            // if ($user->type == 'clinic') {
+                return $this->goHome();
+                
+            // }elseif ($user->type == 'pharmacy') {
+            //     return $this->redirect(['pharmacy/view', 'id'=> 1]);
+                
+            // }
+            // // die();
         }
         return $this->render('login', [
             'model' => $model,
