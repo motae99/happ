@@ -94,7 +94,7 @@ class LabController extends Controller
                 $days = "";
             foreach ($working_days as $d) {
                 // echo $d."<br>";
-                $days .= $d." | ";
+                $days .= $d." ";
                 # code...
             }
             $model->working_days = $days;

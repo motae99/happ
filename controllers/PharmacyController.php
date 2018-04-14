@@ -109,9 +109,13 @@ class PharmacyController extends Controller
             $working_days = $_POST['Pharmacy']['working_days'];
             $days = "";
             foreach ($working_days as $d) {
-                $days .= $d." , ";
+                $days .= $d." ";
             }
+            $start = $_POST['Pharmacy']['from_hour'];
+            $end = $_POST['Pharmacy']['to_hour'];
             $model->working_days = $days;
+            $model->from_hour = date("H:i", strtotime($start));
+            $model->to_hour = date("H:i", strtotime($end));
             $model->save(false);
             return $this->redirect(['view', 'id' => $model->id]);
         }
