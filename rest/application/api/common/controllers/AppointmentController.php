@@ -27,7 +27,7 @@ class AppointmentController extends \api\components\ActiveController
                     'update',
                     'all'
                 ],
-                'roles' => ['?'],
+                'roles' => ['@'],
             ],
             [
                 'allow' => true,
@@ -36,7 +36,7 @@ class AppointmentController extends \api\components\ActiveController
                     'booking',
                     'reserve',
                 ],
-                'roles' => ['?'],
+                'roles' => ['@'],
             ],
             // [
             //     'allow' => true,
@@ -88,7 +88,7 @@ class AppointmentController extends \api\components\ActiveController
                 $patient->contact_no = $phone_no;
                 //fix later
                 // $patient->created_at = new Expression('NOW()');
-                $patient->created_by = $user->id;
+                $patient->created_by = 1;
 
                 if ($insured) {
                     $patient->has_insurance = 1;

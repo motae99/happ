@@ -3,6 +3,8 @@ namespace api\common\controllers;
 use \Yii as Yii;
 use api\models\User;
 use api\common\models\Register;
+use api\common\models\Patient;
+
 // use api\common\models\Profile;
 use yii\db\Expression;
 use \Unifonic\API\Client;
@@ -76,36 +78,43 @@ class RegisterController extends \api\components\ActiveController
     }
 
     public function actionCreate(){
-        // $user =  Yii::$app->user->identity;
-        
-        // $model = new Register();
         $body = json_decode(Yii::$app->getRequest()->getRawBody(), true);
-        if ($body['username'] && $body['password']) {
+        if ($body['phone_no'] && $body['password'] && $body['gender'] && $body['dob'] && $body['name']) {
             $user = new User();
-            $user->email = $body['username'];
+            $user->email = $body['phone_no'];
             $user->password = $body['password'];
             $user->generateAuthKey();
-            if ($user->save()) {
-                return array('success' => 1);
+            $flag = $user->save();
+
+            $patient = new Patient();
+            $patient->name = $body['name'];
+            $patient->contact_no = $body['phone_no'];
+            $patient->gender = $body['gender'];
+            $patient->dob = $body['dob'];
+            if (isset($body['martial_status'])) {
+                $patient->martial_status = $body['martial_status'];
+            }
+            if (isset($body['insurance_id']) && isset($body['insurance_no']) && isset($body['valid_till'])) {
+                $patient->insurance_id = $body['insurance_id'];
+                $patient->insurance_no = $body['insurance_no'];
+                $patient->valid_till = $body['valid_till'];
+                $patient->has_insurance = 1;
             }else{
-                return array('success' => 0);
+                $patient->has_insurance = 0;
+            }
+            
+            $patient->created_by = $user->id;
+            $flag2 = $patient->save();
+            
+            if ($flag2 && $flag) {
+                return array('success' => 1, 'data' => $patient);
+            }else{
+                return array('success' => 0, 'massege' => 'something went wrong please call me');
             }
         }else{
-            return array('success' => 0, 'massege' => 'username & password are required');
+            return array('success' => 0, 'massege' => 'phone_no, password, gender, dob & name are required | martial_status & (insurance_id, insurance_no & valid_till) are optional');
   
         }
-        // if (isset($body['value']) && $body['value'] > 0 && is_integer($body['value'])) {
-        //     $model->value = $body['value'];
-        //     $model->created_at = new Expression('NOW()');
-        //     if ($model->save()) {
-        //         return array('success' => 1);
-        //     }else{
-        //         return array('success' => 0);
-        //     }
-        //     # code...
-        // }else{
-        //     return array('success' => 0);
-        // }
 
     }
 
