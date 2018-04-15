@@ -5,6 +5,8 @@ use api\models\User;
 use api\common\models\Register;
 // use api\common\models\Profile;
 use yii\db\Expression;
+use \Unifonic\API\Client;
+
 
 
 class RegisterController extends \api\components\ActiveController
@@ -16,6 +18,14 @@ class RegisterController extends \api\components\ActiveController
         return [
             [
                 'allow' => true,
+                'roles' => ['?'],
+            ],
+            [
+                'allow' => true,
+                'actions' => [
+                    'code',
+                    'verify',
+                ],
                 'roles' => ['?'],
             ],
            
@@ -30,6 +40,39 @@ class RegisterController extends \api\components\ActiveController
         unset($actions['update']);
         unset($actions['delete']);
         return $actions;
+    }
+
+    public function actionCode(){
+        $body = json_decode(Yii::$app->getRequest()->getRawBody(), true);
+        if ($body['phone_no']) {
+            $client = new Client();
+            $no = $body['phone_no'];
+            $response = $client->Verify->GetCode($no , 'تطبيق طبيبي يرحب بكم', 'OTP');
+            // if ($response) {
+            return array('response' => $response);
+        
+        }else{
+            return array('success' => 0, 'massege' => 'phone_no is required');
+  
+        }
+
+    }
+
+    public function actionVerify(){
+        $body = json_decode(Yii::$app->getRequest()->getRawBody(), true);
+        if ($body['phone_no'] && $body['code']) {
+            $client = new Client();
+            $no = $body['phone_no'];
+            $code = $body['code'];
+            // if ($response) {
+            $response = $client->Verify->VerifyNumber($no, $code);
+            return array('response' => $response);
+        }
+        // }else{
+        //     return array('success' => 0, 'massege' => 'username & password are required');
+  
+        // }
+
     }
 
     public function actionCreate(){
