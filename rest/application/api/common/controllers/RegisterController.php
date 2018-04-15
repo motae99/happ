@@ -49,7 +49,7 @@ class RegisterController extends \api\components\ActiveController
         if ($body['phone_no']) {
             $client = new Client();
             $no = $body['phone_no'];
-            $response = $client->Verify->GetCode($no , 'تطبيق طبيبي يرحب بكم', 'OTP');
+            $response = $client->Verify->GetCode($no , 'مرحبا بك في خدمة تطبيق طبيبي لتأكيد الأشتراك الرجاء ادخال الرقم التالي', 'OTP');
             // if ($response) {
             return array('response' => $response);
         

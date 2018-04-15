@@ -10,6 +10,8 @@ use api\common\models\Availability;
 use api\common\models\Calender;
 use api\common\models\Patient;
 use api\common\models\Appointment;
+use \Unifonic\API\Client;
+
 use yii\db\Expression;
 
 
@@ -141,7 +143,11 @@ class AppointmentController extends \api\components\ActiveController
                         $app->stat = 'schadueled';
                         $app->save(false);
 
-                      return  array('success' => 1 , 'data' => $app); 
+                        $client = new Client();
+                        $message = 'تم الحجز المبدئي لك بالرقم '.$app->id.' عليه نرجو تأكيد حجزك بالدفع المالي حتى ﻻ تفقد فرصتك مع تمنياتنا لك بدوام الصحة والعافية';
+                        $response = $client->Messages->Send($patient->contact_no, $message);
+                        return  array('success' => 1 , 'data' => $app); 
+                    
                     }else{
                         // message your insurance is not available
                       return  array('success' => 0 , 'message' => 'message your insurance is not supported'); 
