@@ -167,7 +167,10 @@ class AppointmentController extends \api\components\ActiveController
                     $app->created_at = new \yii\db\Expression('NOW()');
                     $app->status = 'booked';
                     $app->stat = 'schadueled';
-                    $app->save(false); 
+                    
+                    $client = new Client();
+                    $message = 'تم الحجز المبدئي لك بالرقم '.$app->id.' عليه نرجو تأكيد حجزك بالدفع المالي حتى ﻻ تفقد فرصتك مع تمنياتنا لك بدوام الصحة والعافية';
+                    $response = $client->Messages->Send($patient->contact_no, $message);
                     return  array('success' => 1 , 'data' => $app);
                 }
             }else{
