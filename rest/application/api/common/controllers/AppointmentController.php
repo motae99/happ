@@ -90,7 +90,7 @@ class AppointmentController extends \api\components\ActiveController
                 $patient->contact_no = $phone_no;
                 //fix later
                 // $patient->created_at = new Expression('NOW()');
-                $patient->created_by = 1;
+                $patient->created_by = $user->id;
 
                 if ($insured) {
                     $patient->has_insurance = 1;
@@ -106,6 +106,7 @@ class AppointmentController extends \api\components\ActiveController
                 ->where(['clinic_id' => $clinic_id])
                 ->andWhere(['physician_id' => $doctor_id])
                 ->andWhere(['status' => 'available'])
+                ->andWhere(['>=', 'date', date('Y-m-d')])
                 ->orderBy(['date' => SORT_ASC])
                 ->one();
 
