@@ -58,8 +58,6 @@ class AppointmentController extends \api\components\ActiveController
     }
 
     public function actionBooking(){
-
-            return  array('message' => 'u r here'); 
         $user =  Yii::$app->user->identity;
         $body = json_decode(Yii::$app->getRequest()->getRawBody(), true);
         
