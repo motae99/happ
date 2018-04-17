@@ -197,8 +197,8 @@ class AppointmentController extends \api\components\ActiveController
     public function actionAll(){
         $medical = Medical::find()->all();
         $doctors = Availability::find()
-                    ->where(['status' => 'available'])
-                    ->andWhere(['>=', 'date', date('Y-m-d')])
+                    // ->where(['status' => 'available'])
+                    // ->andWhere(['>=', 'date', date('Y-m-d')])
                     ->orderBy(['date' => SORT_ASC])
                     ->all();
         $insurance = InsuranceAcceptance::find()->all();
