@@ -38,13 +38,13 @@ class Appointment extends \api\components\db\ActiveRecord
 
     public function extraFields() {
         return [
-            'schedule' => function($model) { return $model->schedule; },
+            'schedule' => function($model) { return $model->scheduale; },
         ];
     }
 
     public function getScheduale()
     {
-        return $this->hasMany(Schedule::className(), ['id' => 'calender_id']);
+        return $this->hasMany(Schedule::className(), ['calender_id' => 'calender_id']);
     }
 
 
