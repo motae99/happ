@@ -58,10 +58,11 @@ class AppointmentController extends \api\components\ActiveController
     }
 
     public function actionBooking(){
+
+            return  array('message' => 'u r here'); 
         $user =  Yii::$app->user->identity;
         $body = json_decode(Yii::$app->getRequest()->getRawBody(), true);
-        // $model->load($body, '');
-        // print_r($body);
+        
         if (isset($body['clinic_id']) && isset($body['doctor_id']) && isset($body['name']) && isset($body['phone_no'])) {
             $clinic_id = $body['clinic_id'];
             $doctor_id = $body['doctor_id'];
@@ -197,7 +198,11 @@ class AppointmentController extends \api\components\ActiveController
 
     public function actionAll(){
         $medical = Medical::find()->all();
-        $doctors = Availability::find()->all();
+        $doctors = Availability::find()
+                    ->where(['status' => 'available'])
+                    ->andWhere(['>=', 'date', date('Y-m-d')])
+                    ->orderBy(['date' => SORT_ASC])
+                    ->all();
         $insurance = InsuranceAcceptance::find()->all();
         // $data = Appointment::find()->where(['assigned_to' => $client->id])->all();
         // return array('medical' => $doctors, 'doctors' => $doctors);

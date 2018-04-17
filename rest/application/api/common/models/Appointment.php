@@ -25,12 +25,13 @@ class Appointment extends \api\components\db\ActiveRecord
             'from_time' => function($model) { return $model->calender->start_time; },
             'to_time' => function($model) { return $model->calender->end_time; },
             'queue' => function($model) { return $model->queue($model); },
+            'current' => function($model) { return $model->visit($model); },
+            'time' => function($model) { return $model->time($model); },
             'status',
             'stat',
             'fee',
             'insured_fee',
             'insured',
-            // 'clinic_id',
             // 'physician_id',
         ];
     }
@@ -54,11 +55,54 @@ class Appointment extends \api\components\db\ActiveRecord
 
     public function Queue($model)
     {
-        $count = Appointment::find()
+        $confirmed = Appointment::find()
             ->where(['calender_id' => $model->calender_id])
-            ->andWhere(['<', 'confirmed_at', $model->confirmed_at])
+            ->andWhere(['status' => 'confirmed'])
+            // ->andWhere(['<', 'confirmed_at', $model->confirmed_at])
             ->count();
-        return $count;
+
+        $booked = Appointment::find()
+            ->where(['calender_id' => $model->calender_id])
+            ->andWhere(['status' => 'booked'])
+            ->andWhere(['<=', 'created_at', $model->created_at])
+            ->count();
+        if ($model->status == 'booked') {
+            return $confirmed+$booked;
+        }
+        elseif($model->status == 'confirmed'){
+            $schedule = Schedule::find()
+            ->where(['appointment_id' => $model->id])
+            ->one();
+            return $schedule->queue;
+        }
+        
+    }
+
+    public function Visit($model)
+    {
+        $proccessing = Appointment::find()
+            ->where(['calender_id' => $model->calender_id])
+            ->andWhere(['stat' => 'processing'])
+            ->one();
+
+        if ($proccessing) {
+            $schedule = Schedule::find()
+            ->where(['appointment_id' => $proccessing->id])
+            ->one();
+            return $schedule->queue;
+        }else{
+            return "NaN";
+        }
+    }
+
+    public function Time($model)
+    {
+        $schedule = Schedule::find()->where(['appointment_id' => $model->id])->one();
+        if ($schedule) {
+            return $schedule->schedule_time;
+        }else{
+            return "NaN";
+        }
     }
 
     public function getDoctor()

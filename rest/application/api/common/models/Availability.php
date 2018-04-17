@@ -17,6 +17,7 @@ class Availability extends \api\components\db\ActiveRecord
         return [
             'id',
             'physician_id',
+            'clinic_id',
             'doctor' => function($model) { return $model->doctor->name; },
             'clinic' => function($model) { return $model->clinic->name; },
             'day' => function($model) { return $model->date; },

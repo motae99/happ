@@ -4,6 +4,8 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Appointment;
+use app\models\Schedule;
+use app\models\Calender;
 use app\models\DrugsSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -54,6 +56,31 @@ class RegisterController extends Controller
         $model->confirmed_at = new \yii\db\Expression('NOW()');
         $model->confirmed_by = $user->id;
         $model->save(false);
+
+        // echo $model->calender_id;
+        // die();
+        $scheduale = Schedule::find()
+                    ->where(['calender_id' => $model->calender_id])
+                    ->andWhere(['status' => 'available'])
+                    ->orderBy(['schedule_time' => SORT_ASC])
+                    ->one();
+        $scheduale->appointment_id = $model->id;
+        $scheduale->status = 'reserved';
+        $scheduale->save();
+
+        $status = Schedule::find()
+                    ->where(['calender_id' => $model->calender_id])
+                    ->andWhere(['status' => 'available'])
+                    ->count();
+
+        if ($status >=1) {
+           
+        }else{
+            $cal = Calender::findOne($model->calender_id);
+            $cal->status = "reserved";
+            $cal->save();
+
+        }
         return $this->redirect(['index']);
     }
 
