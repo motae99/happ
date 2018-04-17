@@ -104,8 +104,8 @@ class AppointmentController extends \api\components\ActiveController
             $cal = Calender::find()
                 ->where(['clinic_id' => $clinic_id])
                 ->andWhere(['physician_id' => $doctor_id])
-                ->andWhere(['status' => 'available'])
-                ->andWhere(['>=', 'date', date('Y-m-d')])
+                // ->andWhere(['status' => 'available'])
+                // ->andWhere(['>=', 'date', date('Y-m-d')])
                 ->orderBy(['date' => SORT_ASC])
                 ->one();
 
