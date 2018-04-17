@@ -199,7 +199,7 @@ $this->params['breadcrumbs'][] = $this->title;
                   if($model->stat == 'done'){
                     return Html::tag('span', '', ['class' => 'fa fa-2x fa-check-circle-o', 'style'=>"color: green;"]);
                   }elseif($model->status == 'booked'){
-                    return Html::tag('span', '', ['class' => 'fa fa-2x fa-check', 'style'=>"color: orange;"]);
+                    return Html::tag('span', '', ['class' => 'fa fa-2x fa-check', 'style'=>"color: red;"]);
                   }elseif($model->stat == 'schadueled'){
                     return Html::a('<span class="fa fa-2x fa-hourglass-2" style="color: orange;"></span>', ['register/proccess', 'id'=> $model->id] , [
                       'title' => 'مقابلة', 'method' => 'post'
