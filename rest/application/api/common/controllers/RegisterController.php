@@ -47,11 +47,15 @@ class RegisterController extends \api\components\ActiveController
     public function actionCode(){
         $body = json_decode(Yii::$app->getRequest()->getRawBody(), true);
         if ($body['phone_no']) {
-            $client = new Client();
-            $no = $body['phone_no'];
-            $response = $client->Verify->GetCode($no , 'مرحبا بك في خدمة تطبيق طبيبي لتأكيد الأشتراك الرجاء ادخال الرقم التالي', 'OTP');
-            // if ($response) {
-            return array('response' => $response);
+            $user = User::find()->where(['email' => $body['phone_no']])->one();
+            if ($user) {
+                return array('success' => 0, 'massege' => 'User is already registered');
+            }else{
+                $client = new Client();
+                $no = $body['phone_no'];
+                $response = $client->Verify->GetCode($no , 'مرحبا بك في خدمة تطبيق طبيبي لتأكيد الأشتراك الرجاء ادخال الرقم التالي', 'OTP');
+                return array('response' => $response);
+            }
         
         }else{
             return array('success' => 0, 'massege' => 'phone_no is required');
@@ -79,7 +83,12 @@ class RegisterController extends \api\components\ActiveController
 
     public function actionCreate(){
         $body = json_decode(Yii::$app->getRequest()->getRawBody(), true);
-        if ($body['phone_no'] && $body['password'] && $body['gender'] && $body['dob'] && $body['name']) {
+        if (isset($body['phone_no']) && isset($body['password']) && isset($body['gender']) && isset($body['dob']) && isset($body['name']) {
+            $user = User::find()->where(['email' => $body['phone_no']])->one();
+            if ($user) {
+                return array('success' => 0, 'massege' => 'User is already registered');
+                die();
+            }
             $user = new User();
             $user->email = $body['phone_no'];
             $user->password = $body['password'];

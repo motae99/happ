@@ -8,6 +8,7 @@ use api\common\models\Specialization;
 use api\common\models\InsuranceAcceptance;
 use api\common\models\Availability;
 use api\common\models\Calender;
+use api\common\models\Schedule;
 use api\common\models\Patient;
 use api\common\models\Appointment;
 use \Unifonic\API\Client;
@@ -27,25 +28,16 @@ class AppointmentController extends \api\components\ActiveController
                 'actions' => [
                     'index',
                     'update',
-                    'all'
-                ],
-                'roles' => ['@'],
-            ],
-            [
-                'allow' => true,
-                'actions' => [
+                    'all',
+                    'date',
                     'view',
                     'booking',
                     'reserve',
+                    'cancel',
+                    'schedule'
                 ],
                 'roles' => ['@'],
             ],
-            // [
-            //     'allow' => true,
-            //     'actions' => ['create', 'delete', 'accept', 'reject', 'only', 'oname'],
-            //     'roles' => ['@'],
-            //     'scopes' => ['admin'],
-            // ],
         ];
     }
 
@@ -189,10 +181,80 @@ class AppointmentController extends \api\components\ActiveController
 
     public function actionReserve(){
         $user =  Yii::$app->user->identity;
-        $reserve = Appointment::find()->where(['user_id' => $user->id])->all();
-        return  array('reservations' => $reserve);
+        if ($user) {
+            $reserve = Appointment::find()->where(['user_id' => $user->id])->all();
+            return  array('reservations' => $reserve);
+        }
+        else{
+            return  array('success' => 0, 'message'=>'Who are You');
+        }
 
     }
+
+     public function actionReschedule(){
+        $user =  Yii::$app->user->identity;
+        $body = json_decode(Yii::$app->getRequest()->getRawBody(), true);
+
+        if (isset($body['current']) && isset($body['new']) && isset($body['time'])) {
+            $current = Appointment::findOne($body['current']);
+            if ($current->status == 'confirmed' && $current->stat == 'schadueled') {
+                $calender = Calender::findOne($body['new']);
+                $current_schedule = Schedule::find()->where(['appointment_id' => $current->id])->one();
+                $schedule = Schedule::findOne($body['time']);
+                if (($calender && $schedule) && ($calender->status == 'available' && $schedule->status == 'available')) {
+                    $current->calender_id = $calender->id;
+                    $flag =$current->save();
+
+                    $schedule->appointment_id = $current->id;
+                    $schedule->status = 'reserved';
+                    $flag1 =$schedule->save();
+                    
+                    $current_schedule->appointment_id = "";
+                    $current_schedule->status = "available";
+                    $flag2 =$current_schedule->save();
+
+                    if ($flag2 && $flag1 && $flag) {
+                        return  array('success' => 1, 'message' => 'rescheduled successfully', 'reservation' => $current);
+                    }
+                }else{
+                    return  array('message' => 'date or time is reserved');
+                }
+            }else{
+                return  array('body' => "you cant rescheduled this appointment");
+            }
+        }else{
+            return  array('success' => 0, 'message' => 'specify current reservation id and the rescheduled id and your pereferd time id');
+        }
+    }
+
+    public function actionCancel($id){
+        $user =  Yii::$app->user->identity;
+        $app = Appointment::findOne($id);
+        if ($app) {
+            $current_schedule = Schedule::find()->where(['appointment_id' => $app->id])->one();
+            if (($app->status == "booked" || $app->status == "confirmed") && ($app->stat == "schadueled")) {
+                $app->status = "patient_cancel";
+                $app->stat = "canceled";
+                $app->canceled_by = $user->id;
+                $app->canceled_at = new \yii\db\Expression('NOW()');    
+                $app->save();
+
+                if ($current_schedule) {
+                   $current_schedule->appointment_id = "";
+                   $current_schedule->status = "available";
+                   $current_schedule->save();
+                }
+
+                return  array('success' => 1, 'message' => "reservation has been canceled");
+            }else{
+                return  array('success' => 0, 'message' => "You can't cancel this reservation");
+            }
+        }else{
+            return  array('success' => 0, 'message' => "please specify your reservation");
+        }
+
+    }
+
 
     public function actionAll(){
         $medical = Medical::find()->all();
@@ -205,6 +267,14 @@ class AppointmentController extends \api\components\ActiveController
         // $data = Appointment::find()->where(['assigned_to' => $client->id])->all();
         // return array('medical' => $doctors, 'doctors' => $doctors);
         return  array('medical' => $medical, 'doctors' => $doctors, 'insurance' => $insurance);
+
+    }
+
+    public function actionSchedule($id){
+        $app = Appointment::findOne($id);
+        $cal = Calender::find()->where(['id' => $app->calender_id])->one();
+        $times = $cal->schedule ;    
+        return  array('Calender' => $cal, 'Schedule' => $times);
 
     }
 

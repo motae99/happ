@@ -13,6 +13,17 @@ class Schedule extends \api\components\db\ActiveRecord
         return '{{schedule}}';
     }
 
+    public function fields()
+    {
+        return [
+            'id',
+            // 'calender_id',
+            'schedule_time',
+            'queue',
+            'status',
+        ];
+    }
+
    
 
 
