@@ -17,7 +17,7 @@ class AmbulanceController extends \api\components\ActiveController
         return [
             [
                 'allow' => true,
-                'roles' => ['?'],
+                'roles' => ['@'],
             ],
            
         ];

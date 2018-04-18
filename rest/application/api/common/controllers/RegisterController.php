@@ -20,13 +20,10 @@ class RegisterController extends \api\components\ActiveController
         return [
             [
                 'allow' => true,
-                'roles' => ['?'],
-            ],
-            [
-                'allow' => true,
                 'actions' => [
                     'code',
                     'verify',
+                    'create',
                 ],
                 'roles' => ['?'],
             ],
