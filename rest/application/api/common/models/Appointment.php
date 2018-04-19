@@ -69,12 +69,12 @@ class Appointment extends \api\components\db\ActiveRecord
         if ($model->status == 'booked') {
             return $confirmed+$booked;
         }
-        elseif($model->status == 'confirmed'){
-            $schedule = Schedule::find()
-            ->where(['appointment_id' => $model->id])
-            ->one();
-            return $schedule->queue;
-        }
+        // elseif($model->status == 'confirmed'){
+        //     $schedule = Schedule::find()
+        //     ->where(['appointment_id' => $model->id])
+        //     ->one();
+        //     return $schedule->queue;
+        // }
         
     }
 
