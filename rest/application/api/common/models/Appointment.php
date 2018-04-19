@@ -55,20 +55,20 @@ class Appointment extends \api\components\db\ActiveRecord
 
     public function Queue($model)
     {
-        $confirmed = Appointment::find()
-            ->where(['calender_id' => $model->calender_id])
-            ->andWhere(['status' => 'confirmed'])
-            // ->andWhere(['<', 'confirmed_at', $model->confirmed_at])
-            ->count();
+        // $confirmed = Appointment::find()
+        //     ->where(['calender_id' => $model->calender_id])
+        //     ->andWhere(['status' => 'confirmed'])
+        //     // ->andWhere(['<', 'confirmed_at', $model->confirmed_at])
+        //     ->count();
 
-        $booked = Appointment::find()
-            ->where(['calender_id' => $model->calender_id])
-            ->andWhere(['status' => 'booked'])
-            ->andWhere(['<=', 'created_at', $model->created_at])
-            ->count();
-        if ($model->status == 'booked') {
-            return $confirmed+$booked;
-        }
+        // $booked = Appointment::find()
+        //     ->where(['calender_id' => $model->calender_id])
+        //     ->andWhere(['status' => 'booked'])
+        //     ->andWhere(['<=', 'created_at', $model->created_at])
+        //     ->count();
+        // if ($model->status == 'booked') {
+        //     return $confirmed+$booked;
+        // }
         // elseif($model->status == 'confirmed'){
         //     $schedule = Schedule::find()
         //     ->where(['appointment_id' => $model->id])
@@ -76,6 +76,7 @@ class Appointment extends \api\components\db\ActiveRecord
         //     return $schedule->queue;
         // }
         
+            return 1;
     }
 
     public function Visit($model)
