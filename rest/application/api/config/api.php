@@ -27,9 +27,9 @@ return [
 					'extraPatterns' => [
 						'POST booking' => 'booking',
 						'GET all' => 'all',
-						'GET reserve' => 'reserve',
-						'GET cancel' => 'cancel',
-						'GET schedule/<id>' => 'schedule',
+						// 'GET reserve' => 'reserve',
+						// 'GET cancel' => 'cancel',
+						// 'GET schedule/<id>' => 'schedule',
 						'POST reschedule' => 'reschedule',
 					],
 				],
