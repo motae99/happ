@@ -28,7 +28,7 @@ return [
 						'POST booking' => 'booking',
 						'GET all' => 'all',
 						'GET reserve' => 'reserve',
-						'GET cancel/<id>' => 'cancel',
+						'GET cancel' => 'cancel',
 						'GET schedule/<id>' => 'schedule',
 						'POST reschedule' => 'reschedule',
 					],
