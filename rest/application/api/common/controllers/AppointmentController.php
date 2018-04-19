@@ -228,6 +228,7 @@ class AppointmentController extends \api\components\ActiveController
     }
 
     public function actionCancel($id){
+                return  array('success' => 0, 'message' => "You can't cancel this reservation");
         $user =  Yii::$app->user->identity;
         $app = Appointment::findOne($id);
         if ($app) {
