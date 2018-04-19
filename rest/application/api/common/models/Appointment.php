@@ -13,28 +13,28 @@ class Appointment extends \api\components\db\ActiveRecord
         return '{{appointment}}';
     }
 
-    public function fields()
-    {
-        return [
-            'id',
-            'patient_id',
-            'patient' => function($model) { return $model->patient->name; },
-            'clinic' => function($model) { return $model->clinic->name; },
-            'doctor' => function($model) { return $model->doctor->name; },
-            'date' => function($model) { return $model->calender->date; },
-            'from_time' => function($model) { return $model->calender->start_time; },
-            'to_time' => function($model) { return $model->calender->end_time; },
-            // 'queue' => function($model) { return $model->queue($model); },
-            'current' => function($model) { return $model->visit($model); },
-            'time' => function($model) { return $model->time($model); },
-            'status',
-            'stat',
-            'fee',
-            'insured_fee',
-            'insured',
-            // 'physician_id',
-        ];
-    }
+    // public function fields()
+    // {
+    //     return [
+    //         'id',
+    //         'patient_id',
+    //         'patient' => function($model) { return $model->patient->name; },
+    //         'clinic' => function($model) { return $model->clinic->name; },
+    //         'doctor' => function($model) { return $model->doctor->name; },
+    //         'date' => function($model) { return $model->calender->date; },
+    //         'from_time' => function($model) { return $model->calender->start_time; },
+    //         'to_time' => function($model) { return $model->calender->end_time; },
+    //         'queue' => function($model) { return $model->queue($model); },
+    //         'current' => function($model) { return $model->visit($model); },
+    //         'time' => function($model) { return $model->time($model); },
+    //         'status',
+    //         'stat',
+    //         'fee',
+    //         'insured_fee',
+    //         'insured',
+    //         // 'physician_id',
+    //     ];
+    // }
 
     // public function extraFields() {
     //     return [
@@ -48,10 +48,10 @@ class Appointment extends \api\components\db\ActiveRecord
     // }
 
 
-    public function getCalender()
-    {
-        return $this->hasOne(Calender::className(), ['id' => 'calender_id']);
-    }
+    // public function getCalender()
+    // {
+    //     return $this->hasOne(Calender::className(), ['id' => 'calender_id']);
+    // }
 
     // public function Queue($model)
     // {
@@ -73,55 +73,52 @@ class Appointment extends \api\components\db\ActiveRecord
     //         $schedule = Schedule::find()
     //         ->where(['appointment_id' => $model->id])
     //         ->one();
-    //         if ($schedule) {
-    //             return $schedule->queue;
-    //         }
+    //         return $schedule->queue;
     //     }
         
-            
     // }
 
-    public function Visit($model)
-    {
-        $proccessing = Appointment::find()
-            ->where(['calender_id' => $model->calender_id])
-            ->andWhere(['stat' => 'processing'])
-            ->one();
+    // public function Visit($model)
+    // {
+    //     $proccessing = Appointment::find()
+    //         ->where(['calender_id' => $model->calender_id])
+    //         ->andWhere(['stat' => 'processing'])
+    //         ->one();
 
-        if ($proccessing) {
-            $schedule = Schedule::find()
-            ->where(['appointment_id' => $proccessing->id])
-            ->one();
-            return $schedule->queue;
-        }else{
-            return "NaN";
-        }
-    }
+    //     if ($proccessing) {
+    //         $schedule = Schedule::find()
+    //         ->where(['appointment_id' => $proccessing->id])
+    //         ->one();
+    //         return $schedule->queue;
+    //     }else{
+    //         return "NaN";
+    //     }
+    // }
 
-    public function Time($model)
-    {
-        $schedule = Schedule::find()->where(['appointment_id' => $model->id])->one();
-        if ($schedule) {
-            return $schedule->schedule_time;
-        }else{
-            return "NaN";
-        }
-    }
+    // public function Time($model)
+    // {
+    //     $schedule = Schedule::find()->where(['appointment_id' => $model->id])->one();
+    //     if ($schedule) {
+    //         return $schedule->schedule_time;
+    //     }else{
+    //         return "NaN";
+    //     }
+    // }
 
-    public function getDoctor()
-    {
-        return $this->hasOne(Physicain::className(), ['id' => 'physician_id']);
-    }
+    // public function getDoctor()
+    // {
+    //     return $this->hasOne(Physicain::className(), ['id' => 'physician_id']);
+    // }
 
-    public function getPatient()
-    {
-        return $this->hasOne(Patient::className(), ['id' => 'patient_id']);
-    }
+    // public function getPatient()
+    // {
+    //     return $this->hasOne(Patient::className(), ['id' => 'patient_id']);
+    // }
 
-    public function getClinic()
-    {
-        return $this->hasOne(Medical::className(), ['id' => 'clinic_id']);
-    }
+    // public function getClinic()
+    // {
+    //     return $this->hasOne(Medical::className(), ['id' => 'clinic_id']);
+    // }
 
 
     public static function find() {
