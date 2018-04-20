@@ -21,18 +21,18 @@ return [
 					// 	'GET oname/<id>' => 'oname',
 					// ],
 				],	
-				[
-					'class' => 'yii\rest\UrlRule',
-					'controller' => ['v1/appointment'],
-					'extraPatterns' => [
-						'POST booking' => 'booking',
-						'GET all' => 'all',
-						'GET reserve' => 'reserve',
-						'GET cancel' => 'cancel',
-						'GET schedule/<id>' => 'schedule',
-						'POST reschedule' => 'reschedule',
-					],
-				],
+				// [
+				// 	'class' => 'yii\rest\UrlRule',
+				// 	'controller' => ['v1/appointment'],
+				// 	'extraPatterns' => [
+				// 		'POST booking' => 'booking',
+				// 		'GET all' => 'all',
+				// 		'GET reserve' => 'reserve',
+				// 		'GET cancel/<id>' => 'cancel',
+				// 		'GET schedule/<id>' => 'schedule',
+				// 		'POST reschedule' => 'reschedule',
+				// 	],
+				// ],
 				[
 					'class' => 'yii\rest\UrlRule',
 					'controller' => ['v1/register'],
