@@ -74,7 +74,12 @@ class Appointment extends \api\components\db\ActiveRecord
             ->where(['appointment_id' => $model->id])
             ->one();
 
-            return 1;
+            if ($schedule) {
+                return $schedule->queue;
+            }else{
+                return 0;
+            }
+
         }
 
         // return 1;
