@@ -180,14 +180,14 @@ class AppointmentController extends \api\components\ActiveController
     }
 
     public function actionReserve(){
-        $user =  Yii::$app->user->identity;
-        if ($user) {
-            $reserve = Appointment::find()->where(['user_id' => $user->id])->all();
-            return  array('reservations' => $reserve);
-        }
-        else{
+        // $user =  Yii::$app->user->identity;
+        // if ($user) {
+        //     $reserve = Appointment::find()->where(['user_id' => $user->id])->all();
+        //     return  array('reservations' => $reserve);
+        // }
+        // else{
             return  array('success' => 0, 'message'=>'Who are You');
-        }
+        // }
 
     }
 
