@@ -31,6 +31,8 @@ return [
 						'GET cancel/<id>' => 'cancel',
 						'GET schedule/<id>' => 'schedule',
 						'POST reschedule' => 'reschedule',
+						'POST ratedoctor' => 'ratedoctor',
+						'POST rateclinic' => 'rateclinic',
 					],
 				],
 				[
