@@ -32,7 +32,6 @@ class Physicain extends \api\components\db\ActiveRecord
     public function extraFields() {
         return [
             'work' => function($model) { return $model->avail; },
-            'insurance' => function($model) { return $model->insurance; }
             // 'items' => function($model) { return $model->item; }
         ];
     }
@@ -42,6 +41,12 @@ class Physicain extends \api\components\db\ActiveRecord
         return $this->hasMany(Availability::className(), ['physician_id' => 'id']);
          
     }
+    
+    // public function getInsurance()
+    // {
+        
+    //     return $this->hasMany(InsuranceAcceptance::className(), ['id' => 'id']);
+    // }
 
     public function count($model)
     {
@@ -72,11 +77,6 @@ class Physicain extends \api\components\db\ActiveRecord
     }
 
 
-    // public function getInsurance()
-    // {
-        
-    //     return $this->hasMany(InsuranceAcceptance::className(), ['id' => 'id']);
-    // }
 
     public static function find() {
         return new PhysicainQuery(get_called_class());
