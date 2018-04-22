@@ -30,6 +30,7 @@ return [
 						'GET reserve' => 'reserve',
 						'GET cancel/<id>' => 'cancel',
 						'GET schedule/<id>' => 'schedule',
+						'GET revisit/<id>' => 'revisit',
 						'POST reschedule' => 'reschedule',
 						'POST ratedoctor' => 'ratedoctor',
 						'POST rateclinic' => 'rateclinic',

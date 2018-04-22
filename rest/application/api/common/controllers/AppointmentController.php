@@ -33,8 +33,10 @@ class AppointmentController extends \api\components\ActiveController
                     'view',
                     'booking',
                     'reserve',
+                    'revisit',
                     'cancel',
                     'schedule',
+                    'reschedule',
                     'ratedoctor',
                     'rateclinic'
                 ],
@@ -275,11 +277,25 @@ class AppointmentController extends \api\components\ActiveController
                     return  array('message' => 'date or time is reserved');
                 }
             }else{
-                return  array('body' => "you cant rescheduled this appointment");
+                return  array('success' => 0, 'message' => "you cant rescheduled this appointment");
             }
         }else{
             return  array('success' => 0, 'message' => 'specify current reservation id and the rescheduled id and your pereferd time id');
         }
+    }
+
+    public function actionRevisit($id){
+        $app = Appointment::findOne($id);
+        if ($app) {
+           if ($app->stat == 'done') {
+                return  array('success' => 0, 'message' => "you cant revisit this appointment");
+           }else{
+                return  array('success' => 0, 'message' => "go see doctor first");
+           }
+        }else{
+                return  array('success' => 0, 'message' => "can't find your appointment");
+           }
+        
     }
 
     public function actionCancel($id){
