@@ -21,7 +21,7 @@ use dmstr\widgets\Alert;
     </section>
 </div>
 
-<footer class="main-footer">
+<footer class="main-footer" style="text-align: center;">
     <div class="pull-right hidden-xs">
         <b>Version</b> 0.0
     </div>

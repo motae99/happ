@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Lab;
 use app\models\LabSearch;
+use app\models\LabExam;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\web\UploadedFile;
@@ -53,6 +54,24 @@ class LabController extends Controller
             'model' => $model
         ]);
     }
+
+     public function actionExam($id)
+    {
+        $model = $this->findModel($id);
+        $exam = new LabExam();
+
+        if ($exam->load(Yii::$app->request->post())) {
+            $exam->lab_id = $model->id;
+            $exam->save();
+            return $this->redirect(['view', 'id' => $id]);
+        }
+
+        return $this->renderAjax('exam', [
+            'exam' => $exam,
+            'model' => $model
+        ]);
+    }
+
 
     public function actionIndex()
     {

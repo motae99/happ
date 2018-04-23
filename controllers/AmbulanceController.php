@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Ambulance;
 use app\models\AmbulanceSearch;
+use app\models\AmbulanceRequest;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -41,6 +42,16 @@ class AmbulanceController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionRequest()
+    {
+
+        $model = AmbulanceRequest::find()->all();
+
+         return $this->render('request', [
+            'model' => $model,
         ]);
     }
 

@@ -56,6 +56,11 @@ class AmbulanceRequest extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getAmbulance()
+    {
+        return $this->hasOne(Ambulance::className(), ['id' => 'ambulance_id']);
+    }
+
     /**
      * {@inheritdoc}
      * @return AmbulanceRequestQuery the active query used by this AR class.

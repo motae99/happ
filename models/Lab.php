@@ -104,6 +104,16 @@ class Lab extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getExam()
+    {
+        return $this->hasMany(LabExam::className(), ['lab_id' => 'id']);
+    }
+
+     public function getLabin()
+    {
+        return $this->hasMany(LabInsu::className(), ['lab_id' => 'id']);
+    }
+
     /**
      * {@inheritdoc}
      * @return LabQuery the active query used by this AR class.

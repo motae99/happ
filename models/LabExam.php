@@ -16,14 +16,14 @@ use yii\behaviors\BlameableBehavior;
  *
  * @property Invoice[] $invoices
  */
-class LabInsu extends \yii\db\ActiveRecord
+class LabExam extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'lab_insur';
+        return 'lab_exam';
     }
 
     /**
@@ -32,9 +32,9 @@ class LabInsu extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['lab_id', 'insurance_id', 'discount'], 'required'],
-            [['lab_id', 'insurance_id'], 'integer'],
-            [['discount'], 'safe'],
+            [['lab_id', 'name', 'price', 'resault'], 'required'],
+            [['lab_id'], 'integer'],
+            [['description'], 'safe'],
         ];
     }
 
@@ -45,23 +45,20 @@ class LabInsu extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'lab_id' => Yii::t('app', 'Phar ID'),
-            'insurance_id' => Yii::t('app', 'Insurance ID'),
-            'discount' => Yii::t('app', 'Discount'),
+            'lab_id' => Yii::t('app', 'Lab ID'),
+            'name' => Yii::t('app', 'Name'),
+            'description' => Yii::t('app', 'Description'),
+            'price' => Yii::t('app', 'Price'),
+            'resault' => Yii::t('app', 'Resault'),
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getInvoices()
+    public function getLab()
     {
-        return $this->hasMany(Invoice::className(), ['insurance_id' => 'id']);
-    }
-
-    public function getInsurance()
-    {
-        return $this->hasOne(Insurance::className(), ['id' => 'insurance_id']);
+        return $this->hasOne(Lab::className(), ['id' => 'lab_id']);
     }
 
     /**
