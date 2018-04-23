@@ -78,7 +78,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::button('<i class="fa fa-plus"></i>', ['value' => Url::to(['insu', 'id' => $model->id]), 'title' => Yii::t('app', 'اضف تأمين'), 'class' => 'btn btn-flat bg-blue showModalButton']); ?>
 
             <table class="table table-bordered table-responsive">
-                <tr class="bg-navy">
+                <tr class="bg-purple">
                   <th style="color: white;"></th>
                   <th style="color: white;"><?= Yii::t('app', 'شركة التأمين')?></th>
                   <th style="color: white;"><?= Yii::t('app', 'قيمة التخفيض')?></th>
