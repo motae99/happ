@@ -59,6 +59,11 @@ class PharInsu extends \yii\db\ActiveRecord
         return $this->hasMany(Invoice::className(), ['insurance_id' => 'id']);
     }
 
+    public function getInsurance()
+    {
+        return $this->hasOne(Insurance::className(), ['id' => 'insurance_id']);
+    }
+
     /**
      * {@inheritdoc}
      * @return PharInsuQuery the active query used by this AR class.

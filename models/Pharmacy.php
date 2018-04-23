@@ -125,6 +125,16 @@ class Pharmacy extends \yii\db\ActiveRecord
         return $this->hasMany(Stock::className(), ['phar_id' => 'id']);
     }
 
+    public function getDrugs()
+    {
+        return $this->hasMany(Drugs::className(), ['phar_id' => 'id']);
+    }
+
+    public function getPharin()
+    {
+        return $this->hasMany(PharInsu::className(), ['phar_id' => 'id']);
+    }
+
     /**
      * {@inheritdoc}
      * @return PharmacyQuery the active query used by this AR class.
