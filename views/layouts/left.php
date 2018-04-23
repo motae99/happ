@@ -39,6 +39,8 @@
                     ['label' => Yii::t('app', 'الأطباء'), 'icon' => 'sitemap', 'url' => ['/physician']],
                     ['label' => Yii::t('app', 'شركات التأمين'), 'icon' => 'sitemap', 'url' => ['/insurance']],
                     ['label' => Yii::t('app', 'الحجوزات'), 'icon' => 'sitemap', 'url' => ['/register']],
+                    ['label' => Yii::t('app', 'الصيدليات'), 'icon' => 'sitemap', 'url' => ['/pharmacy']],
+                    ['label' => Yii::t('app', 'المعامل'), 'icon' => 'sitemap', 'url' => ['/lab']],
                    
                     // [
                     //     'label' => 'Same tools',
