@@ -65,13 +65,15 @@ class InsuranceController extends Controller
     public function actionCreate()
     {
         $model = new Insurance();
+        $user =  Yii::$app->user->identity;
 
         if ($model->load(Yii::$app->request->post())) {
 
             $model->created_at = new \yii\db\Expression('NOW()');
-            $model->created_by = 1;
+            $model->created_by = $user->id;
             $model->save();
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
+
         }
 
         return $this->render('create', [

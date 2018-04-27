@@ -61,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 
                   ?>
                   <td><?=  $i+1  ?></td>
-                  <td><?= $s->specialty?></td>
+                  <td><?= $s->specialty->name?></td>
                   <td><?= $s->doctor->name ?></td>
                   <td><?= $s->doctor->contact_no ?></td>
                   

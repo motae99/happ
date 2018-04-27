@@ -429,69 +429,6 @@ class PhysicianController extends Controller
         ]);
     }
 
-        public function actionCr()
-
-    {
-        $modelPerson = new Person;
-        $modelsHouse = [new House];
-        $modelsRoom = [[new Room]];
-        if ($modelPerson->load(Yii::$app->request->post())) {
-            $modelsHouse = Model::createMultiple(House::classname());
-            Model::loadMultiple($modelsHouse, Yii::$app->request->post());
-            // validate person and houses models
-            $valid = $modelPerson->validate();
-            $valid = Model::validateMultiple($modelsHouse) && $valid;
-            if (isset($_POST['Room'][0][0])) {
-                foreach ($_POST['Room'] as $indexHouse => $insurances) {
-                    foreach ($rooms as $indexRoom => $room) {
-                        $data['Room'] = $room;
-                        $modelRoom = new Room;
-                        $modelRoom->load($data);
-                        $modelsRoom[$indexHouse][$indexRoom] = $modelRoom;
-                        $valid = $modelRoom->validate();
-                    }
-                }
-            }
-            if ($valid) {
-                $transaction = Yii::$app->db->beginTransaction();
-                try {
-                    if ($flag = $modelPerson->save(false)) {
-                        foreach ($modelsHouse as $indexHouse => $modelHouse) {
-                            if ($flag === false) {
-                                break;
-                            }
-                            $modelHouse->person_id = $modelPerson->id;
-                            if (!($flag = $modelHouse->save(false))) {
-                                break;
-                            }
-                            if (isset($modelsRoom[$indexHouse]) && is_array($modelsRoom[$indexHouse])) {
-                                foreach ($modelsRoom[$indexHouse] as $indexRoom => $modelRoom) {
-                                    $modelRoom->house_id = $modelHouse->id;
-                                    if (!($flag = $modelRoom->save(false))) {
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    if ($flag) {
-                        $transaction->commit();
-                        return $this->redirect(['view', 'id' => $modelPerson->id]);
-                    } else {
-                        $transaction->rollBack();
-                    }
-                } catch (Exception $e) {
-                    $transaction->rollBack();
-                }
-            }
-        }
-        return $this->render('create', [
-            'modelPerson' => $modelPerson,
-            'modelsHouse' => (empty($modelsHouse)) ? [new House] : $modelsHouse,
-            'modelsRoom' => (empty($modelsRoom)) ? [[new Room]] : $modelsRoom,
-        ]);
-
-    }
     /**
      * Updates an existing Physician model.
      * If update is successful, the browser will be redirected to the 'view' page.

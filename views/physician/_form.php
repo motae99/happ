@@ -8,6 +8,7 @@ use yii\web\JsExpression;
 use kartik\date\DatePicker;
 use wbraganca\dynamicform\DynamicFormWidget;
 use app\models\Clinic;
+use app\models\Speciality;
 /* @var $this yii\web\View */
 /* @var $model app\models\Physician */
 /* @var $form yii\widgets\ActiveForm */
@@ -68,7 +69,12 @@ $(document).ready(function(){
             <?= $form->field($model, 'regestration_no')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'الرقم الطبي')])->label(false) ?>
         </div>
         <div class="col-lg-12">
-            <?= $form->field($model, 'specialization_id')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'التخصص')])->label(false) ?>
+            <?= $form->field($model, 'specialization_id')->dropDownList(
+                        ArrayHelper::map(Speciality::find()->all(), 'id', 'name'),
+                        [
+                            'prompt'=>Yii::t('app', 'التخصص'),
+                        ])->label(false);  
+            ?>
         </div>
         <div class="col-lg-12">
             <?= $form->field($model, 'university')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'جامعة التخرج')])->label(false) ?>

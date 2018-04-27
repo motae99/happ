@@ -61,10 +61,9 @@ class Specialization extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['clinic_id', 'specialty', 'physician_id'], 'required'],
-            [['clinic_id', 'created_by', 'updated_by', 'physician_id'], 'integer'],
+            [['clinic_id', 'specialty_id', 'physician_id'], 'required'],
+            [['clinic_id', 'created_by', 'specialty_id','updated_by', 'physician_id'], 'integer'],
             [['created_at', 'updated_at'], 'safe'],
-            [['specialty'], 'string', 'max' => 45],
             [['clinic_id'], 'exist', 'skipOnError' => true, 'targetClass' => Clinic::className(), 'targetAttribute' => ['clinic_id' => 'id']],
         ];
     }
@@ -78,7 +77,7 @@ class Specialization extends \yii\db\ActiveRecord
             'id' => Yii::t('app', 'ID'),
             'clinic_id' => Yii::t('app', 'Clinic ID'),
             'physician_id' => Yii::t('app', 'Physician'),
-            'specialty' => Yii::t('app', 'Specialty'),
+            'specialty_id' => Yii::t('app', 'Specialty Id'),
             'created_at' => Yii::t('app', 'Created At'),
             'created_by' => Yii::t('app', 'Created By'),
             'updated_at' => Yii::t('app', 'Updated At'),
@@ -94,9 +93,14 @@ class Specialization extends \yii\db\ActiveRecord
         return $this->hasOne(Clinic::className(), ['id' => 'clinic_id']);
     }
 
-     public function getDoctor()
+    public function getDoctor()
     {
         return $this->hasOne(Physician::className(), ['id' => 'physician_id']);
+    }
+
+    public function getSpecialty()
+    {
+        return $this->hasOne(Speciality::className(), ['id' => 'specialty_id']);
     }
 
     /**

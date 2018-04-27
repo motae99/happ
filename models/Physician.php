@@ -108,6 +108,11 @@ class Physician extends \yii\db\ActiveRecord
         return $this->hasMany(Specialization::className(), ['physician_id' => 'id']);
     }
 
+    // public function getSpeciality()
+    // {
+    //     return $this->hasOne(Speciality::className(), ['id' => 'id']);
+    // }
+
     public function getCal()
     {
         return $this->hasMany(Calender::className(), ['physician_id' => 'id']);
