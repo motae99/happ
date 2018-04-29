@@ -10,7 +10,7 @@ class Speciality extends \api\components\db\ActiveRecord
 	 */
 	public static function tableName()
 	{
-		return '{{Speciality}}';
+		return '{{speciality}}';
 	}
 
 	public function fields()
