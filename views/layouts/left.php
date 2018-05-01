@@ -43,6 +43,7 @@
                     ['label' => Yii::t('app', 'المعامل'), 'icon' => 'plus-square', 'url' => ['/lab']],
                     ['label' => Yii::t('app', 'شركات الاسعاف'), 'icon' => 'ambulance', 'url' => ['/ambulance']],
                     ['label' => Yii::t('app', 'طلبات الاسعاف'), 'icon' => 'wheelchair', 'url' => ['/ambulance/request']],
+                    ['label' => Yii::t('app', 'الخدمات والأعلان'), 'icon' => 'home', 'url' => ['/services']],
                    
                     // [
                     //     'label' => 'Same tools',

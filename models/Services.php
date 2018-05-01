@@ -13,14 +13,14 @@ use Yii;
  * @property string $rate
  * @property string $working_hourse
  */
-class Ads extends \yii\db\ActiveRecord
+class Services extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
      */
     public static function tableName()
     {
-        return 'adspanner';
+        return 'services';
     }
 
     /**
@@ -29,8 +29,8 @@ class Ads extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['data', 'img'], 'required'],
-            [['data', 'img'], 'string'],
+            [['description'], 'safe'],
+            [['name'], 'string', 'max' => 45],
         ];
     }
 
@@ -41,17 +41,17 @@ class Ads extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'data' => Yii::t('app', 'data'),
-            'img' => Yii::t('app', 'img'),
+            'name' => Yii::t('app', 'name'),
+            'description' => Yii::t('app', 'description'),
         ];
     }
 
     /**
      * {@inheritdoc}
-     * @return AdsQuery the active query used by this AR class.
+     * @return ServicesQuery the active query used by this AR class.
      */
     public static function find()
     {
-        return new AdsQuery(get_called_class());
+        return new ServicesQuery(get_called_class());
     }
 }
