@@ -11,5 +11,5 @@ use yii\helpers\Url;
 
 
 <div>
-Index
+
 </div>
