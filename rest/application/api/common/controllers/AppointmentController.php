@@ -360,7 +360,7 @@ class AppointmentController extends \api\components\ActiveController
         // }else{
         //     return  array('Calender' => 0);
         // }
-            return  array('app' => $app, 'ava' => $ava, 'Calender' => $cal);
+        return  array('Calender' => $cal);
 
     }
 
