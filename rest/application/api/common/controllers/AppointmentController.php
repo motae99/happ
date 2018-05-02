@@ -355,16 +355,11 @@ class AppointmentController extends \api\components\ActiveController
         $app = Appointment::findOne($id);
         $times =  array();
         $cal = Calender::find()->where(['availability_id' => $app->availability_id])->all();
-        // if ($cal) {
-        //     foreach ($cal as $c) {
-        //         $time = $c->schedule;
-        //         // if ($time->status == 'available') {
-        //             $times[] = $time ; 
-        //         // }
-        //     }
-        // }
-        // $time = $cal->schedule ;    
-        return  array('Calender' => $cal);
+        if ($cal) {
+            return  array('Calender' => $cal);
+        }else{
+            return  array('Calender' => 0);
+        }
 
     }
 
