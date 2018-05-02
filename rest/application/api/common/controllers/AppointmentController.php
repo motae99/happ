@@ -354,7 +354,7 @@ class AppointmentController extends \api\components\ActiveController
     public function actionCalenderavailable($id){
         $app = Appointment::findOne($id);
         $ava = Availability::find()->where(['id' => $app->availability_id])->one();
-        $cal = Calender::find()->where(['availability_id' => $app->availability_id])->all();
+        $cal = Calender::find()->where(['availability_id' => $ava->id])->all();
         // if ($cal) {
         //     return  array('Calender' => $cal);
         // }else{
