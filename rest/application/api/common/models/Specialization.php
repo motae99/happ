@@ -16,9 +16,9 @@ class Specialization extends \api\components\db\ActiveRecord
     {
         return [
             'id',
-            // 'speciality_id',
-            'clinic_id',
             'physician_id',
+            'clinic_id',
+            'doctor' => function($model) { return $model->doctor->name; },
             'Speciality' => function($model) { return $model->speciality->name; },
             // 'clinic' => function($model) { return $model->clinic->name; },
             // 'Doctor' => function($model) { return $model->doctor->name; },
