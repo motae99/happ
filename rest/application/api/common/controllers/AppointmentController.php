@@ -38,7 +38,9 @@ class AppointmentController extends \api\components\ActiveController
                     'schedule',
                     'reschedule',
                     'ratedoctor',
-                    'rateclinic'
+                    'rateclinic',
+                    'scheduleavailable',
+                    'calenderavailable'
                 ],
                 'roles' => ['@'],
             ],
@@ -100,8 +102,8 @@ class AppointmentController extends \api\components\ActiveController
             $cal = Calender::find()
                 ->where(['clinic_id' => $clinic_id])
                 ->andWhere(['physician_id' => $doctor_id])
-                // ->andWhere(['status' => 'available'])
-                // ->andWhere(['>=', 'date', date('Y-m-d')])
+                ->andWhere(['status' => 'available'])
+                ->andWhere(['>=', 'date', date('Y-m-d')])
                 ->orderBy(['date' => SORT_ASC])
                 ->one();
 
@@ -341,11 +343,44 @@ class AppointmentController extends \api\components\ActiveController
 
     }
 
-    public function actionSchedule($id){
+    // public function actionSchedule($id){
+    //     $app = Appointment::findOne($id);
+    //     $cal = Calender::find()->where(['id' => $app->calender_id])->one();
+    //     $times = $cal->schedule ;    
+    //     return  array('Calender' => $cal, 'Schedule' => $times);
+
+    // }
+
+    public function actionCalenderavailable($id){
         $app = Appointment::findOne($id);
-        $cal = Calender::find()->where(['id' => $app->calender_id])->one();
-        $times = $cal->schedule ;    
-        return  array('Calender' => $cal, 'Schedule' => $times);
+        $times =  array();
+        $cal = Calender::find()->where(['availability_id' => $app->availability_id])->all();
+        // if ($cal) {
+        //     foreach ($cal as $c) {
+        //         $time = $c->schedule;
+        //         // if ($time->status == 'available') {
+        //             $times[] = $time ; 
+        //         // }
+        //     }
+        // }
+        // $time = $cal->schedule ;    
+        return  array('Calender' => $cal);
+
+    }
+
+    public function actionScheduleavailable($id){
+        // $cal = Calender::findOne($id);
+        $schedule = Schedule::find()->where(['calender_id' => $id, 'status' => 'available'])->all();
+        // if ($cal) {
+        //     foreach ($cal as $c) {
+        //         $time = $c->schedule;
+        //         // if ($time->status == 'available') {
+        //             $times[] = $time ; 
+        //         // }
+        //     }
+        // }
+        // $time = $cal->schedule ;
+        return  array('Schedule' => $schedule);
 
     }
 
