@@ -353,13 +353,14 @@ class AppointmentController extends \api\components\ActiveController
 
     public function actionCalenderavailable($id){
         $app = Appointment::findOne($id);
-        $times =  array();
+        $ava = Availability::find()->where(['id' => $app->availability_id])->one();
         $cal = Calender::find()->where(['availability_id' => $app->availability_id])->all();
-        if ($cal) {
-            return  array('Calender' => $cal);
-        }else{
-            return  array('Calender' => 0);
-        }
+        // if ($cal) {
+        //     return  array('Calender' => $cal);
+        // }else{
+        //     return  array('Calender' => 0);
+        // }
+            return  array('app' => $app, 'ava' => $ava, 'Calender' => $cal);
 
     }
 
@@ -414,7 +415,7 @@ class AppointmentController extends \api\components\ActiveController
 
 
     // public function actionCreate(){
-    //     $user =  Yii::$app->user->identity;
+    //     $user =  Yii::$app->user->identity; 
         
     //     $model = new Task();
     //     $body = json_decode(Yii::$app->getRequest()->getRawBody(), true);
