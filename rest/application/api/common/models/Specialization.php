@@ -39,12 +39,12 @@ class Specialization extends \api\components\db\ActiveRecord
 
 	public function getDoctor()
     {
-        return $this->hasOne(Physician::className(), ['physician_id' => 'id']);
+        return $this->hasOne(Physicain::className(), ['id' => 'physician_id']);
     }
 
     public function getClinic()
     {
-        return $this->hasOne(Medical::className(), ['clinic_id' => 'id']);
+        return $this->hasOne(Medical::className(), ['id' => 'clinic_id']);
     }
 
     public function getSpeciality()
