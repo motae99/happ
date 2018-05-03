@@ -40,7 +40,8 @@ class AppointmentController extends \api\components\ActiveController
                     'ratedoctor',
                     'rateclinic',
                     'scheduleavailable',
-                    'calenderavailable'
+                    'calenderavailable',
+                    'insurance'
                 ],
                 'roles' => ['@'],
             ],
@@ -53,6 +54,12 @@ class AppointmentController extends \api\components\ActiveController
         unset($actions['create']);
         unset($actions['update']);
         return $actions;
+    }
+
+    public function actionInsurance($clinic_id, $doctor_id){
+        $avail = Availability::find()->where(['clinic_id' => $clinic_id, 'physician_id' => $doctor_id])->one();
+        $accepted = $avail->insurance;
+        return  array('accepted_insurance' => $accepted );
     }
 
     public function actionBooking(){
@@ -285,6 +292,8 @@ class AppointmentController extends \api\components\ActiveController
             return  array('success' => 0, 'message' => 'specify current reservation id and the rescheduled id and your pereferd time id');
         }
     }
+
+
 
     public function actionRevisit($id){
         $app = Appointment::findOne($id);

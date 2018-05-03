@@ -54,6 +54,7 @@ class Medical extends \api\components\db\ActiveRecord
 
     public function getAvail()
     {
+        
         return $this->hasMany(Availability::className(), ['clinic_id' => 'id']);
     }
 

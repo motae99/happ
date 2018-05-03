@@ -58,6 +58,7 @@ return [
 						'POST rateclinic' => 'rateclinic',
 						'GET calenderavailable/<id>' => 'calenderavailable',
 						'GET scheduleavailable/<id>' => 'scheduleavailable',
+						'GET insurance' => 'insurance',
 
 					],
 				],

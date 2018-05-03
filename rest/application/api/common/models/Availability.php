@@ -51,7 +51,7 @@ class Availability extends \api\components\db\ActiveRecord
     public function getInsurance()
     {
         
-        return $this->hasMany(InsuranceAcceptance::className(), ['id' => 'insurance_id']);
+        return $this->hasMany(InsuranceAcceptance::className(), ['availability_id' => 'id']);
     }
 
     public function spec($model)
