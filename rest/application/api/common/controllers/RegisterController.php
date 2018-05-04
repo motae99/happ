@@ -51,7 +51,7 @@ class RegisterController extends \api\components\ActiveController
                 $client = new Client();
                 $no = $body['phone_no'];
                 $response = $client->Verify->GetCode($no , 'مرحبا بك في خدمة تطبيق طبيبي لتأكيد الأشتراك الرجاء ادخال الرقم التالي', 'OTP');
-                return array('response' => $response);
+                return array('success' => 1 ,'response' => $response);
             }
         
         }else{
