@@ -73,7 +73,7 @@ class AppointmentController extends \api\components\ActiveController
             $phone_no = $body['phone_no'];
             
         }else{
-            return  array('message' => 'fill required fields'); 
+            return  array('message' => 'رجاءً أكمل الادخال'); 
 
         }
         if (isset($body['insurance_id']) && isset($body['insurance_no']) ) {
@@ -120,7 +120,7 @@ class AppointmentController extends \api\components\ActiveController
                             ->andWhere(['patient_id' => $patient->id])
                             ->one();
                 if ($already) {
-                     return  array('success' => 0 , 'message' => 'already booked'); 
+                     return  array('success' => 0 , 'message' => 'محجوز مسبقاً'); 
                 }
                 $availability = Availability::findOne($cal->availability_id);
             // return  array('data' => $availability); 
@@ -155,7 +155,7 @@ class AppointmentController extends \api\components\ActiveController
                     
                     }else{
                         // message your insurance is not available
-                      return  array('success' => 0 , 'message' => 'message your insurance is not supported'); 
+                      return  array('success' => 0 , 'message' => 'تأمينك غير مدعوم'); 
                     }
 
                 }elseif($availability){
@@ -181,7 +181,7 @@ class AppointmentController extends \api\components\ActiveController
                 }
             }else{
                 // no appointment available to book  
-                return  array('success' => 0 , 'message' => 'no appointment available to book'); 
+                return  array('success' => 0 , 'message' => 'ﻻ توجد حجوزات شاغره'); 
             }
         }
         
