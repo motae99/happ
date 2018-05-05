@@ -52,7 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
               ?>
               <td><?=  $i+1  ?></td>
               <td><?= $ad->data?></td>
-              <td><a href="<?= Yii::getAlias('@web').$ad->img ?>"><?= $ad->img ?></a> </td>
+              <td><a href="<?= Yii::getAlias('@web').'/img/panners/'.$ad->img ?>"><?= $ad->img ?></a> </td>
             </tr>
               <?php } 
 
