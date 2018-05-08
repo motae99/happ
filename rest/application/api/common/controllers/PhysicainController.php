@@ -20,7 +20,7 @@ class PhysicainController extends \api\components\ActiveController
                     'view',
                     'spaciality'
                 ],
-                'roles' => ['@'],
+                'roles' => ['?'],
             ],
            
         ];

@@ -30,6 +30,13 @@ return [
 				],
 				[
 					'class' => 'yii\rest\UrlRule',
+					'controller' => ['v1/contactus'],
+					'extraPatterns' => [
+						'POST form' => 'form',
+					],
+				],
+				[
+					'class' => 'yii\rest\UrlRule',
 					'controller' => ['v1/ads'],
 					'extraPatterns' => [
 						'GET text' => 'text',
