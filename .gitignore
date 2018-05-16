@@ -32,3 +32,6 @@ config/db.php
 
 # don't push .htaccess
 .htaccess
+
+# don't push .htaccess
+web/.htaccess
