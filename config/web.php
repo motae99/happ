@@ -5,7 +5,7 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
-    'language' => 'ar',
+    'language' => 'en',
     'name' => 'HealthApp',
     'timeZone' => 'Africa/Khartoum',
     
@@ -22,6 +22,11 @@ $config = [
         '@npm'   => '@vendor/npm-asset',
     ],
     'modules' => [
+        'admin' => [
+            'class' => 'mdm\admin\Module',
+            'layout' => /*'@app/views/layouts/left.php',*/ 'right-menu',
+            'mainLayout' => '@app/views/layouts/main.php',
+        ],
        'gridview' =>  [
             'class' => '\kartik\grid\Module',
             // enter optional module parameters below - only if you need to  
@@ -77,12 +82,12 @@ $config = [
             ],
         ],
         'formatter' => [
-            'dateFormat' => 'dd-MM-yyyy',
-            'datetimeFormat' => 'php:d-m-Y H:i:s',
+            'dateFormat' => 'Y-m-d',
+            'datetimeFormat' => 'php:Y-m-d H:i:s',
             'timeFormat' => 'php:H:i:s',
             'decimalSeparator' => '.',
             'thousandSeparator' => ',',
-            // 'currencyCode' => 'Sdp.',
+            'currencyCode' => 'Sdp.',
             'class' => 'yii\i18n\Formatter',
         ],
         'mycomponent' => [
@@ -101,7 +106,7 @@ $config = [
         'assetManager' => [
             'bundles' => [
                 'dmstr\web\AdminLteAsset' => [
-                    'skin' => 'skin-red',
+                    'skin' => 'skin-blue',
                 ],
                 'wbraganca\dynamicform\DynamicFormAsset' => [
                     'sourcePath' => '@app/web/js',
@@ -117,6 +122,9 @@ $config = [
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
+        ],
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager', // or use 'yii\rbac\PhpManager'
         ],
         'user' => [
             'identityClass' => 'app\models\User',
@@ -151,21 +159,36 @@ $config = [
         ],
         
     ],
-    'as beforeRequest' => [
-        'class' => 'yii\filters\AccessControl',
-        'rules' => [
-            [
-                'allow' => true,
-                'actions' => ['login'],
-            ],
-            [
-                'allow' => true,
-                'roles' => ['@'],
-            ],
-        ],
-        'denyCallback' => function () {
-            return Yii::$app->response->redirect(['site/login']);
-        },
+    // 'as beforeRequest' => [
+    //     'class' => 'yii\filters\AccessControl',
+    //     'rules' => [
+    //         [
+    //             'allow' => true,
+    //             'actions' => ['login'],
+    //         ],
+    //         [
+    //             'allow' => true,
+    //             'roles' => ['@'],
+    //         ],
+    //     ],
+    //     'denyCallback' => function () {
+    //         return Yii::$app->response->redirect(['site/login']);
+    //     },
+    // ],
+        'as access' => [
+        'class' => 'mdm\admin\components\AccessControl',
+        'allowActions' => [
+            'site/login',
+            'site/error',
+            'site/logout',
+            // 'admin/*',
+            // 'some-controller/some-action',
+            // The actions listed here will be allowed to everyone including guests.
+            // So, 'admin/*' should not appear here in the production, of course.
+            // But in the earlier stages of your development, you may probably want to
+            // add a lot of actions here until you finally completed setting up rbac,
+            // otherwise you may not even take a first step.
+        ]
     ],
     'params' => $params,
 ];

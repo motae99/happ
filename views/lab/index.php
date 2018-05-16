@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use kartik\grid\GridView;
 
 /* @var $this yii\web\View */
 /* @var $searchModel app\models\LabSearch */
@@ -44,7 +44,12 @@ $this->params['breadcrumbs'][] = $this->title;
             //'updated_at',
             //'updated_by',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'kartik\grid\ActionColumn',
+                'header' => "",
+                'width' => '5%',
+                'template' => '{view} ',
+            ],
         ],
     ]); ?>
 </div>

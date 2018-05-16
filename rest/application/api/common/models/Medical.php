@@ -32,6 +32,7 @@ class Medical extends \api\components\db\ActiveRecord
             'app_service',
             'rate_count' => function($model) { return $model->count($model);},
             'rate_total' => function($model) { return $model->total($model);},
+            // 'photo' => function($model) { return 'https://www.tabibyapp.com/img/clinics/'.$model->photo;},
             'photo' => function($model) { return '/img/clinics/'.$model->photo;},
             'start_time'=> function($model) { return $model->start; },
             'end_time'=> function($model) { return $model->end; },

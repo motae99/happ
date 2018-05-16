@@ -53,6 +53,11 @@ class Calender extends \yii\db\ActiveRecord
         ];
     }
 
+    // public function getClinic()
+    // {
+    //     return $this->hasOne(Clinic::className(), ['id' => 'clinic_id']);
+    // } 
+    
     public function getClinic()
     {
         return $this->hasOne(Clinic::className(), ['id' => 'clinic_id']);

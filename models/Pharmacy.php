@@ -76,7 +76,7 @@ class Pharmacy extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'state', 'city', 'address', 'working_days', 'from_hour', 'to_hour', 'app_service', 'logitude', 'latitude', 'phone', 'rate', ], 'required'],
-            [['address', 'app_service', 'logitude', 'latitude', 'owner_name'], 'string'],
+            [['address', 'app_service', 'logitude', 'latitude', 'owner_name', 'photo'], 'string'],
             [['from_hour', 'created_at', 'working_days', 'updated_at', 'owner_name', 'secodary_phone', 'website'], 'safe'],
             [[ 'phone', 'rate', 'created_by', 'updated_by'], 'integer'],
             [['name', 'state', 'city'], 'string', 'max' => 45],
@@ -102,6 +102,7 @@ class Pharmacy extends \yii\db\ActiveRecord
             'latitude' => Yii::t('app', 'Latitude'),
             'phone' => Yii::t('app', 'Phone'),
             'rate' => Yii::t('app', 'Rate'),
+            'photo' => Yii::t('app', 'photo'),
             'created_at' => Yii::t('app', 'Created At'),
             'created_by' => Yii::t('app', 'Created By'),
             'updated_at' => Yii::t('app', 'Updated At'),

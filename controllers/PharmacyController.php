@@ -116,6 +116,16 @@ class PharmacyController extends Controller
             $model->working_days = $days;
             $model->from_hour = date("H:i", strtotime($start));
             $model->to_hour = date("H:i", strtotime($end));
+
+            $image = UploadedFile::getInstance($model, 'photo');
+            if (!is_null($image)) {
+             $ext = end((explode(".", $image->name)));
+              $model->photo = Yii::$app->security->generateRandomString().".{$ext}";
+              Yii::$app->params['uploadPath'] = Yii::$app->basePath . '/web/img/labs/';
+              $path = Yii::$app->params['uploadPath'] . $model->photo;
+              $image->saveAs($path);
+            }
+            
             $model->save(false);
             return $this->redirect(['view', 'id' => $model->id]);
         }

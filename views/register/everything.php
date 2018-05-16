@@ -9,14 +9,17 @@ $this->title = Yii::t('app', 'Register');
 $this->params['breadcrumbs'][] = $this->title;
 
 ?>
+<h1></h1>
 
   <?php 
-            $dataProvider =  new ActiveDataProvider([
-                'query' => \app\models\Appointment::find(),
-                // 'sort'=> ['defaultOrder' => ['date'=>SORT_DESC, 'account_id'=>SORT_ASC, 'timestamp'=>SORT_ASC]],
+            // $dataProvider =  new ActiveDataProvider([
+            //     'query' => \app\models\Appointment::find(),
+            //     // 'sort'=> ['defaultOrder' => ['date'=>SORT_DESC, 'account_id'=>SORT_ASC, 'timestamp'=>SORT_ASC]],
 
-            ]);
-            // $dataProvider->query->where(['physician_id'=>$model->id])->all();
+            // ]);
+            // // $dataProvider->query->where(['physician_id'=>$model->id])->all();
+
+            // $dataProvider = $dataProvider->query->andWhere(['date'=> date('Y-m-d')]);
 
            $gridColumns  = 
             [
@@ -58,34 +61,32 @@ $this->params['breadcrumbs'][] = $this->title;
             	], 
             	[
             		'class'=>'kartik\grid\DataColumn',
-            		'header'=> Yii::t('app', 'المريض'),
-            		'attribute'=>'physician_id',
+            		'header'=> 'اسم المريض',
+            		'attribute'=>'patientName',
             		'headerOptions'=>['class'=>'kartik-sheet-style'],
                     'hAlign'=>'center',
                     'vAlign'=>'center',
                     // 'width'=>'8%',
                     'format' => 'raw',
                     'value' =>function ($model, $key, $index, $widget) { 
-                        return $model->patient->name; 
+                        return $model->patientName; 
                                           
                     },
             	],
-            	[	
-            		'class'=>'kartik\grid\DataColumn',
-            		'header'=> Yii::t('app', 'رسوم الحجز'),
-            		'attribute'=>'fee',
-                'format' => 'raw',
+              [
+                'class'=>'kartik\grid\DataColumn',
+                'header'=> 'هاتف المريض',
+                'attribute'=>'patientPhone',
+                'headerOptions'=>['class'=>'kartik-sheet-style'],
+                    'hAlign'=>'center',
+                    'vAlign'=>'center',
+                    // 'width'=>'8%',
+                    'format' => 'raw',
                     'value' =>function ($model, $key, $index, $widget) { 
-                        if ($model->insured == 'yes') {
-                          return $model->insured_fee;
-                        }elseif ($model->insured == 'no') {
-                          return $model->fee;
-                        }
+                        return $model->patientPhone; 
                                           
                     },
-                'pageSummary'=>true,
-                'footer'=>true
-            	], 
+              ],
             	[
             		'headerOptions'=>['class'=>'kartik-sheet-style'],
             		'header'=> Yii::t('app', 'تأمين'),
@@ -158,23 +159,58 @@ $this->params['breadcrumbs'][] = $this->title;
                         
                     },
             	], 
-        
+            	[  
+                'class'=>'kartik\grid\DataColumn',
+                'header'=> Yii::t('app', 'رسوم الحجز'),
+                'attribute'=>'fee',
+                'format' => 'raw',
+                    'value' =>function ($model, $key, $index, $widget) { 
+                        if ($model->insured == 'yes') {
+                          return $model->insured_fee;
+                        }elseif ($model->insured == 'no') {
+                          return $model->fee;
+                        }
+                                          
+                    },
+                'pageSummary'=>true,
+                'footer'=>true
+              ],
             	[
-            		'header'=> Yii::t('app', 'حالة الحجز'),
-            		'attribute'=>'status',
-            		'headerOptions'=>['class'=>'kartik-sheet-style'],
-            		'hAlign'=>'center',
+            		'header'=> Yii::t('app', 'وقت الحجز'),
+            		'attribute'=>'date',
+            	],
+              [
+                'header'=> Yii::t('app', 'اليوم'),
+                'attribute'=>'time',
+              ],
+              [
+                'header'=> Yii::t('app', 'وقت الحجز'),
+                'attribute'=>'created_at',
+              ],
+              [
+                'header'=> Yii::t('app', 'وقت تأكيد الحجز'),
+                'attribute'=>'confirmed_at',
+              ],
+              [
+                'header'=> Yii::t('app', 'الترتيب'),
+                'attribute'=>'queue',
+              ],
+              [
+                // 'header'=> Yii::t('app', 'حالة الحجز'),
+                'attribute'=>'status',
+                'headerOptions'=>['class'=>'kartik-sheet-style'],
+                'hAlign'=>'center',
                 'vAlign'=>'center',
-                // 'width'=>'8%',
+                'width'=>'5%',
                 'format' => 'raw',
                 'value' =>function ($model, $key, $index, $widget) { 
                   if($model->status == 'confirmed'){
-			              return Html::tag('span', '', ['class' => 'fa fa-2x fa-calendar-check-o']);
-			            }elseif($model->status == 'booked'){
-		                return Html::a('<span class="fa fa-2x fa-calendar-o"></span>', ['register/pay', 'id'=> $model->id] , [
-		                  'title' => 'تأكيد', 'method' => 'post'
-		                ]);
-		              }else{
+                    return Html::tag('span', '', ['class' => 'fa fa-2x fa-calendar-check-o']);
+                  }elseif($model->status == 'booked'){
+                    return Html::a('<span class="fa fa-2x fa-calendar-o"></span>', ['register/pay', 'id'=> $model->id] , [
+                      'title' => 'تأكيد', 'method' => 'post'
+                    ]);
+                  }else{
                     return Html::tag('span', '', ['class' => 'fa fa-2x fa-calendar-times-o']);
                   }
                 },
@@ -188,12 +224,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     }
                       
                   },
-            	], 
-            	[
-            		'header'=> Yii::t('app', 'الموقف'),
-            		'attribute'=>'stat',
+              ], 
+              [
+                // 'header'=> Yii::t('app', 'الموقف'),
+                'attribute'=>'stat',
                 'vAlign'=>'center',
-                // 'width'=>'8%',
+                'width'=>'5%',
                 'format' => 'raw',
                 'value' =>function ($model, $key, $index, $widget) { 
                   if($model->stat == 'done'){
@@ -220,22 +256,73 @@ $this->params['breadcrumbs'][] = $this->title;
                   }
                     
                 },
-            	], 
-            	[
-            		'header'=> Yii::t('app', 'وقت الحجز'),
-            		'attribute'=>'created_at',
-            	],
-            	[
-            		'header'=> Yii::t('app', 'وقت التأكيد'),
-            		'attribute'=>'confirmed_at',
-            	],  
+              ],
+              [
+                // 'header'=> Yii::t('app', 'الموقف'),
+                'attribute'=>'paiedTo',
+                'vAlign'=>'center',
+                'width'=>'5%',
+                'format' => 'raw',
+                'value' =>function ($model, $key, $index, $widget) { 
+                  if($model->paiedTo == 'app'){
+                    return Html::tag('span', '', ['class' => 'fa fa-2x fa-mobile', 'style'=>"color: blue;"]);
+                  }elseif($model->paiedTo == 'registers'){
+                    return Html::tag('span', '', ['class' => 'fa fa-money', 'style'=>"color: green;"]);
+                  }
+                  else{
+                    return Html::tag('span', '', ['class' => 'fa fa-2x  fa-minus', 'style'=>"color: red;"]);
+                  }
+                },
+                // 'contentOptions' => function ($model, $key, $index, $column) {
+                //   if ($model->stat == 'done') {
+                //     return ['style' => 'color:green;' ];
+                //   }elseif ($model->stat == 'schadueled') {
+                //     return ['style' => 'color:orange;' ];
+                //   }elseif($model->stat == 'processing'){
+                //     return ['style' => 'color:red;' ];
+                //   }
+                    
+                // },
+              ], 
+              [
+                'header'=> Yii::t('app', 'الغاء'),
+                // 'attribute'=>'stat',
+                'vAlign'=>'center',
+                'width'=>'5%',
+                'format' => 'raw',
+                'value' =>function ($model, $key, $index, $widget) { 
+                  if($model->stat == 'done'){
+                    return Html::tag('span', '', ['class' => 'fa fa-2x fa-check-circle-o', 'style'=>"color: green;"]);
+                  }elseif($model->status == 'booked'){
+                    return Html::tag('span', '', ['class' => 'fa fa-2x fa-minus', 'style'=>"color: red;"]);
+                  }elseif($model->stat == 'schadueled'){
+                    return Html::a('<span class="fa fa-2x fa-hourglass-2" style="color: orange;"></span>', ['register/proccess', 'id'=> $model->id] , [
+                      'title' => 'مقابلة', 'method' => 'post'
+                    ]);
+                  }elseif($model->stat == 'processing'){
+                    return Html::a('<span class="fa fa-2x fa-clock-o" style="color: blue;"></span>', ['register/finish', 'id'=> $model->id], [
+                      'title' => 'تم', 'method' => 'post'
+                    ]);
+                  }
+                },
+                'contentOptions' => function ($model, $key, $index, $column) {
+                  if ($model->stat == 'done') {
+                    return ['style' => 'color:green;' ];
+                  }elseif ($model->stat == 'schadueled') {
+                    return ['style' => 'color:orange;' ];
+                  }elseif($model->stat == 'processing'){
+                    return ['style' => 'color:red;' ];
+                  }
+                    
+                },
+              ], 
  
             ]
 
   ?>
   <?php echo  GridView::widget([
       'dataProvider' => $dataProvider,
-      // 'filterModel' => $searchModel,
+      'filterModel' => $searchModel,
       'columns' => $gridColumns,
       'export' => [
           'fontAwesome' => true

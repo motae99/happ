@@ -13,7 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1> </h1>
 
-<div>
+<div class="row">
 
     <div class="col-lg-6 eArLangCss">
       <?= Html::button('<i class="fa fa-plus"></i>', ['value' => Url::to(['service']), 'title' => Yii::t('app', 'اضف خدمة'), 'class' => 'btn btn-flat bg-maroon showModalButton']); ?>

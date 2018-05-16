@@ -16,6 +16,11 @@ use yii\db\Query;
 use app\models\Calender;
 use app\models\Schedule;
 
+use app\models\User;
+use app\models\Role;
+use \Unifonic\API\Client;
+
+
 /**
  * PhysicianController implements the CRUD actions for Physician model.
  */
@@ -415,10 +420,44 @@ class PhysicianController extends Controller
        
 
         if ($model->load(Yii::$app->request->post())) {
-            $model->photo = UploadedFile::getInstance($model,'photo');
-            $model->photo->saveAs(Yii::$app->basePath.'/web/img/' .$model->photo.$model->id);
-            $model->save();
-            return $this->redirect(['view', 'id' => $model->id]);
+
+            $image = UploadedFile::getInstance($model, 'photo');
+            if (!is_null($image)) {
+             // $model->image_src_filename = $image->name;
+             $ext = end((explode(".", $image->name)));
+              // generate a unique file name to prevent duplicate filenames
+              $model->photo = Yii::$app->security->generateRandomString().".{$ext}";
+              // the path to save file, you can set an uploadPath
+              // in Yii::$app->params (as used in example below)                       
+              Yii::$app->params['uploadPath'] = Yii::$app->basePath . '/web/img/doctors/';
+              $path = Yii::$app->params['uploadPath'] . $model->photo;
+              $image->saveAs($path);
+            }
+
+
+            $phone = $_POST['Physician']['contact_no'];
+            $model->contact_no = substr_replace($phone, '249', 0, 1);
+            if ($model->save(false)) {
+                $user = new User();
+                $user->id = $model->id;
+                $user->username = $model->contact_no;
+                $user->email = $model->email;
+                $user->password =$model->contact_no;
+                $user->type ='doctor';
+                $user->reference =$model->id;
+                $user->generateAuthKey();
+                if ($user->save(false)) {
+                    $role = new Role();
+                    $role->item_name = 'physician';
+                    $role->user_id = $user->id;
+                    if ($role->save(false)) {
+                        $client = new Client();
+                        $message = "welcome to tabiby app username ".$user->username." password: ".$user->username." https://www.tabibyapp.com";
+                        $client->Messages->Send($user->username,$message);
+                        return $this->redirect(['view', 'id' => $model->id]);
+                    }
+                }
+            }
         }
 
         return $this->render('_form', [

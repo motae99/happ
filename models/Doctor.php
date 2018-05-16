@@ -28,7 +28,7 @@ use yii\behaviors\BlameableBehavior;
  * @property Availability[] $availabilities
  * @property Specialization[] $specializations
  */
-class Clinic extends \yii\db\ActiveRecord
+class Doctor extends \yii\db\ActiveRecord
 {
     /**
      * {@inheritdoc}
@@ -86,32 +86,32 @@ class Clinic extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
-            'name' => 'الأسم',
-            'state' => 'الوﻻية',
-            'city' => 'المدينة',
-            'address' => 'العنوان',
-            'primary_contact' => 'رقم الهاتف',
-            'secondary_contact' => 'هاتف اضافي',
-            'longitude' => 'خط الطوم',
-            'latitude' => 'خط العرض',
-            'type' => 'نوع المؤسسه',
-            'manager' => 'المدير الطبي',
-            'working_days' => 'أيام العمل',
-            'start' => 'وقت بدأ العمل',
-            'end' => 'وقت انتهاء العمل',
-            'photo' => 'صورة',
-            'special_services' => 'الخدمات الخاصه',
-            'app_services' => 'اشتراك بالتطبيق',
-            'fax' => 'fax',
-            'info' => 'معلومات اضافية',
-            'email' => 'الموقع الالكترني',
-            'rate' => 'التقييم',
-            'color' => 'اللون',
-            'created_at' => 'Created At',
-            'created_by' => 'Created By',
-            'updated_at' => 'Updated At',
-            'updated_by' => 'Updated By',
+            'id' => Yii::t('app', 'ID'),
+            'name' => Yii::t('app', 'Name'),
+            'state' => Yii::t('app', 'State'),
+            'city' => Yii::t('app', 'City'),
+            'address' => Yii::t('app', 'Address'),
+            'primary_contact' => Yii::t('app', 'Primary Contact'),
+            'secondary_contact' => Yii::t('app', 'Secondary Contact'),
+            'longitude' => Yii::t('app', 'Longitude'),
+            'latitude' => Yii::t('app', 'Latitude'),
+            'type' => Yii::t('app', 'Type'),
+            'manager' => Yii::t('app', 'manager'),
+            'working_days' => Yii::t('app', 'Working Days'),
+            'start' => Yii::t('app', 'start time'),
+            'end' => Yii::t('app', 'end time'),
+            'photo' => Yii::t('app', 'photo'),
+            'special_services' => Yii::t('app', 'special_services'),
+            'app_services' => Yii::t('app', 'app_services'),
+            'fax' => Yii::t('app', 'fax'),
+            'info' => Yii::t('app', 'info'),
+            'email' => Yii::t('app', 'Email'),
+            'rate' => Yii::t('app', 'rate'),
+            'color' => Yii::t('app', 'color'),
+            'created_at' => Yii::t('app', 'Created At'),
+            'created_by' => Yii::t('app', 'Created By'),
+            'updated_at' => Yii::t('app', 'Updated At'),
+            'updated_by' => Yii::t('app', 'Updated By'),
         ];
     }
 
@@ -143,6 +143,6 @@ class Clinic extends \yii\db\ActiveRecord
      */
     public static function find()
     {
-        return new ClinicQuery(get_called_class());
+        return new DoctorQuery(get_called_class());
     }
 }

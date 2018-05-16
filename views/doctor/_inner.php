@@ -5,9 +5,6 @@ use kartik\grid\GridView;
 use yii\data\ActiveDataProvider;
 
 
-$this->title = Yii::t('app', 'Register');
-$this->params['breadcrumbs'][] = $this->title;
-
 ?>
 
   <?php 
@@ -16,46 +13,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 // 'sort'=> ['defaultOrder' => ['date'=>SORT_DESC, 'account_id'=>SORT_ASC, 'timestamp'=>SORT_ASC]],
 
             ]);
-            // $dataProvider->query->where(['physician_id'=>$model->id])->all();
+            $dataProvider->query->where(['physician_id'=>$model->physician_id, 'clinic_id'=>$model->clinic_id])->all();
 
            $gridColumns  = 
             [
-            	[	
-            		'class'=>'kartik\grid\DataColumn',
-            		'attribute'=>'physician_id',
-            		'header'=> Yii::t('app', 'طبيب'),
-            		'headerOptions'=>['class'=>'kartik-sheet-style'],
-                    'hAlign'=>'center',
-                    'vAlign'=>'center',
-                    // 'width'=>'8%',
-                    'format' => 'raw',
-                    'value' =>function ($model, $key, $index, $widget) { 
-                        return $model->doctor->name; 
-                                          
-                    },
-                  'group'=>true,
-                  'groupFooter'=>function ($model, $key, $index, $widget) { 
-                      return [
-                         'mergeColumns'=>[[3,10],],
-                          'content'=>[             
-                              0=>Yii::t('app', ' المجموع '),
-                              1=>GridView::F_COUNT,
-                              2=>GridView::F_SUM,
-                           ],
-                          'contentFormats'=>[      
-                              2=>['format'=>'number'],
-                              1=>['format'=>'number'],
-                          ],
-                          'contentOptions'=>[      
-                              0=>['style'=>'font-variant:small-caps'],
-                              1=>['style'=>'text-align:center'],
-                              2=>['style'=>'text-align:center'],
-                      ],
-
-                          'options'=>['class'=>$model->clinic->color,'style'=>'font-weight:bold;']
-                      ];
-                 },
-            	], 
+            	
             	[
             		'class'=>'kartik\grid\DataColumn',
             		'header'=> Yii::t('app', 'المريض'),
@@ -198,8 +160,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' =>function ($model, $key, $index, $widget) { 
                   if($model->stat == 'done'){
                     return Html::tag('span', '', ['class' => 'fa fa-2x fa-check-circle-o', 'style'=>"color: green;"]);
-                  }elseif($model->status == 'booked'){
-                    return Html::tag('span', '', ['class' => 'fa fa-2x fa-minus', 'style'=>"color: red;"]);
                   }elseif($model->stat == 'schadueled'){
                     return Html::a('<span class="fa fa-2x fa-hourglass-2" style="color: orange;"></span>', ['register/proccess', 'id'=> $model->id] , [
                       'title' => 'مقابلة', 'method' => 'post'
@@ -210,16 +170,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     ]);
                   }
                 },
-                'contentOptions' => function ($model, $key, $index, $column) {
-                  if ($model->stat == 'done') {
-                    return ['style' => 'color:green;' ];
-                  }elseif ($model->stat == 'schadueled') {
-                    return ['style' => 'color:orange;' ];
-                  }elseif($model->stat == 'processing'){
-                    return ['style' => 'color:red;' ];
-                  }
+                // 'contentOptions' => function ($model, $key, $index, $column) {
+                //   if ($model->stat == 'done') {
+                //     return ['style' => 'color:green;' ];
+                //   }elseif ($model->stat == 'schadueled') {
+                //     return ['style' => 'color:orange;' ];
+                //   }elseif($model->stat == 'processing'){
+                //     return ['style' => 'color:red;' ];
+                //   }
                     
-                },
+                // },
             	], 
             	[
             		'header'=> Yii::t('app', 'وقت الحجز'),
@@ -237,9 +197,6 @@ $this->params['breadcrumbs'][] = $this->title;
       'dataProvider' => $dataProvider,
       // 'filterModel' => $searchModel,
       'columns' => $gridColumns,
-      'export' => [
-          'fontAwesome' => true
-      ],
 
       // 'rowOptions' => function ($model) {
       //     $min = \app\models\Minimal::find()->where(['stock_id' => $model->id])->one();
@@ -249,15 +206,14 @@ $this->params['breadcrumbs'][] = $this->title;
       // },
       'exportConfig' => [ 
           GridView::PDF => [
-              'fontAwesome' => true,
               'label' => Yii::t('app', 'Type PDF'),
-              'icon' => 'fa fa-hospital-o',
+              'icon' => 'floppy-disk',
               'iconOptions' => ['class' => 'text-danger'],
               'showHeader' => true,
               'showPageSummary' => true,
               'showFooter' => true,
               'showCaption' => true,
-              'filename' => Yii::t('app', 'filename'),
+              'filename' => Yii::t('app', 'Inventory'),
               'alertMsg' => Yii::t('app', 'Its downloading, Wait for it.'),
               // 'options' => ['title' => Yii::t('app', 'Portable Document Format')],
               'mime' => 'application/pdf',
@@ -267,8 +223,8 @@ $this->params['breadcrumbs'][] = $this->title;
                   'destination' => 'D',
                   'marginTop' => 20,
                   'marginBottom' => 20,
-                // 'cssFile' => '@web/css/ar/AdminLTE-rtl.css',
-                'cssInline' => 'body { direction: rtl; font-family: Jannat; } th { text-align: right; } td { text-align: right;}',
+                // 'cssFile' => '@web/css/ar/bootstrap-rtl.min.css',
+                'cssInline' => 'body { direction: rtl; font-family: Jannat;} th { text-align: right; } td { text-align: right;}',
                 'methods' => [
                   'SetHeader' => [
                       [
@@ -303,17 +259,17 @@ $this->params['breadcrumbs'][] = $this->title;
                   //     $arr,
                   // ],
                   // 'SetWatermarkText' => ['motae', 0.3],
-                  // 'SetWatermarkImage' => [
-                  //     // Yii::$app->mycomponent->logo(),
-                  //     0.1, 
-                  //     [100,100],
-                  // ],
-                  // 'SetAuthor' => [
-                  //     'Motae',
-                  // ],
-                  // 'SetCreator' => [
-                  //     'System Name',
-                  // ],
+                  'SetWatermarkImage' => [
+                      // Yii::$app->mycomponent->logo(),
+                      0.1, 
+                      [100,100],
+                  ],
+                  'SetAuthor' => [
+                      'Motae',
+                  ],
+                  'SetCreator' => [
+                      'System Name',
+                  ],
                   // 'SetProtection' => [
                   //     [],
                   //     'UserPassword',
@@ -339,15 +295,13 @@ $this->params['breadcrumbs'][] = $this->title;
       'responsive' => true,
       'responsiveWrap' => true,
       'hover' => true,
-      // 'floatHeader' => true,
+      'floatHeader' => true,
      // 'floatHeaderOptions' => ['scrollingTop' => $scrollingTop],
       'showPageSummary' => true,
-      'panel' => [
-          'type' => GridView::TYPE_INFO,
-          'heading' => '<i class="fa  fa-hospital-o"></i><strong>       الحجوزات</strong>',
+      // 'panel' => [
+      //     'type' => GridView::TYPE_INFO,
+      //     'heading' => '<i class="fa  fa-hospital-o"></i><strong>       Stock</strong>',
 
-      ],
-      // set export properties
-      
+      // ],
       
   ]); ?>

@@ -12,6 +12,11 @@ use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 
 
+use app\models\User;
+use app\models\Role;
+use \Unifonic\API\Client;
+
+
 /**
  * ClinicController implements the CRUD actions for Clinic model.
  */
@@ -88,34 +93,65 @@ class ClinicController extends Controller
         $model = new Clinic();
 
         if ($model->load(Yii::$app->request->post())) {
-            // print_r($model);
+            
             $working_days = $_POST['Clinic']['working_days'];
-            // echo "<br>";
-            // echo "<br>";
-            // echo "<br>";
-            // print_r($working_days);
-            $start = $_POST['Clinic']['start'];
-            $end = $_POST['Clinic']['end'];
-                $days = "";
+            $days = "";
             foreach ($working_days as $d) {
                 // echo $d."<br>";
                 $days .= $d." ";
                 # code...
             }
+
             $model->working_days = $days;
-            $model->photo = UploadedFile::getInstance($model,'photo');
-            $model->primary_contact = $_POST['Clinic']['primary_contact'];
+           
+            $image = UploadedFile::getInstance($model, 'photo');
+            if (!is_null($image)) {
+             // $model->image_src_filename = $image->name;
+             $ext = end((explode(".", $image->name)));
+              // generate a unique file name to prevent duplicate filenames
+              $model->photo = Yii::$app->security->generateRandomString().".{$ext}";
+              // the path to save file, you can set an uploadPath
+              // in Yii::$app->params (as used in example below)                       
+              Yii::$app->params['uploadPath'] = Yii::$app->basePath . '/web/img/clinics/';
+              $path = Yii::$app->params['uploadPath'] . $model->photo;
+              $image->saveAs($path);
+            }
+            
             $model->secondary_contact = $_POST['Clinic']['secondary_contact'];
-            $model->photo->saveAs(Yii::$app->basePath.'/web/img/' .$model->photo.$model->id);
+            $start = $_POST['Clinic']['start'];
+            $end = $_POST['Clinic']['end'];
             $model->start = date("H:i", strtotime($start));
             $model->end = date("H:i", strtotime($end));
             $model->special_services = $_POST['Clinic']['special_services'];
             $model->app_service = $_POST['Clinic']['app_service'];
-            // print_r($model);
-            // die();
-            $model->save();
-            // echo $model->working_days;
-            return $this->redirect(['view', 'id' => $model->id]);
+
+
+            $primary_contact = $_POST['Clinic']['primary_contact'];
+            $model->primary_contact = substr_replace($primary_contact, '249', 0, 1);
+            if ($model->save(false)) {
+                // $user = new User();
+                // // $user->id = $model->id;
+                // $user->username = $model->primary_contact;
+                // // $user->email = $model->email;
+                // $user->password =$model->primary_contact;
+                // $user->type ='clinic';
+                // $user->reference =$model->id;
+                // $user->generateAuthKey();
+                // if ($user->save(false)) {
+                //     $role = new Role();
+                //     $role->item_name = 'clinic';
+                //     $role->user_id = $user->id;
+                //     if ($role->save(false)) {
+                //         $client = new Client();
+                //         $message = "welcome to tabiby app username ".$user->username." password: ".$user->username." https://www.tabibyapp.com";
+                //         $client->Messages->Send($user->username,$message);
+                //         return $this->redirect(['view', 'id' => $model->id]);
+                //     }
+                // }
+            }
+            
+            
+            // return $this->redirect(['view', 'id' => $model->id]);
         }
 
         return $this->render('create', [

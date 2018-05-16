@@ -10,6 +10,7 @@ use yii\helpers\Url;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\User;
 
 
 class SiteController extends Controller
@@ -100,14 +101,16 @@ class SiteController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            // $user =  Yii::$app->user->identity;
-            // if ($user->type == 'clinic') {
-                return $this->goHome();
+            $user =  Yii::$app->user->identity;
+            if ($user->type == 'clinic') {
+                return $this->redirect(['medical/report']);
                 
-            // }elseif ($user->type == 'pharmacy') {
-            //     return $this->redirect(['pharmacy/view', 'id'=> 1]);
+            }elseif ($user->type == 'doctor') {
+                return $this->redirect(['doctor/index']);
                 
-            // }
+            }else{
+               return $this->redirect(['site/index']);
+            }
             // // die();
         }
         return $this->render('login', [

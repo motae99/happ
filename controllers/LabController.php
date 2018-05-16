@@ -117,8 +117,16 @@ class LabController extends Controller
                 # code...
             }
             $model->working_days = $days;
-            $model->photo = UploadedFile::getInstance($model,'photo');
-            $model->photo->saveAs(Yii::$app->basePath.'/web/img/' .$model->photo.$model->id);
+            
+            $image = UploadedFile::getInstance($model, 'photo');
+            if (!is_null($image)) {
+             $ext = end((explode(".", $image->name)));
+              $model->photo = Yii::$app->security->generateRandomString().".{$ext}";
+              Yii::$app->params['uploadPath'] = Yii::$app->basePath . '/web/img/labs/';
+              $path = Yii::$app->params['uploadPath'] . $model->photo;
+              $image->saveAs($path);
+            }
+
             $model->from_hour = date("H:i", strtotime($start));
             $model->to_hour = date("H:i", strtotime($end));
             $model->save(false);

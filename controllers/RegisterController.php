@@ -6,7 +6,7 @@ use Yii;
 use app\models\Appointment;
 use app\models\Schedule;
 use app\models\Calender;
-use app\models\DrugsSearch;
+use app\models\AppointmentSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -37,43 +37,49 @@ class RegisterController extends Controller
      */
     public function actionIndex()
     {
-        // $searchModel = new DrugsSearch();
-        // $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $searchModel = new AppointmentSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-        // return $this->render('index', [
-        //     'searchModel' => $searchModel,
-        //     'dataProvider' => $dataProvider,
-        // ]);
-        $model = Appointment::find()->all();
-        return $this->render('index', ['model' => $model]);
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+        // $model = Appointment::find()->all();
+        // return $this->render('isocope', ['model' => $model]);
     }
 
     public function actionPay($id)
     {   
         $model = Appointment::findOne($id);
         $user =  Yii::$app->user->identity;
-        $model->status = 'confirmed';
-        $model->confirmed_at = new \yii\db\Expression('NOW()');
-        $model->confirmed_by = $user->id;
-        $model->save(false);
 
         // echo $model->calender_id;
         // die();
         $scheduale = Schedule::find()
                     ->where(['calender_id' => $model->calender_id])
                     ->andWhere(['status' => 'available'])
-                    ->orderBy(['schedule_time' => SORT_ASC])
+                    ->orderBy(['queue' => SORT_ASC])
                     ->one();
-        $scheduale->appointment_id = $model->id;
-        $scheduale->status = 'reserved';
-        $scheduale->save();
+        if ($scheduale) { // if we don't then propably we are full
+            # code...
+            $scheduale->appointment_id = $model->id;
+            $scheduale->status = 'reserved';
+            $scheduale->save();
+
+            $model->status = 'confirmed';
+            $model->schedual_id = $scheduale->id;
+            $model->confirmed_at = new \yii\db\Expression('NOW()');
+            $model->confirmed_by = $user->id;
+            $model->save(false);
+        }
+
 
         $status = Schedule::find()
                     ->where(['calender_id' => $model->calender_id])
                     ->andWhere(['status' => 'available'])
                     ->count();
 
-        if ($status >=1) {
+        if ($status >= 1) {
            
         }else{
             $cal = Calender::findOne($model->calender_id);
@@ -86,10 +92,13 @@ class RegisterController extends Controller
 
     public function actionProccess($id)
     {   
+
         $model = Appointment::findOne($id);
+        var_dump($model);
+        die();
         $model->stat = 'processing';
         $model->save(false);
-        return $this->redirect(['index']);
+        return $this->redirect(['doctor/index']);
     }
 
     public function actionFinish($id)

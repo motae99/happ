@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "df7f6b15172b3231d78d6a73d38171e8",
+    "content-hash": "cdea3852adcd92eab0e9fd8a8510eac7",
     "packages": [
         {
             "name": "2amigos/yii2-chartjs-widget",
@@ -169,6 +169,66 @@
             ]
         },
         {
+            "name": "bower-asset/desandro-matches-selector",
+            "version": "v2.0.2",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:desandro/matches-selector.git",
+                "reference": "42ee1cbab7469454d140bdab04d2ceed9c68b85e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/desandro/matches-selector/zipball/42ee1cbab7469454d140bdab04d2ceed9c68b85e",
+                "reference": "42ee1cbab7469454d140bdab04d2ceed9c68b85e",
+                "shasum": null
+            },
+            "type": "bower-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "bower-asset/ev-emitter",
+            "version": "v1.1.1",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:metafizzy/ev-emitter.git",
+                "reference": "1baa3a03d8e07f665b0eb797661fcc2b0d2a5736"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/metafizzy/ev-emitter/zipball/1baa3a03d8e07f665b0eb797661fcc2b0d2a5736",
+                "reference": "1baa3a03d8e07f665b0eb797661fcc2b0d2a5736",
+                "shasum": null
+            },
+            "type": "bower-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "bower-asset/fizzy-ui-utils",
+            "version": "v2.0.7",
+            "source": {
+                "type": "git",
+                "url": "git@github.com:metafizzy/fizzy-ui-utils.git",
+                "reference": "72feb9fc3d6de25696291941121bb3ec2db8221e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/metafizzy/fizzy-ui-utils/zipball/72feb9fc3d6de25696291941121bb3ec2db8221e",
+                "reference": "72feb9fc3d6de25696291941121bb3ec2db8221e",
+                "shasum": null
+            },
+            "require": {
+                "bower-asset/desandro-matches-selector": ">=2.0.0,<3.0.0"
+            },
+            "type": "bower-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
             "name": "bower-asset/fullcalendar",
             "version": "v3.7.0",
             "source": {
@@ -185,6 +245,25 @@
             "require": {
                 "bower-asset/jquery": ">=2,<4.0",
                 "bower-asset/moment": ">=2.9.0,<3.0.0"
+            },
+            "type": "bower-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "bower-asset/get-size",
+            "version": "v2.0.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/desandro/get-size.git",
+                "reference": "6879e7f15b4b6e19ca392b6955edfa8d4aa6f787"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/desandro/get-size/zipball/6879e7f15b4b6e19ca392b6955edfa8d4aa6f787",
+                "reference": "6879e7f15b4b6e19ca392b6955edfa8d4aa6f787",
+                "shasum": null
             },
             "type": "bower-asset",
             "license": [
@@ -233,6 +312,32 @@
             ]
         },
         {
+            "name": "bower-asset/isotope",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/metafizzy/isotope.git",
+                "reference": "ad008079ec0bc6387d2781b98cfd5c80a9fc0b40"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/metafizzy/isotope/zipball/ad008079ec0bc6387d2781b98cfd5c80a9fc0b40",
+                "reference": "ad008079ec0bc6387d2781b98cfd5c80a9fc0b40",
+                "shasum": null
+            },
+            "require": {
+                "bower-asset/desandro-matches-selector": ">=2.0.0,<3.0.0",
+                "bower-asset/fizzy-ui-utils": ">=2.0.4,<3.0.0",
+                "bower-asset/get-size": ">=2.0.0,<3.0.0",
+                "bower-asset/masonry-layout": ">=4.1.0,<5.0.0",
+                "bower-asset/outlayer": ">=2.1.0,<3.0.0"
+            },
+            "type": "bower-asset",
+            "license": [
+                "GPL-3.0"
+            ]
+        },
+        {
             "name": "bower-asset/jquery",
             "version": "3.2.1",
             "source": {
@@ -274,6 +379,29 @@
             ]
         },
         {
+            "name": "bower-asset/masonry-layout",
+            "version": "v4.2.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/desandro/masonry.git",
+                "reference": "31113c7ccaa4c26c50fa603ca3ad8578e03f1b66"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/desandro/masonry/zipball/31113c7ccaa4c26c50fa603ca3ad8578e03f1b66",
+                "reference": "31113c7ccaa4c26c50fa603ca3ad8578e03f1b66",
+                "shasum": null
+            },
+            "require": {
+                "bower-asset/get-size": ">=2.0.2,<3.0.0",
+                "bower-asset/outlayer": ">=2.1.0,<3.0.0"
+            },
+            "type": "bower-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
             "name": "bower-asset/moment",
             "version": "2.19.2",
             "source": {
@@ -286,6 +414,30 @@
                 "url": "https://api.github.com/repos/moment/moment/zipball/328d51e7235b7a2d443bfdf69c1844939c115660",
                 "reference": "328d51e7235b7a2d443bfdf69c1844939c115660",
                 "shasum": null
+            },
+            "type": "bower-asset",
+            "license": [
+                "MIT"
+            ]
+        },
+        {
+            "name": "bower-asset/outlayer",
+            "version": "v2.1.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/metafizzy/outlayer.git",
+                "reference": "bf31c5748bf84fcc2c553d1199a6ecaf0ebd9878"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/metafizzy/outlayer/zipball/bf31c5748bf84fcc2c553d1199a6ecaf0ebd9878",
+                "reference": "bf31c5748bf84fcc2c553d1199a6ecaf0ebd9878",
+                "shasum": null
+            },
+            "require": {
+                "bower-asset/ev-emitter": ">=1.0.0,<2.0.0",
+                "bower-asset/fizzy-ui-utils": ">=2.0.0,<3.0.0",
+                "bower-asset/get-size": ">=2.0.2,<3.0.0"
             },
             "type": "bower-asset",
             "license": [
@@ -1927,6 +2079,53 @@
                 "utf-8"
             ],
             "time": "2017-11-10T12:39:59+00:00"
+        },
+        {
+            "name": "nerburish/yii2-isotope-view",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nerburish/yii2-isotope-view.git",
+                "reference": "7a250481e17804f384d1305d8e3780568356ee0a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nerburish/yii2-isotope-view/zipball/7a250481e17804f384d1305d8e3780568356ee0a",
+                "reference": "7a250481e17804f384d1305d8e3780568356ee0a",
+                "shasum": ""
+            },
+            "require": {
+                "bower-asset/isotope": "*",
+                "yiisoft/yii2": "*"
+            },
+            "type": "yii2-extension",
+            "autoload": {
+                "psr-4": {
+                    "nerburish\\isotopeview\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "nerburish",
+                    "email": "nerburish@hotmail.com"
+                }
+            ],
+            "description": "ListView widget improved to use Isotope (http://isotope.metafizzy.co/)",
+            "keywords": [
+                "ListView",
+                "dataprovider",
+                "extension",
+                "isotope",
+                "masonry",
+                "view",
+                "widget",
+                "yii2"
+            ],
+            "time": "2016-08-24T20:40:09+00:00"
         },
         {
             "name": "paragonie/random_compat",
@@ -5191,7 +5390,8 @@
         "kartik-v/yii2-widget-datepicker": 20,
         "kartik-v/yii2-widget-depdrop": 20,
         "miloschuman/yii2-highcharts-widget": 20,
-        "kartik-v/yii2-editable": 20
+        "kartik-v/yii2-editable": 20,
+        "nerburish/yii2-isotope-view": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

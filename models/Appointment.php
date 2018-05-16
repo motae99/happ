@@ -26,6 +26,16 @@ class Appointment extends \yii\db\ActiveRecord
     /**
      * {@inheritdoc}
      */
+
+    public $date; // defining virtual attribute
+    public $queue; // defining virtual attribute
+    public $time; // defining virtual attribute
+    public $age; // defining virtual attribute
+    public $patientName; // defining virtual attribute
+    public $patientPhone; // defining virtual attribute
+    public $paiedTo; // defining virtual attribute
+    public $provider;
+
     public static function tableName()
     {
         return 'appointment';
@@ -72,9 +82,90 @@ class Appointment extends \yii\db\ActiveRecord
         ];
     }
 
+    // this method is called after using Video::find()
+    // you can set values for your virtual attributes here for example
+    public function afterFind()
+    {
+        parent::afterFind();
+
+
+        $this->date = $this->calender->date;
+        $this->patientName = $this->patient->name;
+        $this->patientPhone = $this->patient->contact_no;
+        if ($s = $this->scheduale) {
+            $this->queue = $s->queue;
+            $this->time = $s->schedule_time;
+        }else{
+            $this->queue =300;
+            $this->time ='00:00:00';
+            
+        }
+        // $this->queue = $this->sche($this);
+        $this->age = $this->age($this);
+
+        // $registers = User::find('reference')->where('type' => 'doctorRegister')
+        // $by = User::findOne($this->confirmed_by)
+        if ($this->status == 'confirmed') {
+            $by = User::findOne($this->confirmed_by);
+            if ($by->type == 'app') {
+                $this->paiedTo = 'app';
+            }else{
+                $this->paiedTo = 'registers';
+            }
+        }
+        else{
+            $this->paiedTo = 'NA';
+        }
+        
+
+        
+    }
+
+    public function Age($model){
+        if ($model->patient->dob) {
+            //explode the date to get month, day and year
+            // $birthDate = explode("/", $model->patient->dob);
+            // //get age from date or birthdate
+            // $age = (date("md", date("U", mktime(0, 0, 0, $birthDate[0], $birthDate[1], $birthDate[2]))) > date("md")
+            // ? ((date("Y") - $birthDate[2]) - 1)
+            // : (date("Y") - $birthDate[2]));
+            $age = date_diff(date_create($model->patient->dob), date_create('now'))->y;
+            return $age;
+        }else{
+            return 50;
+        }
+    }
+
+    public function getCalender()
+    {
+        return $this->hasOne(Calender::className(), ['id' => 'calender_id']);
+    }
+
+    public function getScheduale()
+    {   
+        return $this->hasOne(Schedule::className(), ['appointment_id' => 'id']);
+    }
+
+
+    // public function sche($model)
+    // {
+    //     $s = Schedule::find()->where(['calender_id' => $model->calender_id, 'appointment_id' => $model->id])->one();
+    //     if ($s) {
+    //         return $s->queue;
+    //     }else{
+    //         return 500;
+    //     }
+    // }
+
+
     public function getDoctor()
     {
         return $this->hasOne(Physician::className(), ['id' => 'physician_id']);
+    }
+
+    public function getInsurance()
+    {
+        return $this->hasOne(Insurance::className(), ['id' => 'insurance_id']);
     }
 
      public function insu($av)
@@ -95,6 +186,29 @@ class Appointment extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Patient::className(), ['id' => 'patient_id']);
     }
+
+    // this method is called right before inserting record to DB
+    // after calling save() on model
+    // public function beforeSave($insert)
+    // {
+    //     // if (parent::beforeSave($insert)) {
+    //     //     if ($insert) {
+    //     //         // if new record is inserted into db
+    //     //     } else {
+    //     //         // if existing record is updated
+    //     //         // you can use something like this 
+    //     //         // to prevent updating certain data
+    //     //         // $this->status = $this->oldAttributes['status'];
+    //     //     }
+
+    //     //     $this->start_time = $this->video_date . ' '. $this->video_time;
+
+    //     //     return true;
+    //     // }
+
+    //     // return false;
+    // }
+    
 
     /**
      * {@inheritdoc}

@@ -10,14 +10,15 @@ body {
     text-align: right !important;
 }*/
 
-.breadcrumb {
+/*.breadcrumb {
     padding: 8px 15px;
     margin-bottom: 20px;
     list-style: none;
     background-color: #f5f5f5;
     border-radius: 4px;
-    left: 10px;
-}
+    right: 10px !important;
+    left: auto !important;
+}*/
 
 
 .wrap {
