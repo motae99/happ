@@ -104,13 +104,9 @@ class ClinicController extends Controller
            
             $image = UploadedFile::getInstance($model, 'photo');
             if (!is_null($image)) {
-             // $model->image_src_filename = $image->name;
-             $ext = end((explode(".", $image->name)));
-              // generate a unique file name to prevent duplicate filenames
+             $tmp = explode('.', $image->name);
+              $ext = end($tmp);
               $model->photo = Yii::$app->security->generateRandomString().".{$ext}";
-              // the path to save file, you can set an uploadPath
-              // in Yii::$app->params (as used in example below)                       
-              Yii::$app->params['uploadPath'] = Yii::$app->basePath . '/web/img/clinics/';
               $path = Yii::$app->params['uploadPath'] . $model->photo;
               $image->saveAs($path);
             }

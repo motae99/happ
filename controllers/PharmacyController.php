@@ -121,9 +121,10 @@ class PharmacyController extends Controller
 
             $image = UploadedFile::getInstance($model, 'photo');
             if (!is_null($image)) {
-             $ext = end((explode(".", $image->name)));
-              $model->photo = Yii::$app->security->generateRandomString().".{$ext}";
-              Yii::$app->params['uploadPath'] = Yii::$app->basePath . '/web/img/labs/';
+             $tmp = explode('.', $image->name);
+                  $ext = end($tmp);
+                  $model->photo = Yii::$app->security->generateRandomString().".{$ext}";
+              Yii::$app->params['uploadPath'] = Yii::$app->basePath . '/web/img/';
               $path = Yii::$app->params['uploadPath'] . $model->photo;
               $image->saveAs($path);
             }
