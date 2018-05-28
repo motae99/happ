@@ -38,7 +38,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'manager',
                 'working_days',
                 'email',
-                'rate',
                 'app_service',
                 'color',
             ],

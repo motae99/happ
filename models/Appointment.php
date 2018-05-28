@@ -106,15 +106,15 @@ class Appointment extends \yii\db\ActiveRecord
         // $registers = User::find('reference')->where('type' => 'doctorRegister')
         // $by = User::findOne($this->confirmed_by)
         if ($this->status == 'confirmed') {
-            $by = User::findOne($this->confirmed_by);
-            if ($by->type == 'app') {
+            // $by = User::findOne($this->confirmed_by);
+            // if ($by->type == 'app') {
                 $this->paiedTo = 'app';
-            }else{
-                $this->paiedTo = 'registers';
-            }
-        }
-        else{
-            $this->paiedTo = 'NA';
+        //     }else{
+        //         $this->paiedTo = 'registers';
+        //     }
+        // }
+        // else{
+        //     $this->paiedTo = 'NA';
         }
         
 

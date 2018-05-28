@@ -1,23 +1,49 @@
 <?php
 
 use yii\helpers\Html;
+use yii\widgets\ActiveForm;
+use kartik\select2\Select2; 
+use kartik\time\TimePicker; 
+
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Pharmacy */
-
-$this->title = Yii::t('app', 'Update Pharmacy: ' . $model->name, [
-    'nameAttribute' => '' . $model->name,
-]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Pharmacies'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->name, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+/* @var $form yii\widgets\ActiveForm */
 ?>
-<div class="pharmacy-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="pharmacy-form">
 
-    <?= $this->render('_form', [
-        'model' => $model,
-    ]) ?>
+    <?php $form = ActiveForm::begin(); ?>
+
+    <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'state')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'city')->textInput(['maxlength' => true]) ?>
+
+    <?= $form->field($model, 'address')->textarea(['rows' => 6]) ?>
+
+    <?= $form->field($model, 'phone')->textInput(['type' => 'number', 'max' => 9999999999,]) ?>
+
+    <?= $form->field($model, 'owner_name')->textInput(['placeholder' => 'أسم صاحب الرخصة'])->label(false) ?>
+
+    <?= $form->field($model, 'website')->textInput(['placeholder' => 'الموقع الالكتروني'])->label(false) ?>
+
+    <?= $form->field($model, 'secondary_phone')->textInput(['placeholder' => 'هاتف مساءي'])->label(false) ?>
+
+
+
+    <?= $form->field($model, 'app_service')->dropDownList([ 'yes' => 'Yes', 'no' => 'No', ], ['prompt' => '']) ?>
+
+    <?= $form->field($model, 'logitude')->textInput() ?>
+
+    <?= $form->field($model, 'latitude')->textInput() ?>
+
+
+    <div class="form-group">
+        <?= Html::submitButton(Yii::t('app', 'Save'), ['class' => 'btn btn-block btn-success']) ?>
+    </div>
+
+    <?php ActiveForm::end(); ?>
 
 </div>
