@@ -43,7 +43,7 @@ use app\models\Speciality;
             <?= $form->field($model, 'university')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'جامعة التخرج')])->label(false) ?>
         </div>
         <div class="col-lg-12">
-            <?= $form->field($model, 'extra_info')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'معلومات اضافية')])->label(false) ?>
+            <?= $form->field($model, 'extra_info')->textarea(['rows' => 6, 'placeholder'=> Yii::t('app', 'معلومات اضافيه')])->label(false) ?>
         </div>
         
     </div>
