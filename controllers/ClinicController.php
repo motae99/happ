@@ -127,25 +127,25 @@ class ClinicController extends Controller
             $primary_contact = $_POST['Clinic']['primary_contact'];
             $model->primary_contact = substr_replace($primary_contact, '249', 0, 1);
             if ($model->save(false)) {
-                // $user = new User();
-                // // $user->id = $model->id;
-                // $user->username = $model->primary_contact;
-                // // $user->email = $model->email;
-                // $user->password =$model->primary_contact;
-                // $user->type ='clinic';
-                // $user->reference =$model->id;
-                // $user->generateAuthKey();
-                // if ($user->save(false)) {
-                //     $role = new Role();
-                //     $role->item_name = 'clinic';
-                //     $role->user_id = $user->id;
-                //     if ($role->save(false)) {
-                //         $client = new Client();
-                //         $message = "welcome to tabiby app username ".$user->username." password: ".$user->username." https://www.tabibyapp.com";
-                //         $client->Messages->Send($user->username,$message);
-                //         return $this->redirect(['view', 'id' => $model->id]);
-                //     }
-                // }
+                $user = new User();
+                // $user->id = $model->id;
+                $user->username = $model->primary_contact;
+                // $user->email = $model->email;
+                $user->password =$model->primary_contact;
+                $user->type ='clinic';
+                $user->reference =$model->id;
+                $user->generateAuthKey();
+                if ($user->save(false)) {
+                    $role = new Role();
+                    $role->item_name = 'clinic';
+                    $role->user_id = $user->id;
+                    if ($role->save(false)) {
+                        // $client = new Client();
+                        // $message = "welcome to tabiby app username ".$user->username." password: ".$user->username." https://www.tabibyapp.com";
+                        // $client->Messages->Send($user->username,$message);
+                        return $this->redirect(['view', 'id' => $model->id]);
+                    }
+                }
             }
             
             

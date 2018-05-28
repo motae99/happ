@@ -67,6 +67,7 @@ class Physician extends \yii\db\ActiveRecord
             [['name', 'contact_no', 'regestration_no'], 'required'],
             [['contact_no', 'created_by', 'updated_by', 'regestration_no'], 'integer'],
             [['email'], 'string'],
+            ['contact_no', 'match', 'pattern' => '/^[0-9 ]*$/i'],
             [['created_at', 'updated_at', 'specialization_id', 'extra_info', 'university', 'photo'], 'safe'],
             [['name'], 'string', 'max' => 100],
             [['contact_no'], 'unique'],

@@ -451,9 +451,9 @@ class PhysicianController extends Controller
                     $role->item_name = 'physician';
                     $role->user_id = $user->id;
                     if ($role->save(false)) {
-                        $client = new Client();
-                        $message = "welcome to tabiby app username ".$user->username." password: ".$user->username." https://www.tabibyapp.com";
-                        $client->Messages->Send($user->username,$message);
+                        // $client = new Client();
+                        // $message = "welcome to tabiby app username ".$user->username." password: ".$user->username." https://www.tabibyapp.com";
+                        // $client->Messages->Send($user->username,$message);
                         return $this->redirect(['view', 'id' => $model->id]);
                     }
                 }

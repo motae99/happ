@@ -40,13 +40,13 @@ use kartik\time\TimePicker;
     <?= $form->field($model, 'manager')->textInput(['maxlength' => true, 'placeholder' => Yii::t('app', 'المدير الطبي')])->label(false) ?>
     </div>
     <div class="col-lg-6 eArLangCss">
-    <?= $form->field($model, 'primary_contact')->textInput(['type' => 'number', 'max' => 9999999999,'placeholder' => Yii::t('app', 'تلفون المؤسسه')])->label(false) ?>
+    <?= $form->field($model, 'primary_contact')->textInput(['type' => 'number', 'max' => 999999999999,'placeholder' => Yii::t('app', 'تلفون المؤسسه')])->label(false) ?>
     </div>
     <div class="col-lg-4 eArLangCss">
-    <?= $form->field($model, 'secondary_contact')->textInput(['type' => 'number', 'max' => 9999999999,'placeholder' => Yii::t('app', 'تلفون بديل')])->label(false) ?>
+    <?= $form->field($model, 'secondary_contact')->textInput(['type' => 'number', 'max' => 999999999999,'placeholder' => Yii::t('app', 'تلفون بديل')])->label(false) ?>
     </div> 
     <div class="col-lg-4 eArLangCss">
-    <?= $form->field($model, 'fax')->textInput(['type' => 'number', 'max' => 9999999999, 'placeholder'=> Yii::t('app', 'رقم الفاكس')])->label(false) ?>
+    <?= $form->field($model, 'fax')->textInput(['type' => 'number', 'max' => 999999999999, 'placeholder'=> Yii::t('app', 'رقم الفاكس')])->label(false) ?>
     </div>
      <div class="col-lg-4 eArLangCss">
     <?= $form->field($model, 'email')->textInput(['placeholder'=> Yii::t('app', 'الموقع الالكتروني')])->label(false) ?>

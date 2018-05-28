@@ -10,6 +10,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use app\models\PharInsu;
 use yii\filters\VerbFilter;
+use yii\web\UploadedFile;
+
 
 /**
  * PharmacyController implements the CRUD actions for Pharmacy model.

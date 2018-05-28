@@ -23,9 +23,9 @@ use kartik\time\TimePicker;
     
     <?= $form->field($model, 'address')->textarea(['rows' => 2, 'placeholder' => Yii::t('app', 'العنوان')])->label(false) ?>
 
-    <?= $form->field($model, 'phone')->textInput(['type' => 'number', 'max' => 9999999999, 'placeholder' => Yii::t('app', 'تلفون ')])->label(false) ?>
+    <?= $form->field($model, 'phone')->textInput(['type' => 'number', 'max' => 999999999999, 'placeholder' => Yii::t('app', 'تلفون ')])->label(false) ?>
 
-    <?= $form->field($model, 'secondary_phone')->textInput(['type' => 'number', 'max' => 9999999999, 'placeholder' => Yii::t('app', 'تلفون ')])->label(false) ?>
+    <?= $form->field($model, 'secondary_phone')->textInput(['type' => 'number', 'max' => 999999999999, 'placeholder' => Yii::t('app', 'تلفون ')])->label(false) ?>
 
     <?= $form->field($model, 'logitude')->textInput(['placeholder'=> Yii::t('app', 'خط الطول')])->label(false) ?>
     
